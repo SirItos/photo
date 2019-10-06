@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "leaflet": "^1.5.1",
     "nuxt": "^2.0.0",
-    "nuxt-leaflet": "0.0.19"
+    "nuxt-leaflet": "0.0.19",
+    "vue2-leaflet-markercluster": "^3.0.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar :clipped-left="false" :value="true" app>
+    <v-app-bar app :value="true">
       <div class="d-flex justify-start align-center" style="min-width:68px">
         <v-btn icon @click.stop="drawler=true">
           <v-icon>mdi-menu</v-icon>

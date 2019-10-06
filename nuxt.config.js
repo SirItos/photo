@@ -31,7 +31,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [{ src: '~/plugins/cluster.js', mode: 'client' }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -39,10 +39,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
-  ],
+  modules: ['nuxt-leaflet', '@nuxtjs/axios'],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
