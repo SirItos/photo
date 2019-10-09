@@ -18,7 +18,7 @@
       </l-map>
     </no-ssr>
     <div class="fillter-btn d-flex d-sm-none justify-center">
-      <v-btn large min-width="250" color="primary" class="font-weight-bold">Поиск</v-btn>
+      <v-btn large min-width="250" color="primary" class="font-weight-bold" nuxt to="/filters">Поиск</v-btn>
     </div>
     <div class="map-contorls">
       <div @click="currentPosition" class="loccate_btn mb-2 pa-2 elevation-1" v-ripple>

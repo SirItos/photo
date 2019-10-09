@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+@import url("./transitions.scss");
 
 .v-application {
 	font-family: "Montserrat", sans-serif !important;
 }
-
+.v-slider__tick {
+	border-radius: 50% !important;
+}
 .v-btn:not(.v-btn--text):not(.v-btn--outlined):focus:before {
 	opacity: 0 !important;
 }
