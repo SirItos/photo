@@ -1,6 +1,6 @@
 <template>
   <v-col class="map-containter">
-    <no-ssr>
+    <client-only>
       <l-map
         ref="map"
         @update:zoom="zoomUpdated"
@@ -16,9 +16,25 @@
           <Markers v-for="marker in TestMarkers" :key="`marker_${marker.lng}`" :item="marker" />
         </v-marker-cluster>
       </l-map>
-    </no-ssr>
+    </client-only>
     <div class="fillter-btn d-flex d-sm-none justify-center">
-      <v-btn large min-width="250" color="primary" class="font-weight-bold" nuxt to="/filters">Поиск</v-btn>
+      <v-btn
+        v-if="!getFilterActive"
+        large
+        min-width="250"
+        color="primary"
+        class="font-weight-bold"
+        nuxt
+        to="/filters"
+      >Поиск</v-btn>
+      <v-btn
+        v-else
+        large
+        min-width="250"
+        color="primary"
+        class="font-weight-bold"
+        @click="unsetFilters"
+      >Сбросить фильтр</v-btn>
     </div>
     <div class="map-contorls">
       <div @click="currentPosition" class="loccate_btn mb-2 pa-2 elevation-1" v-ripple>
@@ -39,6 +55,7 @@
 
 <script>
 import Markers from './MarkertComponent.vue'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'MapComponent',
   components: {
@@ -72,6 +89,7 @@ export default {
     ]
   }),
   computed: {
+    ...mapGetters('filters', ['getFilterActive']),
     maxZoomDisable() {
       return this.zoom >= 18
     },
@@ -90,6 +108,7 @@ export default {
     this.mapInstanse.off()
   },
   methods: {
+    ...mapActions('filters', ['changeFilters', 'activateFilters']),
     mapListners() {
       this.mapInstanse.on('locationfound', e => {
         this.mapInstanse.stopLocate()
@@ -109,6 +128,10 @@ export default {
     },
     currentPosition() {
       this.mapInstanse.locate({ watch: true, setView: true, maxZoom: 12 })
+    },
+    unsetFilters() {
+      this.changeFilters()
+      this.activateFilters()
     }
   }
 }
