@@ -45,10 +45,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
-  /*
-   ** vuetify module configuration
-   ** https://github.com/nuxt-community/vuetify-module
-   */
+
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     optionsPath: './vuetify.options.js'

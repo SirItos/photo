@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MapComponent from '~/components/MapComponent'
+const MapComponent = () => import('~/components/MapComponent')
 export default {
   name: 'index',
   components: {

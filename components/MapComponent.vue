@@ -13,7 +13,12 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <v-marker-cluster :options="clusterOptions">
-          <Markers v-for="marker in TestMarkers" :key="`marker_${marker.lng}`" :item="marker" />
+          <Markers
+            v-for="marker in TestMarkers"
+            :key="`marker_${marker.lng}`"
+            :item="marker"
+            @markerCLick="markerClick"
+          />
         </v-marker-cluster>
       </l-map>
     </client-only>
@@ -50,16 +55,21 @@
         </div>
       </div>
     </div>
+    <v-bottom-sheet v-model="sheet" hide-overlay>
+      <BottomSheetContent @closeSheet="closeSheet" />
+    </v-bottom-sheet>
   </v-col>
 </template>
 
 <script>
-import Markers from './MarkertComponent.vue'
+const Markers = () => import('./MarkertComponent')
+const BottomSheetContent = () => import('./BottomSheetContent')
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'MapComponent',
   components: {
-    Markers
+    Markers,
+    BottomSheetContent
   },
   data: () => ({
     mapInstanse: null,
@@ -76,6 +86,7 @@ export default {
       spiderfyOnMaxZoom: false,
       disableClusteringAtZoom: 14
     },
+    sheet: false,
     // TEST BLOC TODO DELETE
     // lat:55.75396
     //  lng:37.620393
@@ -109,6 +120,7 @@ export default {
   },
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
+    ...mapActions('bottomSheet', ['setId']),
     mapListners() {
       this.mapInstanse.on('locationfound', e => {
         this.mapInstanse.stopLocate()
@@ -132,6 +144,14 @@ export default {
     unsetFilters() {
       this.changeFilters()
       this.activateFilters()
+    },
+    markerClick(val) {
+      this.mapInstanse.panTo(val.latlng)
+      this.sheet = true
+    },
+    closeSheet() {
+      this.sheet = false
+      this.setId(null)
     }
   }
 }
