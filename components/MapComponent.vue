@@ -56,6 +56,7 @@
       </div>
     </div>
     <v-bottom-sheet v-model="sheet" hide-overlay>
+      <v-divider class="white"></v-divider>
       <BottomSheetContent @closeSheet="closeSheet" />
     </v-bottom-sheet>
   </v-col>

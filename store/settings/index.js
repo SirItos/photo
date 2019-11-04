@@ -1,19 +1,21 @@
+import { MutationsType } from '@/type-def'
 export const state = () => ({
   header: null,
+  toolbar: true,
   NavList: {
     unauth: [
-      { text: 'Входа', icon: 'mdi-account' },
-      { text: 'Регистрация', icon: 'mdi-arrow-right' }
+      { text: 'Входа', icon: 'mdi-account', to: '/signin' },
+      { text: 'Регистрация', icon: 'mdi-arrow-right', to: '/registrate' }
     ],
     customer: [
-      { text: 'Профиль', icon: 'mdi-account' },
-      { text: 'Избранное', icon: 'mdi-star' },
-      { text: 'Выход', icon: 'mdi-close-circle' }
+      { text: 'Профиль', icon: 'mdi-account', to: '/profile' },
+      { text: 'Избранное', icon: 'mdi-star', to: '/favorite' },
+      { text: 'Выход', icon: 'mdi-close-circle', action: 'exit' }
     ],
     provider: [
-      { text: 'Профиль', icon: 'mdi-account' },
-      { text: 'Статистика', icon: 'mdi-calendar' },
-      { text: 'Выход', icon: 'mdi-close-circle' }
+      { text: 'Профиль', icon: 'mdi-account', to: '/profile' },
+      { text: 'Статистика', icon: 'mdi-calendar', to: 'stats' },
+      { text: 'Выход', icon: 'mdi-close-circle', action: 'exit' }
     ]
   }
 })
@@ -21,5 +23,18 @@ export const state = () => ({
 export const getters = {
   getNavList: state => index => {
     return state.NavList[index]
+  },
+  getToolbar: state => state.toolbar
+}
+
+export const actions = {
+  setToolbar({ commit }, payload) {
+    commit(MutationsType.settings.SET_TOOLBAR, payload)
+  }
+}
+
+export const mutations = {
+  [MutationsType.settings.SET_TOOLBAR](state, payload) {
+    state.toolbar = payload
   }
 }

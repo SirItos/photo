@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app :value="true">
+    <v-app-bar app :value="getToolbar">
       <div class="d-flex justify-start align-center" style="min-width:68px">
         <v-btn icon @click.stop="drawler=true">
           <v-icon>mdi-menu</v-icon>
@@ -19,7 +19,7 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawler" class="primary white--text" app temporary>
       <AppNavContent>
-        <NavList :items="getNavList('unauth')" />
+        <NavList :items="getNavList(list)" />
       </AppNavContent>
     </v-navigation-drawer>
     <v-content>
@@ -31,7 +31,7 @@
 <script>
 import AppNavContent from '@/components/AppNavigationDrawlerList'
 import NavList from '@/components/AppNavList'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'defaultLayer',
   components: {
@@ -44,7 +44,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('settings', ['getNavList'])
+    ...mapGetters('settings', ['getNavList', 'getToolbar']),
+    ...mapState('user', ['name', 'role', 'phone']),
+    list() {
+      if (!this.phone) return 'unauth'
+      return this.role
+    }
   }
 }
 </script>

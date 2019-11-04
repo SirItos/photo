@@ -3,26 +3,35 @@
     <v-col>
       <slot />
     </v-col>
-    <v-divider class="white"></v-divider>
+
     <div>
+      <OnlineSwitch v-if="role==='provider'" />
+      <v-divider class="white"></v-divider>
       <NavListItems :items="items" />
     </div>
   </v-row>
 </template>
 
 <script>
-import NavListItems from './AppNavList'
+const NavListItems = () => import('./AppNavList')
+const OnlineSwitch = () => import('./SwitcherComponent')
+
+import { mapState } from 'vuex'
 export default {
   name: 'AppNavigationDrawlerList',
   components: {
-    NavListItems
+    NavListItems,
+    OnlineSwitch
   },
   data: () => ({
     items: [
       { text: 'Правила сервиса', url: 'terms.svg' },
       { text: 'Обратная связь', url: 'message.svg' }
     ]
-  })
+  }),
+  computed: {
+    ...mapState('user', ['role'])
+  }
 }
 </script>
 

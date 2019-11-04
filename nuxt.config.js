@@ -2,9 +2,6 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   mode: 'universal',
-  /*
-   ** Headers of the page
-   */
   head: {
     titleTemplate: '%s - Место твоих свиданий',
     title: 'Место твоих свиданийы',
@@ -19,9 +16,9 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-  /*
-   ** Customize the progress-bar color
-   */
+  router: {
+    middleware: 'toolbar'
+  },
 
   loading: { color: '#fff' },
   /*

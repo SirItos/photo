@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import filters from '@/components/filterComponent'
+import filters from '@/components/FilterComponent'
 export default {
   name: 'filters',
   head: {

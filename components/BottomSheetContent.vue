@@ -1,5 +1,5 @@
 <template>
-  <v-row no-gutters class="pa-3 white">
+  <v-row no-gutters class="pa-3 white" style="box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25)">
     <div class="primary--text d-flex align-center">
       <v-skeleton-loader v-if="false" type="chip" />
       <div v-else class="d-flex align-center">
@@ -15,23 +15,12 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </div>
-    <v-col cols="12" class="mt-2">
-      <v-row no-gutters>
-        <v-col v-for="i in 3" :key="`img_skeleton_${i}`" class="px-1">
-          <v-skeleton-loader type="image" max-height="80" />
-        </v-col>
-      </v-row>
+    <v-col cols="12" class="mt-7 mb-4">
+      <Swiper />
     </v-col>
     <v-col cols="12" class="my-3">
       <div class="d-flex justify-center">
-        <!-- <v-skeleton-loader
-          type="button"
-          v-if="true"
-          min-width="148"
-          min-height="44"
-          class="fill-skeleton"
-        />-->
-        <v-btn v-if="false" large color="primary">Подробнее</v-btn>
+        <v-btn v-if="true" large color="primary">Подробнее</v-btn>
       </div>
     </v-col>
   </v-row>
@@ -39,8 +28,12 @@
 
 <script>
 import { mapgetters, mapGetters } from 'vuex'
+const Swiper = () => import('./SwiperComponent')
 export default {
   name: 'BottomSheetContent',
+  components: {
+    Swiper
+  },
   data: () => ({
     loading: true
   }),
@@ -61,9 +54,6 @@ export default {
 </script>
 
 <style lang="scss" >
-.fill-skeleton > .v-skeleton-loader__bone {
-  // width: 100% !important;
-}
 .fill-skeleton > .v-skeleton-loader__button {
   height: 100%;
   width: 100%;

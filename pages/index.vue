@@ -6,10 +6,17 @@
 
 <script>
 const MapComponent = () => import('~/components/MapComponent')
+import { mapActions } from 'vuex'
 export default {
   name: 'index',
   components: {
     MapComponent
+  },
+  created() {
+    this.setToolbar(true)
+  },
+  methods: {
+    ...mapActions('settings', ['setToolbar'])
   }
 }
 </script>
