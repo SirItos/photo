@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="fill-height flex-column pa-5">
     <v-col>
-      <div class="text-center headline">Данные профиля</div>
+      <div class="text-center font-weight-bold headline">Данные профиля</div>
       <div class="mt-10">
         <v-form ref="form" lazy-validation :value="valid">
           <div class="mb-5">
@@ -15,7 +15,7 @@
           </div>
           <div class="mb-5">
             <v-text-field
-              v-model="phone"
+              v-model="userPhone"
               name="profilePhone"
               label="Номер телефона (видят клиенты)"
               color="primary"
@@ -38,12 +38,7 @@
             ></v-text-field>
           </div>
           <div>
-            <v-text-field
-              v-model="email"
-              name="ageRange"
-              label="Возрастной диапозон"
-              color="primary"
-            ></v-text-field>
+            <v-text-field disabled name="ageRange" label="Возрастной диапозон" color="primary"></v-text-field>
           </div>
         </v-form>
       </div>
@@ -57,7 +52,7 @@
 
 <script>
 import { mask } from 'vue-the-mask'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'ResourceProfile',
   directives: {
@@ -67,7 +62,7 @@ export default {
     mask: '### ### ## ##',
     valid: false,
     name: null,
-    phone: null,
+    userPhone: null,
     email: null,
     ageRange: null,
     email_rules: value => {
@@ -75,6 +70,12 @@ export default {
       return pattern.test(value) || 'Некоректный email'
     }
   }),
+  computed: {
+    ...mapState('user', ['phone'])
+  },
+  created() {
+    this.userPhone = this.phone
+  },
   methods: {
     ...mapActions('user', ['setUserProperties']),
     next() {
@@ -87,7 +88,7 @@ export default {
           },
           {
             field: 'phone',
-            value: this.phone
+            value: this.userPhone
           },
           {
             field: 'email',
