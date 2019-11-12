@@ -33,6 +33,9 @@ export default {
   mounted() {
     this.$nextTick(() => {
       const reader = new FileReader()
+      reader.onloadstart = e => {
+        this.progress = 0
+      }
       reader.onloadend = e => {
         this.imgUrl = e.target.result
       }

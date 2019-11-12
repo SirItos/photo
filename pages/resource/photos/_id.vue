@@ -15,7 +15,12 @@
       <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
     </v-col>
     <div class="pa-10">
-      <v-btn class="text-none font-weight-bold" color="primary" to="/" block>Отправить на проверку</v-btn>
+      <v-btn
+        class="text-none font-weight-bold"
+        color="primary"
+        @click="next"
+        block
+      >{{id ? 'Сохранить' :'Отправить на проверку'}}</v-btn>
     </div>
   </v-row>
 </template>
@@ -28,8 +33,12 @@ export default {
     'v-photo-view': () => import('@/components/PhotoView')
   },
   data: () => ({
-    img: []
+    img: [],
+    id: null
   }),
+  created() {
+    this.id = this.$route.query.id
+  },
   methods: {
     setNewImg(val) {
       this.img.push(val)
@@ -40,7 +49,11 @@ export default {
       console.log(this.img)
     },
     next() {
-      console.log('done')
+      if (this.id) {
+        this.$root.$router.back()
+        return
+      }
+      this.$root.$router.push('/')
     }
   }
 }

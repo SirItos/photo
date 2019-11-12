@@ -44,7 +44,12 @@
       <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
     </v-col>
     <div class="pa-10">
-      <v-btn class="text-none font-weight-bold" color="primary" @click="next" block>Продолжить</v-btn>
+      <v-btn
+        class="text-none font-weight-bold"
+        color="primary"
+        @click="next"
+        block
+      >{{id ? 'Сохранить' : 'Продолжить'}}</v-btn>
     </div>
   </v-row>
 </template>
@@ -58,19 +63,25 @@ export default {
     'v-geo-search': SearchField
   },
   data: () => ({
+    id: null,
     location: null,
     individual: null,
     showroom: null,
     priceRange: [2, 4],
     price: ['0', '1000', '3000', '6000', '10000', '']
   }),
+  created() {
+    this.id = this.$route.query.id
+  },
   methods: {
     setLocate(val) {
-      console.log(val)
       this.location = val
     },
     next() {
-      console.log('next')
+      if (this.id) {
+        this.$root.$router.back()
+        return
+      }
       this.$root.$router.push('/resource/photos')
     }
   }

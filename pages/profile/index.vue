@@ -16,9 +16,9 @@
       </div>
     </div>
     <v-col>
-      <v-row no-gutters class="pa-5 flex-column fill-height">
+      <v-row no-gutters class="py-5 flex-column fill-height">
         <v-col>
-          <div>
+          <div class="px-5">
             <v-text-field
               v-model="userPhone"
               name="profilePhone"
@@ -32,15 +32,60 @@
               :rules="[val => !!val || 'Укажите Ваш телефон']"
             ></v-text-field>
           </div>
+          <div v-if="role==='provider'" class="px-5">
+            <div>
+              <v-text-field
+                v-model="userEmail"
+                name="userEmail"
+                label="Email"
+                color="primary"
+                append-icon="mdi-pencil"
+                type="email"
+                :rules="[val => !!val || 'Укажите Ваш Email',emailRule]"
+              ></v-text-field>
+            </div>
+          </div>
         </v-col>
-        <div class="pa-5">
-          <v-btn
-            block
-            large
-            color="primary"
-            class="text-none font-weight-bold"
-            @click="saveChange"
-          >Сохранить</v-btn>
+
+        <div>
+          <div v-if="role==='provider'">
+            <v-divider></v-divider>
+            <div
+              class="px-5"
+              v-ripple
+              @click="$router.push({path:'/resource/carinfo',query:{id:1}})"
+            >
+              <v-row>
+                <v-col>Редактировать информацию о автомобиле</v-col>
+                <div class="d-flex align-center">
+                  <v-icon>mdi-chevron-right</v-icon>
+                </div>
+              </v-row>
+            </div>
+            <v-divider></v-divider>
+            <div
+              class="px-5"
+              v-ripple
+              @click="$router.push({path:'/resource/photos',query:{id:1}})"
+            >
+              <v-row>
+                <v-col>Редактирование фотографий</v-col>
+                <div class="d-flex align-center">
+                  <v-icon>mdi-chevron-right</v-icon>
+                </div>
+              </v-row>
+            </div>
+            <v-divider></v-divider>
+          </div>
+          <div class="pa-5">
+            <v-btn
+              block
+              large
+              color="primary"
+              class="text-none font-weight-bold"
+              @click="saveChange"
+            >Сохранить</v-btn>
+          </div>
         </div>
       </v-row>
     </v-col>
@@ -61,15 +106,19 @@ export default {
     userName: null,
     userPhone: null,
     userEmail: null,
-    ageRange: null
+    ageRange: null,
+    emailRule: val => {
+      return true
+    }
   }),
   computed: {
-    ...mapState('user', ['name', 'phone', 'pin'])
+    ...mapState('user', ['name', 'phone', 'pin', 'role', 'email'])
   },
   created() {
     this.setToolbar(false)
     this.userName = JSON.parse(JSON.stringify(this.name))
     this.userPhone = JSON.parse(JSON.stringify(this.phone))
+    this.userEmail = JSON.parse(JSON.stringify(this.email))
   },
   methods: {
     ...mapActions('settings', ['setToolbar']),
