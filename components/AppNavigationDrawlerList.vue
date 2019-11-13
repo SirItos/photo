@@ -25,7 +25,7 @@ export default {
   },
   data: () => ({
     items: [
-      { text: 'Правила сервиса', url: 'terms.svg' },
+      { text: 'Правила сервиса', url: 'terms.svg', to: '/terms' },
       { text: 'Обратная связь', url: 'message.svg' }
     ]
   }),
