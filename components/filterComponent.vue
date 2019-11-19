@@ -81,6 +81,7 @@
               max="5"
               :ticks="true"
               tick-size="6"
+              track-color="rgba(0, 0, 0, 0.26)"
               color="primary"
             ></v-range-slider>
           </div>
@@ -98,6 +99,7 @@
               max="3"
               :ticks="true"
               tick-size="5"
+              track-color="rgba(0, 0, 0, 0.26)"
               color="primary"
             ></v-slider>
           </div>

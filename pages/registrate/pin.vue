@@ -36,7 +36,14 @@
     </v-col>
     <v-col class="d-flex align-end">
       <div style="width:100%" class="d-flex justify-center px-5">
-        <v-btn color="primary" @click="createUser" large block nuxt :disabled="confirmed">Продолжить</v-btn>
+        <v-btn
+          width="250"
+          color="primary"
+          @click="createUser"
+          large
+          nuxt
+          :disabled="confirmed"
+        >Продолжить</v-btn>
       </div>
     </v-col>
   </v-row>

@@ -42,7 +42,12 @@
       >Сбросить фильтр</v-btn>
     </div>
     <div class="map-contorls">
-      <div @click="currentPosition" class="loccate_btn mb-2 pa-2 elevation-1" v-ripple>
+      <div
+        v-show="geolocationPremission"
+        @click="currentPosition"
+        class="loccate_btn mb-2 pa-2 elevation-1"
+        v-ripple
+      >
         <v-icon>mdi-crosshairs-gps</v-icon>
       </div>
       <div class="zoomBtns elevation-1">
@@ -73,6 +78,7 @@ export default {
     BottomSheetContent
   },
   data: () => ({
+    geolocationPremission: true,
     mapInstanse: null,
     url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
     zoom: 10,
@@ -124,9 +130,15 @@ export default {
     ...mapActions('bottomSheet', ['setId']),
     mapListners() {
       this.mapInstanse.on('locationfound', e => {
+        this.geolocationPremission = true
         this.mapInstanse.stopLocate()
       })
-      this.mapInstanse.on('locationerror', () => {
+      this.mapInstanse.on('locationerror', e => {
+        if (e.code === 1) {
+          // alert(
+          //   'Для определения местоположения требуется разрешить браузеру запрашиватьэти данные'
+          // )
+        }
         this.mapInstanse.stopLocate()
       })
     },
@@ -140,6 +152,13 @@ export default {
       this.mapInstanse.zoomOut()
     },
     currentPosition() {
+      navigator.permissions.query({ name: 'geolocation' }).then(result => {
+        // navigator.permissions.revoke({ name: 'geolocation' }).then(result => {
+        //   console.log(result)
+        // })
+
+        this.geolocationPremission = result.state === 'granted'
+      })
       this.mapInstanse.locate({ watch: true, setView: true, maxZoom: 12 })
     },
     unsetFilters() {

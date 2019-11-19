@@ -20,7 +20,7 @@
     </v-col>
     <v-col cols="12" class="my-3">
       <div class="d-flex justify-center">
-        <v-btn v-if="true" large color="primary">Подробнее</v-btn>
+        <v-btn v-if="true" nuxt to="/detail/1" min-width="250" color="primary">Подробнее</v-btn>
       </div>
     </v-col>
   </v-row>

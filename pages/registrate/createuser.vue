@@ -12,9 +12,10 @@
         <v-btn
           color="primary"
           class="text-none font-weight-bold"
+          width="250"
           nuxt
+          large
           @click="setUser('customer','/registrate/customer-name')"
-          block
         >Я хочу фотографироваться</v-btn>
         <!--  to="/registrate/customer-name" -->
       </div>
@@ -22,9 +23,10 @@
         <v-btn
           class="text-none font-weight-bold primary--text"
           nuxt
+          large
+          width="250"
           @click="setUser('provider','/resource/profile')"
           color="secondary "
-          block
         >У меня есть машины</v-btn>
       </div>
     </div>

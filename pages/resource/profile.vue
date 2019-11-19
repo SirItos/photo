@@ -38,14 +38,22 @@
             ></v-text-field>
           </div>
           <div>
-            <v-text-field disabled name="ageRange" label="Возрастной диапозон" color="primary"></v-text-field>
+            <v-select v-model="ageRange" clearable :items="['20-30','30-40','40-50','старше 50']" />
+            <!-- <v-text-field disabled name="ageRange" label="Возрастной диапозон" color="primary"></v-text-field> -->
           </div>
         </v-form>
       </div>
       <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
     </v-col>
     <div class="pa-10">
-      <v-btn class="text-none font-weight-bold" color="primary" @click="next" block>Продолжить</v-btn>
+      <v-btn
+        width="250"
+        large
+        class="text-none font-weight-bold"
+        color="primary"
+        @click="next"
+        block
+      >Продолжить</v-btn>
     </div>
   </v-row>
 </template>
@@ -93,6 +101,10 @@ export default {
           {
             field: 'email',
             value: this.email
+          },
+          {
+            field: 'ageRange',
+            value: this.ageRange
           }
         ])
       }

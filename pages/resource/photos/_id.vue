@@ -18,8 +18,9 @@
       <v-btn
         class="text-none font-weight-bold"
         color="primary"
+        min-width="250"
         @click="next"
-        block
+        large
       >{{id ? 'Сохранить' :'Отправить на проверку'}}</v-btn>
     </div>
   </v-row>

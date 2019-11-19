@@ -61,9 +61,12 @@ export default {
   }),
   mounted() {
     this.$nextTick(() => {
-      this.scrolled =
-        this.$refs.scrolledArea.$el.clientHeight <
-        this.$refs.scrolledArea.$el.scrollHeight
+      setTimeout(() => {
+        this.scrolled =
+          this.$refs.scrolledArea.$el.clientHeight <
+          this.$refs.scrolledArea.$el.scrollHeight
+      }, 250)
+
       this.setMaxHeight()
     })
   },
@@ -71,7 +74,7 @@ export default {
     onScroll(e) {
       this.scrolled =
         Math.ceil(e.target.scrollHeight) >
-        Math.ceil(e.target.scrollTop + e.target.clientHeight)
+        Math.ceil(e.target.scrollTop + e.target.clientHeight) + 20
     },
     setMaxHeight() {
       this.max =

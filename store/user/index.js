@@ -5,6 +5,7 @@ export const state = () => ({
   role: null,
   phone: null,
   email: null,
+  ageRange: null,
   access_token: null,
   have_res: false,
   online: false

@@ -36,6 +36,7 @@
             max="5"
             :ticks="true"
             tick-size="6"
+            track-color="rgba(0, 0, 0, 0.26)"
             color="primary"
             class="mt-5"
           ></v-range-slider>
@@ -47,8 +48,9 @@
       <v-btn
         class="text-none font-weight-bold"
         color="primary"
+        width="250px"
         @click="next"
-        block
+        large
       >{{id ? 'Сохранить' : 'Продолжить'}}</v-btn>
     </div>
   </v-row>

@@ -8,11 +8,13 @@
       <div class="caption">Вы сможете изменить эти параметры в настройках сервиса</div>
     </v-col>
     <div>
-      <div class="d-flex justify-center px-5" style="width:100%;">
+      <div class="d-flex justify-center px-10" style="width:100%;">
         <v-btn
           color="primary"
           class="text-none font-weight-bold"
           nuxt
+          width="250"
+          large
           @click="setCustomerName"
           block
         >{{name ? 'Начать пользоваться' : 'Пропустить'}}</v-btn>

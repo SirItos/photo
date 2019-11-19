@@ -1,55 +1,79 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
-@import url("./transitions.scss");
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import url('./transitions.scss');
 
 .v-application {
-	font-family: "Montserrat", sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
 }
 .v-slider__tick {
-	border-radius: 50% !important;
+  border-radius: 50% !important;
 }
 .v-btn:not(.v-btn--text):not(.v-btn--outlined):focus:before {
-	opacity: 0 !important;
+  opacity: 0 !important;
 }
 
 // MarkerCLuster Fix
 
 .marker-cluster {
-	background-clip: padding-box;
-	border-radius: 20px;
+  background-clip: padding-box;
+  border-radius: 20px;
 }
 .marker-cluster div {
-	width: 30px;
-	height: 30px;
-	margin-left: 5px;
-	margin-top: 5px;
-	text-align: center;
-	border-radius: 15px;
-	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-top: 5px;
+  text-align: center;
+  border-radius: 15px;
+  font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 .marker-cluster span {
-	line-height: 30px;
+  line-height: 30px;
 }
 
 .leaflet-cluster-anim .leaflet-marker-icon,
 .leaflet-cluster-anim .leaflet-marker-shadow {
-	-webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
-	-moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
-	-o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
-	transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+  -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+  -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+  -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-in;
 }
 
 .leaflet-cluster-spider-leg {
-	/* stroke-dashoffset (duration and function) should match with leaflet-marker-icon transform in order to track it exactly */
-	-webkit-transition: -webkit-stroke-dashoffset 0.3s ease-out, -webkit-stroke-opacity 0.3s ease-in;
-	-moz-transition: -moz-stroke-dashoffset 0.3s ease-out, -moz-stroke-opacity 0.3s ease-in;
-	-o-transition: -o-stroke-dashoffset 0.3s ease-out, -o-stroke-opacity 0.3s ease-in;
-	transition: stroke-dashoffset 0.3s ease-out, stroke-opacity 0.3s ease-in;
+  /* stroke-dashoffset (duration and function) should match with leaflet-marker-icon transform in order to track it exactly */
+  -webkit-transition: -webkit-stroke-dashoffset 0.3s ease-out,
+    -webkit-stroke-opacity 0.3s ease-in;
+  -moz-transition: -moz-stroke-dashoffset 0.3s ease-out,
+    -moz-stroke-opacity 0.3s ease-in;
+  -o-transition: -o-stroke-dashoffset 0.3s ease-out,
+    -o-stroke-opacity 0.3s ease-in;
+  transition: stroke-dashoffset 0.3s ease-out, stroke-opacity 0.3s ease-in;
 }
 
 .botom-btn {
-	padding-top: 50px;
-	padding-bottom: 83px;
+  padding-top: 50px;
+  padding-bottom: 83px;
 }
 .fill-height {
-	height: 100% !important;
+  height: 100% !important;
+}
+
+.v-slider__thumb {
+  width: 20px !important;
+  height: 20px !important;
+  &::before {
+    // display: none;
+    top: -8px !important;
+    left: -8px !important;
+  }
+}
+.v-slider__tick--filled {
+  background-color: #ff473a !important;
+}
+.v-input--selection-controls
+  .v-input--selection-controls__input:hover
+  .v-input--selection-controls__ripple:before {
+  transform: scale(0) !important;
+}
+.theme--light.v-list-item:hover::before {
+  opacity: 0 !important;
 }

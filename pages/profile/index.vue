@@ -44,6 +44,9 @@
                 :rules="[val => !!val || 'Укажите Ваш Email',emailRule]"
               ></v-text-field>
             </div>
+            <div>
+              <v-select v-model="age" clearable :items="['20-30','30-40','40-50','старше 50']" />
+            </div>
           </div>
         </v-col>
 
@@ -81,6 +84,7 @@
             <v-btn
               block
               large
+              max-width="250"
               color="primary"
               class="text-none font-weight-bold"
               @click="saveChange"
@@ -106,19 +110,20 @@ export default {
     userName: null,
     userPhone: null,
     userEmail: null,
-    ageRange: null,
+    age: null,
     emailRule: val => {
       return true
     }
   }),
   computed: {
-    ...mapState('user', ['name', 'phone', 'pin', 'role', 'email'])
+    ...mapState('user', ['name', 'phone', 'pin', 'role', 'email', 'ageRange'])
   },
   created() {
     this.setToolbar(false)
     this.userName = JSON.parse(JSON.stringify(this.name))
     this.userPhone = JSON.parse(JSON.stringify(this.phone))
     this.userEmail = JSON.parse(JSON.stringify(this.email))
+    this.age = JSON.parse(JSON.stringify(this.ageRange))
   },
   methods: {
     ...mapActions('settings', ['setToolbar']),
@@ -136,6 +141,10 @@ export default {
         {
           field: 'email',
           value: this.userEmail
+        },
+        {
+          field: 'ageRange',
+          value: this.age
         }
       ])
       this.$root.$router.back()

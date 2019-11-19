@@ -21,11 +21,11 @@
               v-if="timer"
               @click="confirmCode"
               large
-              min-width="250"
+              width="250"
               color="primary"
               :disabled="codeEntered"
             >Подтвердить</v-btn>
-            <v-btn v-else large min-width="250" color="primary" @click="sendSms">Отправить код</v-btn>
+            <v-btn v-else large width="250" color="primary" @click="sendSms">Отправить код</v-btn>
           </v-fade-transition>
         </div>
         <div
