@@ -4,6 +4,18 @@
 .v-application {
   font-family: 'Montserrat', sans-serif !important;
 }
+.v-application--wrap {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100) !important;
+  // height: calc(100vh - env(safe-area-inset-top, 66px)) !important;
+  max-height: 100vh !important;
+  max-height: calc(var(--vh, 1vh) * 100) !important;
+  // max-height: calc(100vh - env(safe-area-inset-top, 66px)) !important;
+  min-height: 100vh !important;
+  min-height: calc(var(--vh, 1vh) * 100) !important;
+  // min-height: calc(100vh - env(safe-area-inset-top, 66px)) !important;
+}
+
 .v-slider__tick {
   border-radius: 50% !important;
 }

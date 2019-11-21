@@ -1,7 +1,7 @@
 import { MutationsType } from '@/type-def'
 export const state = () => ({
   header: null,
-  toolbar: true,
+  toolbar: false,
   NavList: {
     unauth: [
       { text: 'Входа', icon: 'mdi-account', to: '/signin' },

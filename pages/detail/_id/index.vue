@@ -15,14 +15,14 @@
     </div>
     <v-content
       id="scroll-target-detail"
-      ref="scrolled"
+      ref="scrolledArea"
       :style="{
         'max-height':max+'px',
         'position':'relative'
       }"
       class="overflow-y-auto py-0 px-3"
     >
-      <v-row no-gutters v-scroll:#scroll-target-detail="onScroll">
+      <v-row no-gutters>
         <v-col>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla, laboriosam illum doloremque exercitationem at error officia autem a commodi, vitae vel tempora quibusdam consequatur odio modi quisquam dolorem pariatur amet.
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, neque fuga suscipit aspernatur rerum beatae quae illo voluptate, eveniet animi optio rem enim dolorum quia iusto quisquam, sequi nostrum amet?
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { scrolling } from '~/mixins'
 export default {
   name: 'DetailPage',
   components: {
@@ -63,28 +64,30 @@ export default {
       default: 0
     }
   },
+  mixins: [scrolling],
   data: () => ({
     like: false,
-    scrolled: true,
-    max: 0
+    target: '#scroll-target-detail'
   }),
-  mounted() {
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.scrolled =
-          this.$refs.scrolled.$el.clientHeight <
-          this.$refs.scrolled.$el.scrollHeight
-      }, 250)
-
-      this.setMaxHeight()
-    })
-  },
+  // mounted() {
+  //   this.$nextTick(() => {
+  //     setTimeout(() => {
+  //       this.scrolled =
+  //         this.$refs.scrolled.$el.clientHeight <
+  //         this.$refs.scrolled.$el.scrollHeight
+  //     }, 250)
+  //     document
+  //       .querySelector(this.target)
+  //       .addEventListener('scroll', this.onScroll)
+  //     this.setMaxHeight()
+  //   })
+  // },
   methods: {
-    onScroll(e) {
-      this.scrolled =
-        Math.ceil(e.target.scrollHeight) >
-        Math.ceil(e.target.scrollTop + e.target.clientHeight) + 20
-    },
+    // onScroll(e) {
+    //   this.scrolled =
+    //     Math.ceil(e.target.scrollHeight) >
+    //     Math.ceil(e.target.scrollTop + e.target.clientHeight) + 20
+    // },
     setMaxHeight() {
       this.max =
         document.documentElement.clientHeight -

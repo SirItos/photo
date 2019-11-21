@@ -7,7 +7,11 @@ export default {
     title: 'Место твоих свиданийы',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content:
+          'width=device-width,initial-scale=1.0, viewport-fit=cover, user-scalable=no'
+      },
       {
         hid: 'description',
         name: 'description',
@@ -45,7 +49,9 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
-
+  generate: {
+    routes: ['/detail/1']
+  },
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     optionsPath: './vuetify.options.js'

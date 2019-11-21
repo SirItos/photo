@@ -13,7 +13,7 @@
       }"
         class="overflow-y-auto px-5"
       >
-        <v-row no-gutters v-scroll:#scroll-target="onScroll">
+        <v-row no-gutters>
           <v-col>
             <h4>Условия пользования сервисом</h4>
             <div class="mt-3">
@@ -39,7 +39,14 @@
       style="box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25)"
     >
       <div class="d-flex justify-center">
-        <v-btn nuxt to="/" depressed color="primary" class="text-none" min-width="250">Продолжить</v-btn>
+        <v-btn
+          nuxt
+          :to="confirm ? '/registrate/confirm': '/'"
+          depressed
+          color="primary"
+          class="text-none"
+          min-width="250"
+        >Продолжить</v-btn>
       </div>
       <div class="pt-5 caption black--text" style="line-height:15px">
         Нажимая кнопку “Продолжить” вы подтверждаете, что вы старше 18 лет и соглашаетесь с
@@ -53,36 +60,16 @@
 </template>
 
 <script>
+import { scrolling } from '~/mixins'
 export default {
   name: 'TermsPage',
+  mixins: [scrolling],
   data: () => ({
-    scrolled: false,
-    max: 0
+    target: '#scroll-target',
+    confirm: false
   }),
   mounted() {
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.scrolled =
-          this.$refs.scrolledArea.$el.clientHeight <
-          this.$refs.scrolledArea.$el.scrollHeight
-      }, 250)
-
-      this.setMaxHeight()
-    })
-  },
-  methods: {
-    onScroll(e) {
-      this.scrolled =
-        Math.ceil(e.target.scrollHeight) >
-        Math.ceil(e.target.scrollTop + e.target.clientHeight) + 20
-    },
-    setMaxHeight() {
-      this.max =
-        document.documentElement.clientHeight -
-        48 -
-        this.$refs.bottom.offsetHeight -
-        13
-    }
+    this.confirm = this.$route.query.confirm || false
   }
 }
 </script>

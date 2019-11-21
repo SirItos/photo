@@ -28,9 +28,10 @@
             <v-btn v-else large width="250" color="primary" @click="sendSms">Отправить код</v-btn>
           </v-fade-transition>
         </div>
-        <div
-          class="caption pa-3"
-        >Нажимая кнопку Отправить код, вы подтверждаете, что вы старше 18 лет и соглашаетесь с Условиями использования сервиса</div>
+        <div class="caption pa-3">
+          Нажимая кнопку Отправить код, вы подтверждаете, что вы старше 18 лет и соглашаетесь с
+          <nuxt-link to="/terms?confirm=1">Условиями использования сервиса</nuxt-link>
+        </div>
       </v-row>
     </v-col>
   </v-row>

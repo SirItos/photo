@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="margin-top:0px ;margin-top:env(safe-area-inset-top)">
     <v-app-bar app :value="getToolbar">
       <div class="d-flex justify-start align-center" style="min-width:68px">
         <v-btn icon @click.stop="drawler=true">
@@ -17,7 +17,7 @@
         </div>
       </v-row>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawler" class="primary white--text" app temporary>
+    <v-navigation-drawer v-model="drawler" class="primary white--text fix-nav" app temporary>
       <AppNavContent>
         <NavList :items="getNavList(list)" />
       </AppNavContent>
@@ -50,6 +50,20 @@ export default {
       if (!this.phone) return 'unauth'
       return this.role
     }
+  },
+  mounted() {
+    let vh = window.innerHeight * 0.01
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
+    window.addEventListener('resize', () => {
+      let vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+    })
   }
 }
 </script>
+
+<style lang="scss" >
+.fix-nav {
+  max-height: calc(var(--vh, 1vh) * 100) !important;
+}
+</style>
