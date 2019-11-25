@@ -1,16 +1,23 @@
 <template>
   <v-row no-gutters class="fill-height start-bg flex-column">
     <v-col>
-      <v-row no-gutters class="fill-height flex-column justify-center align-center white--text">
-        <div class="d-flex flex-column justify-space-around" style="height:100%">
-          <v-row no-gutters class="flex-column justify-end">
-            <div class="text-uppercase display-1">
-              Место
-              <br />Твоих
-              <br />Свиданий
-            </div>
-            <div class="py-4">город : Санкт-Петербург</div>
-            <v-form :value="valid" lazy-validation ref="form">
+      <v-form
+        @submit="call"
+        :value="valid"
+        lazy-validation
+        ref="form"
+        class="d-flex fill-height flex-column justify-center align-center"
+      >
+        <div class="d-flex flex-column justify-space-around white--text" style="height:100%">
+          <div class="fill-height flex-column justify-end d-flex">
+            <div>
+              <div class="text-uppercase display-1">
+                Место
+                <br />Твоих
+                <br />Свиданий
+              </div>
+
+              <div class="py-4">город : Санкт-Петербург</div>
               <!--     -->
               <v-text-field
                 v-model="phone"
@@ -35,26 +42,28 @@
                 solo
                 style="border-radius:0"
               ></v-text-field>
-            </v-form>
-            <div class="pt-2" v-if="registrate">
-              На номер телефона придет СМС
-              <br />с кодом подтверждения
+
+              <div class="pt-2" v-if="registrate">
+                На номер телефона придет СМС
+                <br />с кодом подтверждения
+              </div>
+              <div v-if="!registrate" class="pt-2 d-flex justify-end">
+                <nuxt-link class="link" to="/registrate/confirm">Забыли пин-код?</nuxt-link>
+              </div>
             </div>
-            <div v-if="!registrate" class="pt-2 d-flex justify-end">
-              <nuxt-link class="link" to="/registrate/confirm">Забыли пин-код?</nuxt-link>
-            </div>
-          </v-row>
+          </div>
+
           <div class="botom-btn">
             <v-btn
               block
               large
               color="primary"
               class="text-none font-weight-bold"
-              @click="call"
+              type="submit"
             >{{ registrate ? 'Регистрация' : 'Вход'}}</v-btn>
           </div>
         </div>
-      </v-row>
+      </v-form>
     </v-col>
   </v-row>
 </template>
@@ -85,15 +94,19 @@ export default {
   },
   methods: {
     ...mapActions('user', ['setUserProperties', 'enter']),
-    call() {
+    call(e) {
       this.registrate ? this.registrateAction() : this.enterAction()
+
+      e.preventDefault()
     },
     registrateAction() {
       if (this.$refs.form.validate()) {
-        this.setUserProperties([{
-          field: 'phone',
-          value: this.phone
-        }])
+        this.setUserProperties([
+          {
+            field: 'phone',
+            value: this.phone
+          }
+        ])
         this.$root.$router.push('/registrate/confirm')
       }
     },

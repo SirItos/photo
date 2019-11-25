@@ -7,9 +7,9 @@
         :style="{
         'position':'relative'
       }"
-        class="overflow-y-auto scrollFilters py-0 pb-2"
+        class="overflow-y-auto scrollFilters py-0"
       >
-        <v-row no-gutters class="elevation-6 pa-4">
+        <v-row no-gutters class="pa-4">
           <v-col cols="12" class="mb-3">
             <div
               class="title font-weight-medium"
@@ -115,6 +115,7 @@
         </v-row>
       </v-content>
     </v-col>
+    <!--  -->
     <div class="px-4 py-6" style="box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25)">
       <v-row no-gutters>
         <v-col cols="6" class="px-2">
@@ -170,5 +171,9 @@ export default {
 <style lang="scss" >
 .scrollFilters {
   max-height: calc(100vh - 92px - 56px);
+}
+.v-slider__tick:first-child,
+.v-slider__tick:last-child {
+  display: none;
 }
 </style>

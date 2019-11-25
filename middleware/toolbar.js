@@ -8,5 +8,7 @@ export default function({ route, store }) {
     if (store.state.settings.toolbar) {
       store.dispatch('settings/setToolbar', false)
     }
+  } else {
+    store.dispatch('settings/setToolbar', true)
   }
 }

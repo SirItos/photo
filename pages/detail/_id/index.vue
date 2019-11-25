@@ -37,7 +37,7 @@
     <div>
       <v-row no-gutters class="px-3 py-4">
         <v-col class="px-2">
-          <v-btn block large color="secondary" to="/" nuxt>
+          <v-btn block large color="secondary" @click="$root.$router.back()" nuxt>
             <span class="primary--text">Отмена</span>
           </v-btn>
         </v-col>
