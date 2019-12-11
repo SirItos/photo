@@ -54,6 +54,11 @@
 <script>
 import { scrolling } from '~/mixins'
 export default {
+  head() {
+    return {
+      title: 'Ресурс ' + this.id
+    }
+  },
   name: 'DetailPage',
   components: {
     'g-detail-slider': () => import('~/components/DetailSlider')

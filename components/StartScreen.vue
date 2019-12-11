@@ -17,7 +17,7 @@
                 <br />Свиданий
               </div>
 
-              <div class="py-4">город : Санкт-Петербург</div>
+              <div class="py-4" v-if="city">город : {{city}}</div>
               <!--     -->
               <v-text-field
                 v-model="phone"
@@ -70,7 +70,7 @@
 
 <script>
 import { mask } from 'vue-the-mask'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'StartScreen',
@@ -89,25 +89,26 @@ export default {
     phone: null,
     code: null
   }),
+  computed: {
+    ...mapState('user', ['city'])
+  },
   created() {
     // this.$store.registerModule('providerDetails', providerModule)
   },
   methods: {
-    ...mapActions('user', ['setUserProperties', 'enter']),
+    ...mapActions('user', ['registrateApi', 'enter']),
     call(e) {
       this.registrate ? this.registrateAction() : this.enterAction()
 
       e.preventDefault()
     },
-    registrateAction() {
+    async registrateAction() {
       if (this.$refs.form.validate()) {
-        this.setUserProperties([
-          {
-            field: 'phone',
-            value: this.phone
-          }
-        ])
-        this.$root.$router.push('/registrate/confirm')
+        await this.registrateApi({
+          field: 'phone',
+          value: this.phone
+        })
+        // this.$root.$router.push('/registrate/confirm')
       }
     },
     enterAction() {

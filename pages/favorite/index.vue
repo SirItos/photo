@@ -29,6 +29,9 @@
 
 <script>
 export default {
+  head: {
+    title: 'Избранное'
+  },
   name: 'Favorite',
   data: () => ({
     test: [1, 2, 3, 4, 5, 7, 8, 9, 10, 11]

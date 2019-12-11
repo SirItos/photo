@@ -3,14 +3,16 @@
     <div class="primary pa-6 pb-10 white--text">
       <div>
         На
-        <span v-if="phone">номер+7 {{phone}}</span>
+        <span v-if="phone">номер+7 {{ phone }}</span>
         <span v-else>телефонный номер</span>
       </div>
       <div>выслан код подтверждения</div>
       <div class="mt-8">Код из СМС</div>
       <input v-model="code" type="tel" class="code-input" maxlength="4" />
       <v-fade-transition>
-        <div v-if="timer" class="caption">выслать повторно код можно через {{timer}} секунд</div>
+        <div v-if="timer" class="caption">
+          выслать повторно код можно через {{ timer }} секунд
+        </div>
       </v-fade-transition>
     </div>
     <v-col>
@@ -24,13 +26,19 @@
               width="250"
               color="primary"
               :disabled="codeEntered"
-            >Подтвердить</v-btn>
-            <v-btn v-else large width="250" color="primary" @click="sendSms">Отправить код</v-btn>
+              >Подтвердить</v-btn
+            >
+            <v-btn v-else large width="250" color="primary" @click="sendSms"
+              >Отправить код</v-btn
+            >
           </v-fade-transition>
         </div>
         <div class="caption pa-3">
-          Нажимая кнопку Отправить код, вы подтверждаете, что вы старше 18 лет и соглашаетесь с
-          <nuxt-link to="/terms?confirm=1">Условиями использования сервиса</nuxt-link>
+          Нажимая кнопку Отправить код, вы подтверждаете, что вы старше 18 лет и
+          соглашаетесь с
+          <nuxt-link to="/terms?confirm=1"
+            >Условиями использования сервиса</nuxt-link
+          >
         </div>
       </v-row>
     </v-col>
@@ -38,10 +46,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
+  head: {
+    title: 'Подтвердитt Email'
+  },
   name: 'confrimCode',
   middleware: 'preRegistratepage',
+  props: {
+    type: {
+      type: String,
+      default: null
+    }
+  },
   data: () => ({
     code: null,
     timer: 60
@@ -65,20 +82,26 @@ export default {
     this.countdown()
   },
   methods: {
-    sendSms() {
+    ...mapActions('user', ['smsConfrim', 'ascNewCode']),
+    async sendSms() {
+      this.code = null
+      await this.ascNewCode()
       this.timer = 60
       this.countdown()
     },
     countdown() {
       const interval = setInterval(() => {
         this.timer--
-        if (this.timer === 0) {
+        if (this.timer <= 0) {
           clearInterval(interval)
         }
       }, 1000)
     },
-    confirmCode() {
-      this.$root.$router.push('/registrate/pin')
+    async confirmCode() {
+      await this.smsConfrim({
+        code: this.code
+      })
+      // this.$root.$router.push('/registrate/pin')
     }
   }
 }

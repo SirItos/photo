@@ -26,6 +26,9 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
+  head: {
+    title: 'Настройка клиента'
+  },
   name: 'CustomerName',
   middleware: 'preRegistratepage',
   data: () => ({

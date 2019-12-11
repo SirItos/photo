@@ -37,6 +37,9 @@
 import { mapActions } from 'vuex'
 import { map } from 'leaflet'
 export default {
+  head: {
+    title: 'Создание пользовтеля'
+  },
   name: 'Usercreating',
   middleware: 'preRegistratepage',
   methods: {

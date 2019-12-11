@@ -28,6 +28,9 @@
 
 <script>
 export default {
+  head: {
+    title: 'Загрузка фотографий'
+  },
   name: 'Photos',
   components: {
     'v-photo-input': () => import('@/components/PhotoInput'),

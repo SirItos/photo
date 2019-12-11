@@ -1,6 +1,6 @@
 <template>
   <v-app style="margin-top:0px ;margin-top:env(safe-area-inset-top)">
-    <v-app-bar app :value="getToolbar">
+    <v-app-bar app :value="toolbar">
       <div class="d-flex justify-start align-center" style="min-width:68px">
         <v-btn icon @click.stop="drawler=true">
           <v-icon>mdi-menu</v-icon>
@@ -25,6 +25,9 @@
     <v-content>
       <nuxt />
     </v-content>
+    <v-overlay :value="overlay" opacity="0.8">
+      <v-progress-circular indeterminate color="primary" width="7" size="64"></v-progress-circular>
+    </v-overlay>
   </v-app>
 </template>
 
@@ -46,6 +49,7 @@ export default {
   computed: {
     ...mapGetters('settings', ['getNavList', 'getToolbar']),
     ...mapState('user', ['name', 'role', 'phone']),
+    ...mapState('settings', ['overlay', 'toolbar']),
     list() {
       if (!this.phone) return 'unauth'
       return this.role

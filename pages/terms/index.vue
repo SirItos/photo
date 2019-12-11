@@ -62,6 +62,9 @@
 <script>
 import { scrolling } from '~/mixins'
 export default {
+  head: {
+    title: 'Пользовательское соглашение'
+  },
   name: 'TermsPage',
   mixins: [scrolling],
   data: () => ({

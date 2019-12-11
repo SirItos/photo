@@ -60,6 +60,9 @@
 const SearchField = () => import('@/components/PositionSearchComponent')
 
 export default {
+  head: {
+    title: 'Информация о ресурсе'
+  },
   name: 'CarInfo',
   components: {
     'v-geo-search': SearchField

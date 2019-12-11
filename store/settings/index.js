@@ -2,6 +2,7 @@ import { MutationsType } from '@/type-def'
 export const state = () => ({
   header: null,
   toolbar: false,
+  overlay: false,
   NavList: {
     unauth: [
       { text: 'Входа', icon: 'mdi-account', to: '/signin' },
@@ -23,18 +24,23 @@ export const state = () => ({
 export const getters = {
   getNavList: state => index => {
     return state.NavList[index]
-  },
-  getToolbar: state => state.toolbar
+  }
 }
 
 export const actions = {
   setToolbar({ commit }, payload) {
     commit(MutationsType.settings.SET_TOOLBAR, payload)
+  },
+  setOverlay({ commit }, payload) {
+    commit(MutationsType.settings.SET_OVERLAY, payload)
   }
 }
 
 export const mutations = {
   [MutationsType.settings.SET_TOOLBAR](state, payload) {
     state.toolbar = payload
+  },
+  [MutationsType.settings.SET_OVERLAY](state, payload) {
+    state.overlay = payload || false
   }
 }

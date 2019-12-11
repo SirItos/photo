@@ -101,6 +101,9 @@ import { mapState, mapActions } from 'vuex'
 import { mask } from 'vue-the-mask'
 
 export default {
+  head: {
+    title: 'Профиль'
+  },
   name: 'ProfilePage',
   directives: {
     mask

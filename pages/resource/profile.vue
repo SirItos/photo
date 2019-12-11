@@ -62,6 +62,9 @@
 import { mask } from 'vue-the-mask'
 import { mapState, mapActions } from 'vuex'
 export default {
+  head: {
+    title: 'Настройка держателя'
+  },
   name: 'ResourceProfile',
   directives: {
     mask

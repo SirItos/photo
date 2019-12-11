@@ -9,8 +9,7 @@ export default {
       { charset: 'utf-8' },
       {
         name: 'viewport',
-        content:
-          'width=device-width,initial-scale=1.0, viewport-fit=cover, user-scalable=no'
+        content: 'width=device-width,initial-scale=1.0, user-scalable=no'
       },
       {
         hid: 'description',
@@ -34,7 +33,8 @@ export default {
    */
   plugins: [
     { src: '~/plugins/cluster.js', mode: 'client' },
-    { src: '~/plugins/swiper.js', ssr: false }
+    { src: '~/plugins/swiper.js', ssr: false },
+    { src: '~/plugins/axios.js' }
   ],
   /*
    ** Nuxt.js dev-modules
@@ -48,7 +48,10 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: 'http://photo/api',
+    progress: false
+  },
   generate: {
     routes: ['/detail/1']
   },

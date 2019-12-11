@@ -1,5 +1,8 @@
 <template>
-  <v-row no-gutters class="flex-column align-center justify-space-between fill-height pa-5">
+  <v-row
+    no-gutters
+    class="flex-column align-center justify-space-between fill-height pa-5"
+  >
     <v-col>
       <div style="width:100%">
         <div class="d-flex flex-column align-center title" style="width:100%">
@@ -30,7 +33,9 @@
             maxlength="4"
             @click:append="show2 = !show2"
           ></v-text-field>
-          <div class="caption mt-2">Вы сможете изменить или восстановить пинкод в настройках сервиса</div>
+          <div class="caption mt-2">
+            Вы сможете изменить или восстановить пинкод в настройках сервиса
+          </div>
         </div>
       </div>
     </v-col>
@@ -43,7 +48,8 @@
           large
           nuxt
           :disabled="confirmed"
-        >Продолжить</v-btn>
+          >Продолжить</v-btn
+        >
       </div>
     </v-col>
   </v-row>
@@ -52,6 +58,9 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
+  head: {
+    title: 'Установка пин-кода'
+  },
   name: 'PinPage',
   middleware: 'preRegistratepage',
   data: () => ({
@@ -73,13 +82,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('user', ['setUserProperties']),
-    createUser() {
-      this.$root.$router.push('/registrate/createuser')
+    ...mapActions('user', ['setPin']),
+    async createUser() {
+      await this.setPin(this.pin)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

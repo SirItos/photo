@@ -71,6 +71,17 @@
 const Markers = () => import('./MarkertComponent')
 const BottomSheetContent = () => import('./BottomSheetContent')
 import { mapGetters, mapActions } from 'vuex'
+import { OpenStreetMapProvider } from 'leaflet-geosearch'
+
+const provider = new OpenStreetMapProvider({
+  params: {
+    addressdetails: 1,
+    limit: 20,
+    'accept-language': 'ru',
+    countrycodes: 'ru'
+  }
+})
+
 export default {
   name: 'MapComponent',
   components: {
@@ -81,7 +92,7 @@ export default {
     geolocationPremission: true,
     mapInstanse: null,
     url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-    zoom: 10,
+    zoom: 16,
     minZoom: 8,
     center: { lat: 55.75396, lng: 37.620393 },
     mapOptions: {
@@ -128,9 +139,12 @@ export default {
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
     ...mapActions('bottomSheet', ['setId']),
+    ...mapActions('user', ['setCity']),
     mapListners() {
       this.mapInstanse.on('locationfound', e => {
         this.geolocationPremission = true
+        this.zoom = 15
+        this.findCity(e.latlng)
         this.mapInstanse.stopLocate()
       })
       this.mapInstanse.on('locationerror', e => {
@@ -172,6 +186,21 @@ export default {
     closeSheet() {
       this.sheet = false
       this.setId(null)
+    },
+    findCity(latlng) {
+      // lat: 55.75396, lng: 37.620393
+      this.$axios
+        .get(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${
+            latlng.lat
+          }&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`
+        )
+        .then(response => {
+          this.setCity(response.data.address.state)
+        })
+        .catch(e => {
+          this.setCity(null)
+        })
     }
   }
 }
