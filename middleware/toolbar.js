@@ -1,4 +1,5 @@
 export default function({ route, store }) {
+  store.dispatch('dialog/setDialogParams', {})
   if (
     route.path === '/'
     // route.path.startsWith('/signin') ||

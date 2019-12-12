@@ -28,18 +28,20 @@
     <v-overlay :value="overlay" opacity="0.8">
       <v-progress-circular indeterminate color="primary" width="7" size="64"></v-progress-circular>
     </v-overlay>
+    <v-dialog :value="visibility" @click:outside="closeDialog" style="z-index:1200">
+      <dialog-content />
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
-import AppNavContent from '@/components/AppNavigationDrawlerList'
-import NavList from '@/components/AppNavList'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   name: 'defaultLayer',
   components: {
-    AppNavContent,
-    NavList
+    AppNavContent: () => import('@/components/AppNavigationDrawlerList'),
+    NavList: () => import('@/components/AppNavList'),
+    'dialog-content': () => import('@/components/AppDialog')
   },
   data() {
     return {
@@ -50,6 +52,7 @@ export default {
     ...mapGetters('settings', ['getNavList', 'getToolbar']),
     ...mapState('user', ['name', 'role', 'phone']),
     ...mapState('settings', ['overlay', 'toolbar']),
+    ...mapState('dialog', ['visibility']),
     list() {
       if (!this.phone) return 'unauth'
       return this.role
@@ -62,6 +65,12 @@ export default {
       let vh = window.innerHeight * 0.01
       document.documentElement.style.setProperty('--vh', `${vh}px`)
     })
+  },
+  methods: {
+    ...mapActions('dialog', ['setDialogParams']),
+    closeDialog() {
+      this.setDialogParams({})
+    }
   }
 }
 </script>

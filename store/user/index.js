@@ -1,5 +1,4 @@
 import { MutationsType } from '@/type-def'
-import Cookie from 'js-cookie'
 
 export const state = () => ({
   id: null,
@@ -22,7 +21,6 @@ export const actions = {
         phone: payload.value.replace(/\s+/g, '')
       })
       .then(response => {
-        dispatch('settings/setOverlay', false, { root: true })
         commit(MutationsType.user.SET_USER_FIELD, [
           payload,
           { field: 'id', value: response.data.user_id }
@@ -30,8 +28,20 @@ export const actions = {
         $nuxt.$router.push('/registrate/confirm')
       })
       .catch(e => {
-        dispatch('settings/setOverlay', false, { root: true })
-        console.log(e)
+        dispatch(
+          'dialog/setDialogParams',
+          {
+            visibility: true,
+            title: 'Ошибка регистрации',
+            text: e.response.data,
+            confirm: false,
+            okLabel: 'Войти',
+            okAction: () => {
+              this.$router.replace('/signin')
+            }
+          },
+          { root: true }
+        )
       })
   },
 
@@ -43,7 +53,6 @@ export const actions = {
         id: state.id
       })
       .then(response => {
-        dispatch('settings/setOverlay', false, { root: true })
         commit(MutationsType.user.SET_USER_FIELD, [
           {
             field: 'access_token',
@@ -54,7 +63,6 @@ export const actions = {
         $nuxt.$router.push('/registrate/pin')
       })
       .catch(e => {
-        dispatch('settings/setOverlay', false, { root: true })
         console.log(e)
       })
   },
@@ -67,11 +75,9 @@ export const actions = {
       })
       .then(response => {
         console.log(response.data)
-        dispatch('settings/setOverlay', false, { root: true })
       })
       .catch(e => {
         console.log(e)
-        dispatch('settings/setOverlay', false, { root: true })
       })
   },
 
@@ -82,7 +88,6 @@ export const actions = {
         pin: payload.pin
       })
       .then(response => {
-        dispatch('settings/setOverlay', false, { root: true })
         Cookie.set('token', {
           access_token: state.access_token.access_token,
           refresh_token: state.access_token.refresh_token
@@ -90,7 +95,19 @@ export const actions = {
         $nuxt.$router.push('/registrate/createuser')
       })
       .catch(e => {
-        dispatch('settings/setOverlay', false, { root: true })
+        console.log(e)
+      })
+  },
+
+  async getUserParams({ commit }) {
+    await this.$axios
+      .post('/user-params', {
+        params: ['role', 'id']
+      })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(e => {
         console.log(e)
       })
   },

@@ -4,7 +4,10 @@ export const state = () => ({
   visibility: false,
   title: null,
   text: null,
-  buttons: []
+  okLabel: null,
+  cancelLabel: null,
+  okAction: null,
+  confirm: false
 })
 
 export const actions = {
@@ -18,6 +21,9 @@ export const mutations = {
     state.visibility = payload.visibility || false
     state.title = payload.title || null
     state.text = payload.text || null
-    state.buttons = payload.buttons
+    state.okLabel = payload.okLabel || null
+    state.cancelLabel = payload.cancelLabel || null
+    state.confirm = payload.confirm || false
+    state.okAction = payload.okAction || null
   }
 }

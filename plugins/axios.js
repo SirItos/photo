@@ -6,9 +6,9 @@ export default function({ $axios, store }) {
     return config
   })
   $axios.onResponse(() => {
-    // store.dispatch('settings/setOverlay', false)
+    store.dispatch('settings/setOverlay', false)
   })
   $axios.onError(error => {
-    // store.dispatch('settings/setOverlay', false)
+    store.dispatch('settings/setOverlay', false)
   })
 }
