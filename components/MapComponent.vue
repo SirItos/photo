@@ -31,8 +31,7 @@
         class="font-weight-bold"
         nuxt
         to="/filters"
-        >Поиск</v-btn
-      >
+      >Поиск</v-btn>
       <v-btn
         v-else
         large
@@ -40,8 +39,7 @@
         color="primary"
         class="font-weight-bold"
         @click="unsetFilters"
-        >Сбросить фильтр</v-btn
-      >
+      >Сбросить фильтр</v-btn>
     </div>
     <div class="map-contorls">
       <div
@@ -191,7 +189,7 @@ export default {
     },
     findCity(latlng) {
       // lat: 55.75396, lng: 37.620393
-      this.$store.dispatch('user/getUserParams')
+
       this.$axios
         .get(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`

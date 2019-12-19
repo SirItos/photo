@@ -35,7 +35,9 @@ export default {
     call() {
       if (this.okAction) {
         this.okAction()
+        return
       }
+      this.setDialogParams({})
     }
   }
 }

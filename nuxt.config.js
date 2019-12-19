@@ -23,7 +23,7 @@ export default {
     middleware: 'toolbar'
   },
 
-  loading: { color: '#fff' },
+  loading: { color: '#FF473A' },
   /*
    ** Global CSS
    */

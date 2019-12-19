@@ -101,6 +101,7 @@ export default {
       await this.smsConfrim({
         code: this.code
       })
+      this.code = null
       // this.$root.$router.push('/registrate/pin')
     }
   }

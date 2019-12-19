@@ -32,7 +32,7 @@
               :rules="[val => !!val || 'Укажите Ваш телефон']"
             ></v-text-field>
           </div>
-          <div v-if="role==='provider'" class="px-5">
+          <div v-if="roles==='provider'" class="px-5">
             <div>
               <v-text-field
                 v-model="userEmail"
@@ -51,7 +51,7 @@
         </v-col>
 
         <div>
-          <div v-if="role==='provider'">
+          <div v-if="roles==='provider'">
             <v-divider></v-divider>
             <div
               class="px-5"
@@ -119,7 +119,7 @@ export default {
     }
   }),
   computed: {
-    ...mapState('user', ['name', 'phone', 'pin', 'role', 'email', 'ageRange'])
+    ...mapState('user', ['name', 'phone', 'pin', 'roles', 'email', 'ageRange'])
   },
   created() {
     this.setToolbar(false)

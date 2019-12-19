@@ -50,12 +50,12 @@ export default {
   },
   computed: {
     ...mapGetters('settings', ['getNavList', 'getToolbar']),
-    ...mapState('user', ['name', 'role', 'phone']),
+    ...mapState('user', ['name', 'roles', 'phone']),
     ...mapState('settings', ['overlay', 'toolbar']),
     ...mapState('dialog', ['visibility']),
     list() {
-      if (!this.phone) return 'unauth'
-      return this.role
+      if (!this.roles) return 'unauth'
+      return this.roles
     }
   },
   mounted() {

@@ -17,7 +17,7 @@
                 <br />Свиданий
               </div>
 
-              <div class="py-4" v-if="city">город : {{city}}</div>
+              <div class="py-4" v-if="city">город : {{ city }}</div>
               <!--     -->
               <v-text-field
                 v-model="phone"
@@ -25,7 +25,7 @@
                 prefix="+7"
                 max="10"
                 type="tel"
-                :rules="[val => !!val || 'Укажите Ваш телефон']"
+                :rules="[ v => !!v ||'Укажите свой телефон' ,rules.length(13)]"
                 hide-details
                 placeholder="_ _ _  _ _ _  _ _  _ _"
                 solo
@@ -34,8 +34,9 @@
               <v-text-field
                 v-if="!registrate"
                 v-model="code"
+                :rules="[ v => !!v ||'Укажите пин-код' ,rules.length(4)]"
                 maxlength="4"
-                type="tel"
+                type="password"
                 class="mt-1 text-center"
                 hide-details
                 placeholder="введите пин-код"
@@ -60,7 +61,7 @@
               color="primary"
               class="text-none font-weight-bold"
               type="submit"
-            >{{ registrate ? 'Регистрация' : 'Вход'}}</v-btn>
+            >{{ registrate ? 'Регистрация' : 'Вход' }}</v-btn>
           </div>
         </div>
       </v-form>
@@ -87,13 +88,16 @@ export default {
     mask: '### ### ## ##',
     valid: false,
     phone: null,
-    code: null
+    code: null,
+    rules: {
+      length: len => v => {
+        if (!v) return true
+        return v.length === len || 'Укажите свой телефон'
+      }
+    }
   }),
   computed: {
     ...mapState('user', ['city'])
-  },
-  created() {
-    // this.$store.registerModule('providerDetails', providerModule)
   },
   methods: {
     ...mapActions('user', ['registrateApi', 'enter']),
@@ -108,26 +112,23 @@ export default {
           field: 'phone',
           value: this.phone
         })
-        // this.$root.$router.push('/registrate/confirm')
       }
     },
-    enterAction() {
+    async enterAction() {
       if (this.$refs.form.validate()) {
-        if (this.code === '1111') {
-          this.enter({ name: 'User one', phone: this.phone, role: 'provider' })
-          this.$root.$router.push('/')
-        }
-        if (this.code === '2222') {
-          this.enter({ name: 'User two', phone: this.phone, role: 'customer' })
-          this.$root.$router.push('/')
-        }
+        await this.enter({
+          phone: this.phone.replace(/\s+/g, ''),
+          code: this.code
+        })
+      } else {
+        console.log('unvalid')
       }
     }
   }
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .start-bg {
   background-image: url('/photo-main-bg.png');
   background-position: center;

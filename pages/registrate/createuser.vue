@@ -47,7 +47,7 @@ export default {
     setUser(userType, nextRoute) {
       this.setUserProperties([
         {
-          field: 'role',
+          field: 'roles',
           value: userType
         }
       ])

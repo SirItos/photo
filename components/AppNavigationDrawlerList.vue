@@ -5,7 +5,7 @@
     </v-col>
 
     <div>
-      <OnlineSwitch v-if="role==='provider'" />
+      <OnlineSwitch v-if="roles==='provider'" />
       <v-divider class="white"></v-divider>
       <NavListItems :items="items" />
     </div>
@@ -30,7 +30,7 @@ export default {
     ]
   }),
   computed: {
-    ...mapState('user', ['role'])
+    ...mapState('user', ['roles'])
   }
 }
 </script>
