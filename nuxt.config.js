@@ -19,9 +19,7 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-  router: {
-    middleware: 'toolbar'
-  },
+  router: {},
 
   loading: { color: '#FF473A' },
   /*

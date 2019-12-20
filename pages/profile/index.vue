@@ -108,11 +108,24 @@ export default {
   directives: {
     mask
   },
+  async asyncData({ $axios }) {
+    return await $axios
+      .post('/user-params', {
+        params: ['phone', 'userDetails']
+      })
+      .then(response => {
+        return {
+          userPhone: response.data.phone,
+          userEmail: response.data.userDetails.email,
+          userName: response.data.userDetails.name
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  },
   data: () => ({
     mask: '### ### ## ##',
-    userName: null,
-    userPhone: null,
-    userEmail: null,
     age: null,
     emailRule: val => {
       return true
@@ -120,13 +133,6 @@ export default {
   }),
   computed: {
     ...mapState('user', ['name', 'phone', 'pin', 'roles', 'email', 'ageRange'])
-  },
-  created() {
-    this.setToolbar(false)
-    this.userName = JSON.parse(JSON.stringify(this.name))
-    this.userPhone = JSON.parse(JSON.stringify(this.phone))
-    this.userEmail = JSON.parse(JSON.stringify(this.email))
-    this.age = JSON.parse(JSON.stringify(this.ageRange))
   },
   methods: {
     ...mapActions('settings', ['setToolbar']),

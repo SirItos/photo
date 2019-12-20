@@ -104,6 +104,12 @@ export const actions = {
           access_token: state.access_token.access_token,
           refresh_token: state.access_token.refresh_token
         })
+        commit(MutationsType.user.SET_USER_FIELD, [
+          {
+            field: 'roles',
+            value: response.data.roles
+          }
+        ])
         $nuxt.$router.push('/registrate/createuser')
       })
       .catch(e => {
@@ -129,9 +135,7 @@ export const actions = {
         ]
         commit(MutationsType.user.SET_USER_FIELD, data)
       })
-      .catch(e => {
-        console.log(e)
-      })
+      .catch(e => {})
   },
 
   async enter({ commit, dispatch }, payload) {
@@ -171,6 +175,44 @@ export const actions = {
                     })
                   }
                 : null
+          },
+          { root: true }
+        )
+      })
+  },
+  async setUserProperties({ commit, dispatch }, payload) {
+    dispatch('settings/setOverlay', true, { root: true })
+    await this.$axios
+      .post('/set-user-details', {
+        params: payload
+      })
+      .then(response => {
+        commit(MutationsType.user.SET_USER_FIELD, payload)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  },
+  async setUserRole({ commit, dispatch }, payload) {
+    dispatch('settings/setOverlay', true, { root: true })
+    await this.$axios
+      .post('/set-role', {
+        role: payload.params[0].value
+      })
+      .then(respinse => {
+        commit(MutationsType.user.SET_USER_FIELD, payload.params)
+        $nuxt.$router.push(payload.nextRoute)
+      })
+      .catch(e => {
+        dispatch(
+          'dialog/setDialogParams',
+          {
+            visibility: true,
+            title: 'Ошибка установки роли',
+            text: e.response.data,
+            confirm: false,
+            okLabel: 'Ок',
+            okAction: null
           },
           { root: true }
         )

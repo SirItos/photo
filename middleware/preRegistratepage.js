@@ -8,7 +8,6 @@ export default function({ store, from, redirect }) {
     !from.fullPath.startsWith('/signin') &&
     !from.fullPath.startsWith('/terms')
   ) {
-    store.dispatch('settings/setToolbar', true)
     redirect('/')
   }
 }

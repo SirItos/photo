@@ -36,13 +36,15 @@ export default {
   }),
   methods: {
     ...mapActions('user', ['setUserProperties']),
-    setCustomerName() {
-      this.setUserProperties([
-        {
-          field: 'name',
-          value: this.name
-        }
-      ])
+    async setCustomerName() {
+      if (this.name) {
+        await this.setUserProperties([
+          {
+            field: 'name',
+            value: this.name
+          }
+        ])
+      }
       this.$root.$router.push('/')
     }
   }

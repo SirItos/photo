@@ -14,12 +14,6 @@ export default {
   components: {
     statScreen
   }
-  // created() {
-  //   this.setToolbar(false)
-  // },
-  // methods: {
-  //   ...mapActions('settings', ['setToolbar'])
-  // }
 }
 </script>
 

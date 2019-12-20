@@ -61,6 +61,7 @@
 
 <script>
 import { scrolling } from '~/mixins'
+
 export default {
   head: {
     title: 'Пользовательское соглашение'

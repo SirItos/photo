@@ -18,6 +18,9 @@ export default {
   created() {
     this.setToolbar(true)
   },
+  beforeDestroy() {
+    this.setToolbar(false)
+  },
   methods: {
     ...mapActions('settings', ['setToolbar'])
   }

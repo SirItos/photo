@@ -17,7 +17,6 @@
           large
           @click="setUser('customer','/registrate/customer-name')"
         >Я хочу фотографироваться</v-btn>
-        <!--  to="/registrate/customer-name" -->
       </div>
       <div class="d-flex justify-center mt-4" style="width:100%">
         <v-btn
@@ -25,7 +24,7 @@
           nuxt
           large
           width="250"
-          @click="setUser('provider','/resource/profile')"
+          @click="setUser('provider','/registrate/resource/profile',true)"
           color="secondary "
         >У меня есть машины</v-btn>
       </div>
@@ -43,15 +42,17 @@ export default {
   name: 'Usercreating',
   middleware: 'preRegistratepage',
   methods: {
-    ...mapActions('user', ['setUserProperties']),
-    setUser(userType, nextRoute) {
-      this.setUserProperties([
-        {
-          field: 'roles',
-          value: userType
-        }
-      ])
-      this.$root.$router.push(`${nextRoute}`)
+    ...mapActions('user', ['setUserRole']),
+    async setUser(userType, nextRoute) {
+      await this.setUserRole({
+        params: [
+          {
+            field: 'roles',
+            value: userType
+          }
+        ],
+        nextRoute: nextRoute
+      })
     }
   }
 }
