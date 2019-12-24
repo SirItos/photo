@@ -30,13 +30,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('user', ['enter']),
+    ...mapActions('user', ['enter', 'exit']),
     call(item) {
+      this.$emit('hideDrawler')
       if (!item.action) return
       this[item.action]()
-    },
-    exit() {
-      this.enter({})
     }
   }
 }

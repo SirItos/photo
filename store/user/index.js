@@ -6,7 +6,7 @@ export const state = () => ({
   roles: null,
   phone: null,
   email: null,
-  ageRange: null,
+  age_range: null,
   access_token: null,
   have_res: false,
   online: false,
@@ -180,6 +180,12 @@ export const actions = {
         )
       })
   },
+
+  exit({ commit }) {
+    this.$cookies.remove('token')
+    commit(MutationsType.user.CLEAR)
+  },
+
   async setUserProperties({ commit, dispatch }, payload) {
     dispatch('settings/setOverlay', true, { root: true })
     await this.$axios
@@ -235,10 +241,24 @@ export const mutations = {
   [MutationsType.user.SET_USER_FIELD](state, payload) {
     payload.forEach(property => {
       if (!property) return
-      state[property.field] = property.value
+      const paramName =
+        property.field === 'display_phone' ? 'phone' : property.field
+      state[paramName] = property.value
     })
   },
   [MutationsType.user.SET_CITY](state, payload) {
     state.city = payload
+  },
+  [MutationsType.user.CLEAR](state) {
+    ;(state.id = null),
+      (state.name = null),
+      (state.roles = null),
+      (state.phone = null),
+      (state.email = null),
+      (state.age_range = null),
+      (state.access_token = null),
+      (state.have_res = false),
+      (state.online = false),
+      (state.city = null)
   }
 }

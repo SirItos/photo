@@ -19,7 +19,7 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawler" class="primary white--text fix-nav" app temporary>
       <AppNavContent>
-        <NavList :items="getNavList(list)" />
+        <NavList :items="getNavList(list)" @hideDrawler="drawler=false" />
       </AppNavContent>
     </v-navigation-drawer>
     <v-content>

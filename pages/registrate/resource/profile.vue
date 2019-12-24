@@ -89,16 +89,15 @@ export default {
   },
   methods: {
     ...mapActions('user', ['setUserProperties']),
-    next() {
+    async next() {
       if (this.$refs.form.validate()) {
-        this.$root.$router.push('/resource/carinfo')
-        this.setUserProperties([
+        await this.setUserProperties([
           {
             field: 'name',
             value: this.name
           },
           {
-            field: 'phone',
+            field: 'display_phone',
             value: this.userPhone
           },
           {
@@ -106,10 +105,11 @@ export default {
             value: this.email
           },
           {
-            field: 'ageRange',
+            field: 'age_range',
             value: this.ageRange
           }
         ])
+        this.$root.$router.push('/registrate/resource/carinfo')
       }
     }
   }

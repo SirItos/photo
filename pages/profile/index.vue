@@ -115,7 +115,7 @@ export default {
       })
       .then(response => {
         return {
-          userPhone: response.data.phone,
+          userPhone: response.data.userDetails.display_phone,
           userEmail: response.data.userDetails.email,
           userName: response.data.userDetails.name
         }
@@ -144,7 +144,7 @@ export default {
           value: this.userName
         },
         {
-          field: 'phone',
+          field: 'display_phone',
           value: this.userPhone
         },
         {
@@ -156,7 +156,7 @@ export default {
           value: this.age
         }
       ])
-      this.$root.$router.back()
+      // this.$root.$router.back()
     }
   }
 }

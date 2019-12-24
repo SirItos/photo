@@ -166,14 +166,14 @@ export default {
       this.mapInstanse.zoomOut()
     },
     currentPosition() {
-      navigator.permissions.query({ name: 'geolocation' }).then(result => {
-        // navigator.permissions.revoke({ name: 'geolocation' }).then(result => {
-        //   console.log(result)
-        // })
+      // navigator.permissions.query({ name: 'geolocation' }).then(result => {
+      //   // navigator.permissions.revoke({ name: 'geolocation' }).then(result => {
+      //   //   console.log(result)
+      //   // })
 
-        this.geolocationPremission = result.state === 'granted'
-      })
-      this.mapInstanse.locate({ watch: true, setView: true, maxZoom: 12 })
+      //   this.geolocationPremission = result.state === 'granted'
+      // })
+      this.mapInstanse.locate({ watch: true, setView: true, maxZoom: 14 })
     },
     unsetFilters() {
       this.changeFilters()

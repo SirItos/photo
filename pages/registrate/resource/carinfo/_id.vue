@@ -33,9 +33,9 @@
             :tick-labels="price"
             v-model="priceRange"
             min="0"
-            max="5"
+            max="4"
             :ticks="true"
-            tick-size="6"
+            tick-size="4"
             track-color="rgba(0, 0, 0, 0.26)"
             color="primary"
             class="mt-5"
@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 const SearchField = () => import('@/components/PositionSearchComponent')
 
 export default {
@@ -72,29 +74,66 @@ export default {
     location: null,
     individual: null,
     showroom: null,
-    priceRange: [2, 4],
-    price: ['0', '1000', '3000', '6000', '10000', '']
+    priceRange: [1, 2],
+    price: ['1000', '3000', '6000', '10000', '']
   }),
   created() {
     this.id = this.$route.query.id
   },
   methods: {
+    ...mapActions('resource', ['setResourceParams']),
     setLocate(val) {
       this.location = val
     },
-    next() {
+    async next() {
+      await this.setResourceParams([
+        {
+          field: 'address',
+          value: this.location.label
+        },
+        {
+          field: 'lat',
+          value: this.location.latlng.lat
+        },
+        {
+          field: 'long',
+          value: this.location.latlng.lng
+        },
+        // {
+        //   field:'description',
+        //   value:this.description
+        // },
+        {
+          field: 'resource_type',
+          value: this.individual
+        },
+        {
+          field: 'min_cost',
+          value: this.priceRange[0]
+        },
+        {
+          field: 'max_cost',
+          value: this.priceRange[1]
+        }
+      ])
       if (this.id) {
         this.$root.$router.back()
         return
       }
-      this.$root.$router.push('/resource/photos')
+      // this.$root.$router.push('/resource/photos')
     }
   }
 }
 </script>
 
 <style lang="scss">
-.no-margin-slider .v-slider--horizontal {
-  // margin: 0;
+.v-slider__tick:first-child {
+  background: transparent !important;
+  div {
+    transform: traslateX(-12px) !important;
+  }
+}
+.v-slider__tick:last-child {
+  display: none;
 }
 </style>

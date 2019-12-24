@@ -1,6 +1,6 @@
 export const MutationsType = {
   user: {
-    SET_USER: 'SET_USER',
+    CLEAR: 'CLEAR',
     SET_USER_PHONE: 'SEt_USER_PHONE',
     SET_USER_FIELD: 'SET_USER_FILED',
     SET_CITY: 'SET_CITY'
