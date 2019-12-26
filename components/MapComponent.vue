@@ -92,7 +92,7 @@ export default {
     geolocationPremission: true,
     mapInstanse: null,
     url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-    zoom: 16,
+    zoom: 14,
     minZoom: 8,
     center: { lat: 55.75396, lng: 37.620393 },
     mapOptions: {
@@ -142,10 +142,9 @@ export default {
     ...mapActions('user', ['setCity']),
     mapListners() {
       this.mapInstanse.on('locationfound', e => {
+        this.mapInstanse.setZoom(14)
         this.geolocationPremission = true
-        this.zoom = 15
         this.findCity(e.latlng)
-        this.mapInstanse.stopLocate()
       })
       this.mapInstanse.on('locationerror', e => {
         if (e.code === 1) {
@@ -157,6 +156,7 @@ export default {
       })
     },
     zoomUpdated(zoom) {
+      console.log(zoom)
       this.zoom = zoom
     },
     zoomIn() {
@@ -166,14 +166,7 @@ export default {
       this.mapInstanse.zoomOut()
     },
     currentPosition() {
-      // navigator.permissions.query({ name: 'geolocation' }).then(result => {
-      //   // navigator.permissions.revoke({ name: 'geolocation' }).then(result => {
-      //   //   console.log(result)
-      //   // })
-
-      //   this.geolocationPremission = result.state === 'granted'
-      // })
-      this.mapInstanse.locate({ watch: true, setView: true, maxZoom: 14 })
+      this.mapInstanse.locate({ setView: true })
     },
     unsetFilters() {
       this.changeFilters()
@@ -192,7 +185,9 @@ export default {
 
       this.$axios
         .get(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${
+            latlng.lat
+          }&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`
         )
         .then(response => {
           this.setCity(response.data.address.state)

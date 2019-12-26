@@ -9,6 +9,7 @@ export const actions = {
         value: access_token
       }
     ])
+
     await dispatch('user/getUserParams', ['roles', 'id'], { root: true })
   }
 }

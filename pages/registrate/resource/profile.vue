@@ -38,7 +38,12 @@
             ></v-text-field>
           </div>
           <div>
-            <v-select v-model="ageRange" clearable :items="['20-30','30-40','40-50','старше 50']" />
+            <v-select
+              v-model="ageRange"
+              label="Возростной диапазон"
+              clearable
+              :items="['20-30','30-40','40-50','старше 50']"
+            />
             <!-- <v-text-field disabled name="ageRange" label="Возрастной диапозон" color="primary"></v-text-field> -->
           </div>
         </v-form>

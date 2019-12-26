@@ -20,58 +20,76 @@
 </template>
 
 <script>
-import { OpenStreetMapProvider } from 'leaflet-geosearch'
+// import { OpenStreetMapProvider } from 'leaflet-geosearch'
 
-const provider = new OpenStreetMapProvider({
-  params: {
-    addressdetails: 1,
-    limit: 20,
-    'accept-language': 'ru',
-    countrycodes: 'ru'
-  }
-})
+// const provider = new OpenStreetMapProvider({
+//   params: {
+//     addressdetails: 1,
+//     limit: 20,
+//     'accept-language': 'ru',
+//     countrycodes: 'ru'
+//   }
+// })
 
 export default {
   name: 'PositionSearchComponent',
   data: () => ({
     loading: false,
+    wait: false,
     search: null,
-    manual: true,
     mapItems: [],
     current: null
   }),
   watch: {
     search(val) {
-      this.startSearch(val)
+      this.search = val
+      if (!this.wait) {
+        this.wait = true
+        setTimeout(() => {
+          this.startSearch()
+          this.wait = false
+        }, 1000)
+      }
     }
   },
   methods: {
-    startSearch(val) {
-      if (!val) {
+    startSearch() {
+      if (!this.search) {
         return
       }
-      if (val.length >= 3 && !this.loading) {
-        this.loading = true
-        provider.search({ query: val }).then(response => {
-          const items = response.map(item => {
-            const label = `${item.raw.address.road || ''} ${item.raw.address
-              .house_number ||
-              item.raw.address.house ||
-              ''} ${item.raw.address.state}`
-            return {
-              label: label,
-              value: item.raw.osm_id,
-              latlng: {
-                lat: Number(item.y),
-                lng: Number(item.x)
-              }
-            }
-          })
-
-          this.mapItems = items
-          this.loading = false
+      this.$axios
+        .post('/geosearch', {
+          val: this.search
         })
-      }
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+
+      // if (val.length >= 3 && !this.loading) {
+      //   this.loading = true
+      //   provider.search({ query: val }).then(response => {
+      //     const items = response.map(item => {
+      //       const label = `${item.raw.address.road || ''} ${item.raw.address
+      //         .house_number ||
+      //         item.raw.address.house ||
+      //         ''} ${item.raw.address.state}`
+      //       return {
+      //         label: label,
+      //         value: item.raw.osm_id,
+      //         latlng: {
+      //           lat: Number(item.y),
+      //           lng: Number(item.x)
+      //         }
+      //       }
+      //     })
+
+      //     this.mapItems = items
+      //     this.loading = false
+      //   })
+      // }
     },
     change(val) {
       const selected = this.mapItems.find(object => {

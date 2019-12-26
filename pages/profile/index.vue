@@ -56,7 +56,7 @@
             <div
               class="px-5"
               v-ripple
-              @click="$router.push({path:'/resource/carinfo',query:{id:1}})"
+              @click="$router.push({path:'/registrate/resource/carinfo',query:{id:1}})"
             >
               <v-row>
                 <v-col>Редактировать информацию о автомобиле</v-col>
