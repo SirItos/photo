@@ -48,9 +48,7 @@ export default {
       this.img.push(val)
     },
     deleteImg(val) {
-      console.log(val)
       this.img.splice(val, 1)
-      console.log(this.img)
     },
     next() {
       if (this.id) {

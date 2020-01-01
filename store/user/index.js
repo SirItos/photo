@@ -2,15 +2,18 @@ import { MutationsType } from '@/type-def'
 
 export const state = () => ({
   id: null,
-  name: null,
   roles: null,
   phone: null,
   email: null,
-  age_range: null,
   access_token: null,
   have_res: false,
-  online: false,
-  city: null
+  have_foto: 0,
+  online: true,
+  city: null,
+  latlng: {
+    lat: null,
+    lng: null
+  }
 })
 
 export const actions = {
@@ -93,56 +96,11 @@ export const actions = {
       })
   },
 
-  async setPin({ state, commit, dispatch }, payload) {
-    dispatch('settings/setOverlay', true, { root: true })
-    await this.$axios
-      .post('/set-pin', {
-        pin: payload
-      })
-      .then(response => {
-        this.$cookies.set('token', {
-          access_token: state.access_token.access_token,
-          refresh_token: state.access_token.refresh_token
-        })
-        commit(MutationsType.user.SET_USER_FIELD, [
-          {
-            field: 'roles',
-            value: response.data.roles
-          }
-        ])
-        $nuxt.$router.push('/registrate/createuser')
-      })
-      .catch(e => {
-        console.log(e)
-      })
-  },
-
-  async getUserParams({ commit }, payload) {
-    await this.$axios
-      .post('/user-params', {
-        params: payload
-      })
-      .then(response => {
-        const data = [
-          {
-            field: 'id',
-            value: response.data.id
-          },
-          {
-            field: 'roles',
-            value: response.data.roles[0].name
-          }
-        ]
-        commit(MutationsType.user.SET_USER_FIELD, data)
-      })
-      .catch(e => {})
-  },
-
-  async enter({ commit, dispatch }, payload) {
+  async enter({ state, commit, dispatch }, payload) {
     dispatch('settings/setOverlay', true, { root: true })
     await this.$axios
       .post('/auth', payload)
-      .then(response => {
+      .then(async response => {
         this.$cookies.set('token', {
           access_token: response.data.access_token,
           refresh_token: response.data.refresh_token
@@ -154,7 +112,32 @@ export const actions = {
           }
         ])
         $nuxt.$router.push('/')
-        dispatch('getUserParams', ['roles', 'id'])
+        await dispatch('getUserParams', [
+          'roles',
+          'id',
+          'resource',
+          'userDetails'
+        ])
+
+        if (!state.have_res) {
+          dispatch(
+            'dialog/setDialogParams',
+            {
+              visibility: true,
+              title: 'Создайте ресурс',
+              text:
+                'Для продолжения работы в качестве поставщика услуг, необходимо создать ресурс',
+              confirm: true,
+              okLabel: 'Создать',
+              cancelLabel: 'Позже',
+              okAction: () => {
+                $nuxt.$router.push('/registrate/resource/carinfo')
+                dispatch('dialog/setDialogParams', {}, { root: true })
+              }
+            },
+            { root: true }
+          )
+        }
       })
       .catch(e => {
         dispatch(
@@ -185,7 +168,29 @@ export const actions = {
     this.$cookies.remove('token')
     commit(MutationsType.user.CLEAR)
   },
-
+  async setPin({ state, commit, dispatch }, payload) {
+    dispatch('settings/setOverlay', true, { root: true })
+    await this.$axios
+      .post('/set-pin', {
+        pin: payload
+      })
+      .then(response => {
+        this.$cookies.set('token', {
+          access_token: state.access_token.access_token,
+          refresh_token: state.access_token.refresh_token
+        })
+        commit(MutationsType.user.SET_USER_FIELD, [
+          {
+            field: 'roles',
+            value: response.data.roles
+          }
+        ])
+        $nuxt.$router.push('/registrate/createuser')
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  },
   async setUserProperties({ commit, dispatch }, payload) {
     dispatch('settings/setOverlay', true, { root: true })
     await this.$axios
@@ -225,19 +230,45 @@ export const actions = {
       })
   },
   setCity({ commit }, payload) {
-    commit(MutationsType.user.SET_CITY, payload)
+    commit(MutationsType.user.SET_USER_FIELD, payload)
+  },
+  async getUserParams({ commit }, payload) {
+    await this.$axios
+      .post('/user-params', {
+        params: payload
+      })
+      .then(response => {
+        const data = [
+          {
+            field: 'id',
+            value: response.data.id
+          },
+          {
+            field: 'roles',
+            value: response.data.roles[0].name
+          },
+          {
+            field: 'have_res',
+            value: response.data.resource ? response.data.resource.id : 0
+          },
+          {
+            field: 'have_foto',
+            value: response.data.resource
+              ? response.data.resource.images.length
+              : 0
+          },
+          {
+            field: 'online',
+            value: response.data.userDetails.online
+          }
+        ]
+        commit(MutationsType.user.SET_USER_FIELD, data)
+      })
+      .catch(e => {})
   }
 }
 
 export const mutations = {
-  [MutationsType.user.SET_USER_PHONE](state, payload) {
-    state.phone = payload
-  },
-  // [MutationsType.user.SET_USER](state, payload) {
-  //   state.phone = payload.phone
-  //   state.name = payload.name
-  //   state.roles = payload.roles
-  // },
   [MutationsType.user.SET_USER_FIELD](state, payload) {
     payload.forEach(property => {
       if (!property) return
@@ -246,19 +277,19 @@ export const mutations = {
       state[paramName] = property.value
     })
   },
-  [MutationsType.user.SET_CITY](state, payload) {
-    state.city = payload
-  },
   [MutationsType.user.CLEAR](state) {
     ;(state.id = null),
       (state.name = null),
       (state.roles = null),
       (state.phone = null),
       (state.email = null),
-      (state.age_range = null),
       (state.access_token = null),
       (state.have_res = false),
       (state.online = false),
-      (state.city = null)
+      (state.city = null),
+      (state.latlng = {
+        lat: null,
+        lng: null
+      })
   }
 }

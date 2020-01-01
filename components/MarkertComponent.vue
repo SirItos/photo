@@ -1,5 +1,5 @@
 <template>
-  <l-marker ref="marker" :lat-lng="{lat:item.lat, lng:item.lng}" @click="clickEvent">
+  <l-marker ref="marker" :lat-lng="{lat:item.lat, lng:item.long}" @click="clickEvent">
     <l-icon
       :icon-size="dymanicSize"
       :icon-anchor="dynamicAnchor"

@@ -9,7 +9,12 @@ export const actions = {
         value: access_token
       }
     ])
-
-    await dispatch('user/getUserParams', ['roles', 'id'], { root: true })
+    await dispatch(
+      'user/getUserParams',
+      ['roles', 'id', 'resource', 'userDetails'],
+      {
+        root: true
+      }
+    )
   }
 }

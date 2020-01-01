@@ -3,7 +3,7 @@
     <v-col>
       <v-form ref="form" lazy-validation :value="valid">
         <div class="text-center font-weight-bold headline">Информация об автомобиле</div>
-        <v-geo-search @setLocate="setLocate" />
+        <v-geo-search @setLocate="setLocate" :init="location" />
         <div class="pt-5">
           <v-textarea v-model="description" label="Описание" rows="4" />
         </div>
@@ -50,7 +50,7 @@
       </v-form>
     </v-col>
 
-    <div class="pa-10">
+    <div class="pa-10" style="background-color:#fafafa">
       <v-btn
         class="text-none font-weight-bold"
         color="primary"
@@ -75,6 +75,23 @@ export default {
   components: {
     'v-geo-search': SearchField
   },
+  async asyncData({ route, $axios }) {
+    if (route.query.edit) {
+      return await $axios
+        .post('/get-resource-params', { id: route.query.edit })
+        .then(response => {
+          console.log(response.data)
+          return {
+            id: response.data.id,
+            location: response.data.address,
+            individual: response.data.resource_type,
+            showroom: !response.data.resource_type,
+            description: response.data.description,
+            priceRange: [response.data.min_cost, response.data.max_cost]
+          }
+        })
+    }
+  },
   data: () => ({
     id: null,
     location: null,
@@ -85,15 +102,19 @@ export default {
     valid: false,
     price: ['1000', '3000', '6000', '10000', '']
   }),
-  created() {
-    this.id = this.$route.query.id
-  },
+  // created() {
+  //   this.edit = this.$route.query.edit
+  // },
   methods: {
     ...mapActions('resource', ['setResourceParams']),
     setLocate(val) {
       this.location = val
     },
     async next() {
+      if (!this.$refs.form.validate()) {
+        this.$vuetify.goTo(0)
+        return
+      }
       await this.setResourceParams([
         {
           field: 'address',
@@ -107,10 +128,10 @@ export default {
           field: 'long',
           value: this.location.latlng.lng
         },
-        // {
-        //   field:'description',
-        //   value:this.description
-        // },
+        {
+          field: 'description',
+          value: this.description
+        },
         {
           field: 'resource_type',
           value: this.individual
@@ -122,13 +143,17 @@ export default {
         {
           field: 'max_cost',
           value: this.priceRange[1]
+        },
+        {
+          field: 'activated',
+          value: true
         }
       ])
       if (this.id) {
         this.$root.$router.back()
         return
       }
-      // this.$root.$router.push('/resource/photos')
+      this.$root.$router.push('/registrate/resource/photos')
     }
   }
 }

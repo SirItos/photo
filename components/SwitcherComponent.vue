@@ -17,7 +17,7 @@
 export default {
   name: 'SwitcherComponent',
   data: () => ({
-    status: false
+    status: true
   }),
   created() {
     this.status = this.$store.state.user.online
@@ -25,6 +25,20 @@ export default {
   methods: {
     changeValue() {
       this.status = !this.status
+      this.$store.commit('user/SET_USER_FILED', [
+        {
+          field: 'online',
+          value: this.status
+        }
+      ])
+      this.$axios.post('/set-user-details', {
+        params: [
+          {
+            field: 'online',
+            value: this.status
+          }
+        ]
+      })
     }
   }
 }

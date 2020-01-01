@@ -14,8 +14,8 @@
         <l-tile-layer :url="url"></l-tile-layer>
         <v-marker-cluster :options="clusterOptions">
           <Markers
-            v-for="marker in TestMarkers"
-            :key="`marker_${marker.lng}`"
+            v-for="marker in points"
+            :key="`marker_${marker.id}`"
             :item="marker"
             @markerCLick="markerClick"
           />
@@ -62,7 +62,7 @@
     </div>
     <v-bottom-sheet v-model="sheet" hide-overlay>
       <v-divider class="white"></v-divider>
-      <BottomSheetContent @closeSheet="closeSheet" />
+      <BottomSheetContent ref="bottomSheet" @closeSheet="closeSheet" />
     </v-bottom-sheet>
   </v-col>
 </template>
@@ -90,8 +90,10 @@ export default {
   },
   data: () => ({
     geolocationPremission: true,
+    rememberPosition: null,
+    loadingPoints: false,
     mapInstanse: null,
-    url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+    url: 'https://tile.gpnmarket.ru:4443/{z}/{x}/{y}.png',
     zoom: 14,
     minZoom: 8,
     center: { lat: 55.75396, lng: 37.620393 },
@@ -105,17 +107,7 @@ export default {
       disableClusteringAtZoom: 14
     },
     sheet: false,
-    // TEST BLOC TODO DELETE
-    // lat:55.75396
-    //  lng:37.620393
-
-    TestMarkers: [
-      { lat: 55.75396, lng: 37.620393, selected: false },
-      { lat: 54.75396, lng: 36.620393, selected: false },
-      { lat: 53.75396, lng: 34.620393, selected: false },
-      { lat: 55.95396, lng: 37.13, selected: false },
-      { lat: 56.75396, lng: 33.620393, selected: false }
-    ]
+    points: []
   }),
   computed: {
     ...mapGetters('filters', ['getFilterActive']),
@@ -126,11 +118,21 @@ export default {
       return this.zoom <= 8
     }
   },
+  watch: {
+    sheet: function(newVal, oldVal) {
+      if (!newVal) {
+        // console.log(this)
+        this.mapInstanse.setView(this.rememberPosition)
+      }
+    }
+  },
   mounted() {
     this.$nextTick(() => {
       this.mapInstanse = this.$refs.map.mapObject
       this.mapListners()
       this.currentPosition()
+      this.debounce()
+      // this.loadPoints()
     })
   },
   beforeDestroy() {
@@ -139,13 +141,19 @@ export default {
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
     ...mapActions('bottomSheet', ['setId']),
-    ...mapActions('user', ['setCity']),
     mapListners() {
-      this.mapInstanse.on('locationfound', e => {
-        this.mapInstanse.setZoom(14)
-        this.geolocationPremission = true
-        this.findCity(e.latlng)
+      this.mapInstanse.on('moveend ', e => {
+        this.debounce()
+        // this.loadPoints()
       })
+      this.mapInstanse.on('zoomend ', e => {
+        this.debounce()
+        // this.loadPoints(e)
+      }),
+        this.mapInstanse.on('locationfound', e => {
+          this.mapInstanse.setZoom(14)
+          this.geolocationPremission = true
+        })
       this.mapInstanse.on('locationerror', e => {
         if (e.code === 1) {
           // alert(
@@ -155,8 +163,33 @@ export default {
         this.mapInstanse.stopLocate()
       })
     },
+    debounce() {
+      if (!this.loadingPoints) {
+        this.loadingPoints = true
+        setTimeout(() => {
+          this.loadPoints()
+          this.loadingPoints = false
+        }, 1000)
+      }
+    },
+    async loadPoints() {
+      this.loadingPoints = true
+      const bound = this.mapInstanse.getBounds()
+      await this.$axios
+        .post('/points', {
+          sw: bound._southWest,
+          ne: bound._northEast
+        })
+        .then(response => {
+          this.points = response.data
+          this.loadingPoints = false
+        })
+        .catch(e => {
+          console.log(e)
+          this.loadingPoints = false
+        })
+    },
     zoomUpdated(zoom) {
-      console.log(zoom)
       this.zoom = zoom
     },
     zoomIn() {
@@ -173,28 +206,27 @@ export default {
       this.activateFilters()
     },
     markerClick(val) {
+      this.rememberPosition = val.latlng
       this.mapInstanse.panTo(val.latlng)
       this.sheet = true
+      this.$nextTick(() => {
+        const availableSpaceCenter =
+          (window.innerHeight - this.$refs.bottomSheet.$el.offsetHeight - 56) /
+          2
+        const offset = window.innerHeight / 2 - availableSpaceCenter
+        this.panWithOffset(this.rememberPosition, [0, offset])
+      })
+    },
+    panWithOffset(latlng, offset) {
+      const x = this.mapInstanse.latLngToContainerPoint(latlng).x + offset[0]
+      const y =
+        this.mapInstanse.latLngToContainerPoint(latlng).y + offset[1] - 23
+      const point = this.mapInstanse.containerPointToLatLng([x, y])
+      this.mapInstanse.setView(point)
     },
     closeSheet() {
       this.sheet = false
       this.setId(null)
-    },
-    findCity(latlng) {
-      // lat: 55.75396, lng: 37.620393
-
-      this.$axios
-        .get(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-            latlng.lat
-          }&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`
-        )
-        .then(response => {
-          this.setCity(response.data.address.state)
-        })
-        .catch(e => {
-          this.setCity(null)
-        })
     }
   }
 }

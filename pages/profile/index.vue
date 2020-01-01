@@ -56,7 +56,7 @@
             <div
               class="px-5"
               v-ripple
-              @click="$router.push({path:'/registrate/resource/carinfo',query:{id:1}})"
+              @click="$router.push({path:'/registrate/resource/carinfo',query:{edit:resource_id}})"
             >
               <v-row>
                 <v-col>Редактировать информацию о автомобиле</v-col>
@@ -69,7 +69,7 @@
             <div
               class="px-5"
               v-ripple
-              @click="$router.push({path:'/resource/photos',query:{id:1}})"
+              @click="$router.push({path:'/resource/photos',query:{edit:resource_id}})"
             >
               <v-row>
                 <v-col>Редактирование фотографий</v-col>
@@ -111,13 +111,15 @@ export default {
   async asyncData({ $axios }) {
     return await $axios
       .post('/user-params', {
-        params: ['phone', 'userDetails']
+        params: ['phone', 'userDetails', 'resource']
       })
       .then(response => {
         return {
           userPhone: response.data.userDetails.display_phone,
           userEmail: response.data.userDetails.email,
-          userName: response.data.userDetails.name
+          userName: response.data.userDetails.name,
+          age: response.data.userDetails.age_range,
+          resource_id: response.data.resource.id
         }
       })
       .catch(e => {

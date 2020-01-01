@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters('settings', ['getNavList', 'getToolbar']),
-    ...mapState('user', ['name', 'roles', 'phone']),
+    ...mapState('user', ['name', 'roles', 'phone', 'have_res', 'have_foto']),
     ...mapState('settings', ['overlay', 'toolbar']),
     ...mapState('dialog', ['visibility']),
     list() {
@@ -58,6 +58,7 @@ export default {
       return this.roles
     }
   },
+  created() {},
   mounted() {
     let vh = window.innerHeight * 0.01
     document.documentElement.style.setProperty('--vh', `${vh}px`)
@@ -65,11 +66,74 @@ export default {
       let vh = window.innerHeight * 0.01
       document.documentElement.style.setProperty('--vh', `${vh}px`)
     })
+    this.$nextTick(() => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          this.findCity({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          })
+        })
+      }
+      console.log(this.roles)
+      if (this.roles === 'provider') {
+        if (!this.have_res || !this.have_foto) {
+          this.dialogAboutResource(!this.have_foto)
+        }
+      }
+    })
   },
   methods: {
     ...mapActions('dialog', ['setDialogParams']),
+    ...mapActions('user', ['setCity']),
     closeDialog() {
       this.setDialogParams({})
+    },
+    findCity(latlng) {
+      this.$axios
+        .get(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${
+            latlng.lat
+          }&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`
+        )
+        .then(response => {
+          this.setCity([
+            { field: 'city', value: response.data.address.state },
+            { field: 'latlng', value: latlng }
+          ])
+        })
+        .catch(e => {
+          this.setCity([
+            { field: city, value: null },
+            { field: latlng, value: null }
+          ])
+        })
+    },
+    dialogAboutResource(foto) {
+      if ($nuxt.$route.name.indexOf('carinfo') !== -1) return
+      this.$store.dispatch(
+        'dialog/setDialogParams',
+        {
+          visibility: true,
+          title: foto ? 'Добавьте фотографии' : 'Создайте ресурс',
+          text: foto
+            ? 'Для продолжения работы в качестве поставщика услуг, необходимо добавить фотографии'
+            : 'Для продолжения работы в качестве поставщика услуг, необходимо создать ресурс',
+          confirm: true,
+          okLabel: foto ? 'Добавить' : 'Создать',
+          cancelLabel: 'Позже',
+          okAction: () => {
+            foto
+              ? this.$root.$router.push({
+                  path: 'registrate/resource/photos',
+                  query: { edit: this.have_res }
+                })
+              : this.$root.$router.push('/registrate/resource/carinfo')
+            this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+          }
+        },
+        { root: true }
+      )
     }
   }
 }

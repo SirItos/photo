@@ -1,11 +1,16 @@
 <template>
   <v-autocomplete
     @click:clear="clear()"
-    @change="val=>{change(val)}"
+    @change="
+      val => {
+        change(val)
+      }
+    "
     :search-input.sync="search"
     :items="mapItems"
     :loading="loading"
     :value="current"
+    :rules="[val => !!val || 'Укажите адрес']"
     class="no-rotate mt-10"
     append-icon="mdi-map-marker"
     no-filter
@@ -16,7 +21,14 @@
     no-data-text
     hide-selected
     label="Местонахождение авто"
-  ></v-autocomplete>
+  >
+    <template v-slot:item="objects">
+      <v-row no-gutters class="pa-1">
+        <v-col cols="12">{{objects.item.label}}</v-col>
+        <div class="caption">{{objects.item.sub}}</div>
+      </v-row>
+    </template>
+  </v-autocomplete>
 </template>
 
 <script>
@@ -33,6 +45,12 @@
 
 export default {
   name: 'PositionSearchComponent',
+  props: {
+    init: {
+      type: [String, Object],
+      default: null
+    }
+  },
   data: () => ({
     loading: false,
     wait: false,
@@ -52,17 +70,45 @@ export default {
       }
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      if (this.init) {
+        this.search = this.init
+        this.startSearch(true)
+      }
+    })
+  },
   methods: {
-    startSearch() {
+    startSearch(getFirst) {
       if (!this.search) {
         return
       }
+      this.loading = true
       this.$axios
         .post('/geosearch', {
-          val: this.search
+          val: this.search,
+          ll: this.$store.state.user.latlng
         })
         .then(response => {
-          console.log(response.data)
+          const items = response.data.response.GeoObjectCollection.featureMember.map(
+            (item, index) => {
+              return {
+                value: item.GeoObject.name + '_' + index,
+                label: item.GeoObject.name,
+                sub: item.GeoObject.description,
+                latlng: {
+                  lat: item.GeoObject.Point.pos.split(' ')[1],
+                  lng: item.GeoObject.Point.pos.split(' ')[0]
+                }
+              }
+            }
+          )
+          this.mapItems = items
+          if (getFirst) {
+            this.current = this.mapItems[0]
+            this.change(this.current.value)
+          }
+          this.loading = false
         })
         .catch(e => {
           console.log(e)
@@ -105,7 +151,7 @@ export default {
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .no-rotate.v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
   transform: rotate(0) !important;
 }
