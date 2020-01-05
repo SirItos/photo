@@ -10,7 +10,7 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn v-if="confirm" color="primary" @click="setDialogParams({})" text>{{ cancelLabel}}</v-btn>
+      <v-btn v-if="confirm" color="primary" @click="cancel" text>{{ cancelLabel}}</v-btn>
       <v-btn class="text-none" color="primary" depressed @click="call">{{okLabel}}</v-btn>
     </v-card-actions>
   </v-card>
@@ -27,6 +27,7 @@ export default {
       'okLabel',
       'cancelLabel',
       'okAction',
+      'cancelAction',
       'confirm'
     ])
   },
@@ -35,6 +36,13 @@ export default {
     call() {
       if (this.okAction) {
         this.okAction()
+        return
+      }
+      this.setDialogParams({})
+    },
+    cancel() {
+      if (this.cancelAction) {
+        this.cancelAction()
         return
       }
       this.setDialogParams({})

@@ -9,8 +9,7 @@ export const state = () => ({
     thirty: false,
     forty: false,
     fifty: false,
-    priceRange: [1, 3],
-    distance: 0
+    price: [0, 99999]
   }
 })
 
@@ -37,8 +36,7 @@ export const mutations = {
       thirty: false,
       forty: false,
       fifty: false,
-      priceRange: [1, 3],
-      distance: 0
+      price: [0, 99999]
     }
   },
   [MutationsType.filters.SET_FILTERS_ACTIVE](state, payload) {

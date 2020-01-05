@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="fill-height flex-column white">
     <v-col class="mb-4">
-      <v-row no-gutters class="pa-4">
+      <v-row no-gutters class="pa-4" style="box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25)">
         <v-col cols="12" class="mb-3">
           <div
             class="title font-weight-medium"
@@ -76,38 +76,20 @@
           <div>
             <v-range-slider
               :tick-labels="price"
-              v-model="filters.priceRange"
+              v-model="priceRange"
+              @change="val=>{changeSliderRange(val)}"
               min="0"
-              max="5"
+              max="4"
               :ticks="true"
-              tick-size="6"
+              tick-size="4"
               track-color="rgba(0, 0, 0, 0.26)"
               color="primary"
             ></v-range-slider>
           </div>
         </v-col>
-        <v-col cols="12" class="pr-2">
-          <div
-            class="title font-weight-medium"
-            style="	font-family: 'Montserrat', sans-serif !important;"
-          >Расстояние от текущего положения</div>
-          <div>
-            <v-slider
-              :tick-labels="distanceLabels"
-              v-model="filters.distance"
-              min="0"
-              max="3"
-              :ticks="true"
-              tick-size="5"
-              track-color="rgba(0, 0, 0, 0.26)"
-              color="primary"
-            ></v-slider>
-          </div>
-        </v-col>
       </v-row>
     </v-col>
-    <!--  -->
-    <div class="px-4 py-6" style="box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25)">
+    <div class="px-4 py-6">
       <v-row no-gutters>
         <v-col cols="6" class="px-2">
           <v-btn block large color="secondary" to="/" nuxt>
@@ -126,6 +108,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { rangeHelper } from '~/utils'
+
 export default {
   name: 'FilterComponent',
   data: () => ({
@@ -136,24 +120,36 @@ export default {
       thirty: false,
       forty: false,
       fifty: false,
-      priceRange: [2, 4],
-      distance: 0
+      price: [0, 99999]
     },
-    price: ['0', '1000', '3000', '6000', '10000', ''],
-    distanceLabels: ['1к', '3км', '6км', '10км']
+    priceRange: [2, 4],
+    price: ['0', '3000', '6000', '10000', '']
   }),
   computed: {
     ...mapGetters('filters', ['getFilters'])
   },
   created() {
     this.filters = Object.assign({}, this.getFilters)
+    this.priceRange = [
+      rangeHelper(this.filters.price[0]),
+      rangeHelper(this.filters.price[1])
+    ]
+    this.$store.dispatch('settings/setToolbar', true)
+  },
+
+  beforeDestroy() {
+    this.$store.dispatch('settings/setToolbar', false)
   },
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
     confirmFilters() {
+      const filters = this.filters
       this.changeFilters(this.filters)
       this.activateFilters(true)
       this.$root.$router.push('/')
+    },
+    changeSliderRange(val) {
+      this.filters.price = [this.price[val[0]], this.price[val[1]] || 99999]
     }
   }
 }

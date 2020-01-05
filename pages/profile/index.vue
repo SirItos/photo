@@ -69,7 +69,7 @@
             <div
               class="px-5"
               v-ripple
-              @click="$router.push({path:'/resource/photos',query:{edit:resource_id}})"
+              @click="$router.push({path:'/registrate/resource/photos',query:{edit:resource_id}})"
             >
               <v-row>
                 <v-col>Редактирование фотографий</v-col>

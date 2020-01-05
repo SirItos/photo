@@ -20,7 +20,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('bottomSheet', ['getId']),
     dymanicSize() {
       return [40, 46]
     },
@@ -29,11 +28,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions('bottomSheet', ['setId']),
     clickEvent(e) {
-      this.setId(1)
       this.$emit('markerCLick', {
-        latlng: e.latlng
+        latlng: e.latlng,
+        id: this.item.id
       })
     }
   }

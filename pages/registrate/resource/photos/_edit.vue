@@ -19,7 +19,7 @@
         class="text-none font-weight-bold"
         color="primary"
         min-width="250"
-        @click="next"
+        @click="nextBtnClick"
         large
       >{{id ? 'Сохранить' :'Отправить на проверку'}}</v-btn>
     </div>
@@ -49,6 +49,25 @@ export default {
     },
     deleteImg(val) {
       this.img.splice(val, 1)
+    },
+    nextBtnClick() {
+      if (!this.img.length) {
+        this.$store.dispatch('dialog/setDialogParams', {
+          visibility: true,
+          title: 'Вы уверены?',
+          text:
+            'Для успешного прохождения модерации рекомендуется добавить фотографии объекта',
+          confirm: true,
+          okLabel: 'Добавить',
+          cancelLabel: 'Потом',
+          cancelAction: () => {
+            this.next()
+            this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+          }
+        })
+      } else {
+        this.next()
+      }
     },
     next() {
       if (this.id) {

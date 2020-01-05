@@ -15,7 +15,7 @@ export const state = () => ({
     ],
     provider: [
       { text: 'Профиль', icon: 'mdi-account', to: '/profile' },
-      { text: 'Статистика', icon: 'mdi-calendar', to: 'stats' },
+      // { text: 'Статистика', icon: 'mdi-calendar', to: 'stats' },
       { text: 'Выход', icon: 'mdi-close-circle', action: 'exit' }
     ]
   }

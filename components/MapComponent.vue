@@ -62,7 +62,7 @@
     </div>
     <v-bottom-sheet v-model="sheet" hide-overlay>
       <v-divider class="white"></v-divider>
-      <BottomSheetContent ref="bottomSheet" @closeSheet="closeSheet" />
+      <BottomSheetContent ref="bottomSheet" @closeSheet="closeSheet" :id="selected" />
     </v-bottom-sheet>
   </v-col>
 </template>
@@ -91,6 +91,7 @@ export default {
   data: () => ({
     geolocationPremission: true,
     rememberPosition: null,
+    selected: null,
     loadingPoints: false,
     mapInstanse: null,
     url: 'https://tile.gpnmarket.ru:4443/{z}/{x}/{y}.png',
@@ -110,7 +111,7 @@ export default {
     points: []
   }),
   computed: {
-    ...mapGetters('filters', ['getFilterActive']),
+    ...mapGetters('filters', ['getFilterActive', 'getFilters']),
     maxZoomDisable() {
       return this.zoom >= 18
     },
@@ -121,8 +122,8 @@ export default {
   watch: {
     sheet: function(newVal, oldVal) {
       if (!newVal) {
-        // console.log(this)
         this.mapInstanse.setView(this.rememberPosition)
+        this.selected = null
       }
     }
   },
@@ -132,7 +133,6 @@ export default {
       this.mapListners()
       this.currentPosition()
       this.debounce()
-      // this.loadPoints()
     })
   },
   beforeDestroy() {
@@ -140,15 +140,12 @@ export default {
   },
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
-    ...mapActions('bottomSheet', ['setId']),
     mapListners() {
       this.mapInstanse.on('moveend ', e => {
         this.debounce()
-        // this.loadPoints()
       })
       this.mapInstanse.on('zoomend ', e => {
         this.debounce()
-        // this.loadPoints(e)
       }),
         this.mapInstanse.on('locationfound', e => {
           this.mapInstanse.setZoom(14)
@@ -178,7 +175,8 @@ export default {
       await this.$axios
         .post('/points', {
           sw: bound._southWest,
-          ne: bound._northEast
+          ne: bound._northEast,
+          filters: this.getFilterActive ? this.getFilters : null
         })
         .then(response => {
           this.points = response.data
@@ -208,6 +206,7 @@ export default {
     markerClick(val) {
       this.rememberPosition = val.latlng
       this.mapInstanse.panTo(val.latlng)
+      this.selected = val.id
       this.sheet = true
       this.$nextTick(() => {
         const availableSpaceCenter =
@@ -226,7 +225,7 @@ export default {
     },
     closeSheet() {
       this.sheet = false
-      this.setId(null)
+      this.selected = null
     }
   }
 }

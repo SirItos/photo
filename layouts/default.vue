@@ -1,6 +1,6 @@
 <template>
   <v-app style="margin-top:0px ;margin-top:env(safe-area-inset-top)">
-    <v-app-bar app :value="toolbar">
+    <v-app-bar app :value="toolbar" class="elevation-0">
       <div class="d-flex justify-start align-center" style="min-width:68px">
         <v-btn icon @click.stop="drawler=true">
           <v-icon>mdi-menu</v-icon>
@@ -58,7 +58,11 @@ export default {
       return this.roles
     }
   },
-  created() {},
+  watch: {
+    have_res: function(newVal) {
+      this.checkUser()
+    }
+  },
   mounted() {
     let vh = window.innerHeight * 0.01
     document.documentElement.style.setProperty('--vh', `${vh}px`)
@@ -75,12 +79,7 @@ export default {
           })
         })
       }
-      console.log(this.roles)
-      if (this.roles === 'provider') {
-        if (!this.have_res || !this.have_foto) {
-          this.dialogAboutResource(!this.have_foto)
-        }
-      }
+      this.checkUser()
     })
   },
   methods: {
@@ -88,6 +87,15 @@ export default {
     ...mapActions('user', ['setCity']),
     closeDialog() {
       this.setDialogParams({})
+    },
+    checkUser() {
+      if (!this.$cookies.get('token')) return
+      if (this.roles === 'provider') {
+        if (!this.have_res || !this.have_foto) {
+          const mode = this.have_res ? !this.have_foto : false
+          this.dialogAboutResource(mode)
+        }
+      }
     },
     findCity(latlng) {
       this.$axios
@@ -110,7 +118,7 @@ export default {
         })
     },
     dialogAboutResource(foto) {
-      if ($nuxt.$route.name.indexOf('carinfo') !== -1) return
+      if ($nuxt.$route.name.indexOf('registrate') !== -1) return
       this.$store.dispatch(
         'dialog/setDialogParams',
         {

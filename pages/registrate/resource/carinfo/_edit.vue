@@ -5,6 +5,11 @@
         <div class="text-center font-weight-bold headline">Информация об автомобиле</div>
         <v-geo-search @setLocate="setLocate" :init="location" />
         <div class="pt-5">
+          <v-text-field
+            v-model="title"
+            label="Заголовок"
+            :rules="[val => !!val || 'Укажите заголовок для ресурса']"
+          ></v-text-field>
           <v-textarea v-model="description" label="Описание" rows="4" />
         </div>
         <div class="py-5">
@@ -64,6 +69,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { rangeHelper } from '~/utils'
 
 const SearchField = () => import('@/components/PositionSearchComponent')
 
@@ -78,29 +84,44 @@ export default {
   async asyncData({ route, $axios }) {
     if (route.query.edit) {
       return await $axios
-        .post('/get-resource-params', { id: route.query.edit })
+        .post('/get-resource-params', {
+          id: route.query.edit,
+          params: [
+            'id',
+            'address',
+            'title',
+            'resource_type',
+            'description',
+            'min_cost',
+            'max_cost'
+          ]
+        })
         .then(response => {
-          console.log(response.data)
           return {
             id: response.data.id,
+            title: response.data.title,
             location: response.data.address,
             individual: response.data.resource_type,
             showroom: !response.data.resource_type,
             description: response.data.description,
-            priceRange: [response.data.min_cost, response.data.max_cost]
+            priceRange: [
+              rangeHelper(response.data.min_cost),
+              rangeHelper(response.data.max_cost)
+            ]
           }
         })
     }
   },
   data: () => ({
     id: null,
+    title: null,
     location: null,
     individual: true,
     showroom: null,
     description: null,
     priceRange: [1, 2],
     valid: false,
-    price: ['1000', '3000', '6000', '10000', '']
+    price: ['0', '3000', '6000', '10000', '']
   }),
   // created() {
   //   this.edit = this.$route.query.edit
@@ -121,6 +142,10 @@ export default {
           value: this.location.label
         },
         {
+          field: 'title',
+          value: this.title
+        },
+        {
           field: 'lat',
           value: this.location.latlng.lat
         },
@@ -138,11 +163,11 @@ export default {
         },
         {
           field: 'min_cost',
-          value: this.priceRange[0]
+          value: this.price[this.priceRange[0]]
         },
         {
           field: 'max_cost',
-          value: this.priceRange[1]
+          value: this.price[this.priceRange[1]] || 99999999
         },
         {
           field: 'activated',

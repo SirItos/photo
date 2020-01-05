@@ -1,11 +1,11 @@
 <template>
   <v-row no-gutters class="flex-column fill-height">
-    <g-detail-slider />
+    <g-detail-slider :images="images" />
     <div class="detail_title" ref="title">
       <v-row no-gutters class="px-3">
-        <v-col class="headline">Название</v-col>
-        <div>
-          <v-btn text icon @click="like=!like">
+        <v-col class="headline">{{title}}</v-col>
+        <div v-if="$store.state.user.roles === 'customer'">
+          <v-btn text icon @click="setFavorite">
             <v-icon
               :class="{'primary--text':like}"
             >{{like ? 'mdi-cards-heart' :'mdi-heart-outline'}}</v-icon>
@@ -13,27 +13,10 @@
         </div>
       </v-row>
     </div>
-    <v-content
-      id="scroll-target-detail"
-      ref="scrolledArea"
-      :style="{
-        'max-height':max+'px',
-        'position':'relative'
-      }"
-      class="overflow-y-auto py-0 px-3"
-    >
-      <v-row no-gutters>
-        <v-col>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla, laboriosam illum doloremque exercitationem at error officia autem a commodi, vitae vel tempora quibusdam consequatur odio modi quisquam dolorem pariatur amet.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, neque fuga suscipit aspernatur rerum beatae quae illo voluptate, eveniet animi optio rem enim dolorum quia iusto quisquam, sequi nostrum amet?
-        </v-col>
-      </v-row>
-      <v-scale-transition>
-        <div v-if="scrolled" class="arrow-down">
-          <v-icon size="2em" class="d4">mdi-arrow-down</v-icon>
-        </div>
-      </v-scale-transition>
-    </v-content>
+    <v-col class="px-3">
+      <div>{{description}}</div>
+      <g-detail-price :price="cost_range" />
+    </v-col>
     <div>
       <v-row no-gutters class="px-3 py-4">
         <v-col class="px-2">
@@ -42,7 +25,7 @@
           </v-btn>
         </v-col>
         <v-col class="px-2">
-          <v-btn block large color="primary">
+          <v-btn :href="`tel:+7${phone}`" block large color="primary">
             <span class="white--text">Позвонить</span>
           </v-btn>
         </v-col>
@@ -52,54 +35,57 @@
 </template>
 
 <script>
-import { scrolling } from '~/mixins'
 export default {
   head() {
     return {
-      title: 'Ресурс ' + this.id
+      title: 'Ресурс ' + this.title
     }
   },
   name: 'DetailPage',
   components: {
-    'g-detail-slider': () => import('~/components/DetailSlider')
+    'g-detail-slider': () => import('~/components/DetailSlider'),
+    'g-detail-price': () => import('~/components/AppDetailPrice')
   },
-  props: {
-    id: {
-      type: [String, Number],
-      default: 0
-    }
+  async asyncData({ params, $axios }) {
+    return await $axios
+      .post('/get-resource-params', {
+        id: params.id,
+        all: true
+      })
+      .then(response => {
+        console.log(response.data)
+        return {
+          address: response.data.address,
+          title: response.data.title || response.data.address,
+          phone: response.data.user.phone,
+          id: response.data.id,
+          description: response.data.description,
+          cost_range: [response.data.min_cost, response.data.max_cost],
+          type: response.data.resource_type,
+          like: response.data.favorite,
+          images: response.data.images
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
   },
-  mixins: [scrolling],
   data: () => ({
-    like: false,
-    target: '#scroll-target-detail'
+    like: false
   }),
-  // mounted() {
-  //   this.$nextTick(() => {
-  //     setTimeout(() => {
-  //       this.scrolled =
-  //         this.$refs.scrolled.$el.clientHeight <
-  //         this.$refs.scrolled.$el.scrollHeight
-  //     }, 250)
-  //     document
-  //       .querySelector(this.target)
-  //       .addEventListener('scroll', this.onScroll)
-  //     this.setMaxHeight()
-  //   })
-  // },
+  created() {
+    this.$store.dispatch('settings/setToolbar', true)
+  },
+  beforeDestroy() {
+    this.$store.dispatch('settings/setToolbar', false)
+  },
   methods: {
-    // onScroll(e) {
-    //   this.scrolled =
-    //     Math.ceil(e.target.scrollHeight) >
-    //     Math.ceil(e.target.scrollTop + e.target.clientHeight) + 20
-    // },
-    setMaxHeight() {
-      this.max =
-        document.documentElement.clientHeight -
-        56 -
-        328 -
-        this.$refs.title.offsetHeight -
-        76
+    async setFavorite() {
+      this.like = !this.like
+      await this.$axios.post('/set-favorite', {
+        id: this.id,
+        delete: !this.like
+      })
     }
   }
 }
