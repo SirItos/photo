@@ -69,7 +69,6 @@ export default {
           params: ['id', 'address']
         })
         .then(response => {
-          console.log(response)
           this.address = response.data.address
           this.images = response.data.images
           this.loading = false

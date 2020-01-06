@@ -8,7 +8,7 @@
       </div>
       <v-row no-gutters>
         <v-col class="d-flex align-center justify-center">
-          <div class="primary--text font-weight-bold">Заголовок</div>
+          <div class="primary--text font-weight-bold">{{header}}</div>
         </v-col>
         <div class="overline texg-uppercase text-right">
           <div class="text-right">Место</div>
@@ -51,7 +51,7 @@ export default {
   computed: {
     ...mapGetters('settings', ['getNavList', 'getToolbar']),
     ...mapState('user', ['name', 'roles', 'phone', 'have_res', 'have_foto']),
-    ...mapState('settings', ['overlay', 'toolbar']),
+    ...mapState('settings', ['overlay', 'toolbar', 'header']),
     ...mapState('dialog', ['visibility']),
     list() {
       if (!this.roles) return 'unauth'

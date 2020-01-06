@@ -134,11 +134,14 @@ export default {
       rangeHelper(this.filters.price[0]),
       rangeHelper(this.filters.price[1])
     ]
-    this.$store.dispatch('settings/setToolbar', true)
+    this.$store.dispatch('settings/setToolbar', {
+      header: 'Фильтры',
+      toolbar: true
+    })
   },
 
   beforeDestroy() {
-    this.$store.dispatch('settings/setToolbar', false)
+    this.$store.dispatch('settings/setToolbar')
   },
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),

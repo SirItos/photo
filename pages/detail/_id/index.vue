@@ -53,7 +53,6 @@ export default {
         all: true
       })
       .then(response => {
-        console.log(response.data)
         return {
           address: response.data.address,
           title: response.data.title || response.data.address,
@@ -74,10 +73,13 @@ export default {
     like: false
   }),
   created() {
-    this.$store.dispatch('settings/setToolbar', true)
+    this.$store.dispatch('settings/setToolbar', {
+      header: 'Контакт',
+      toolbar: true
+    })
   },
   beforeDestroy() {
-    this.$store.dispatch('settings/setToolbar', false)
+    this.$store.dispatch('settings/setToolbar')
   },
   methods: {
     async setFavorite() {

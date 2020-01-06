@@ -111,7 +111,7 @@ export default {
     points: []
   }),
   computed: {
-    ...mapGetters('filters', ['getFilterActive', 'getFilters']),
+    ...mapGetters('filters', ['getFilterActive', 'getGroupedFilters']),
     maxZoomDisable() {
       return this.zoom >= 18
     },
@@ -172,11 +172,12 @@ export default {
     async loadPoints() {
       this.loadingPoints = true
       const bound = this.mapInstanse.getBounds()
+
       await this.$axios
         .post('/points', {
           sw: bound._southWest,
           ne: bound._northEast,
-          filters: this.getFilterActive ? this.getFilters : null
+          filters: this.getFilterActive ? this.getGroupedFilters : undefined
         })
         .then(response => {
           this.points = response.data
@@ -202,6 +203,7 @@ export default {
     unsetFilters() {
       this.changeFilters()
       this.activateFilters()
+      this.debounce()
     },
     markerClick(val) {
       this.rememberPosition = val.latlng

@@ -16,10 +16,13 @@ export default {
     MapComponent
   },
   created() {
-    this.setToolbar(true)
+    this.setToolbar({
+      header: '',
+      toolbar: true
+    })
   },
   beforeDestroy() {
-    this.setToolbar(false)
+    this.setToolbar()
   },
   methods: {
     ...mapActions('settings', ['setToolbar'])

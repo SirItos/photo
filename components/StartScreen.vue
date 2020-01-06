@@ -121,7 +121,6 @@ export default {
           code: this.code
         })
       } else {
-        console.log('unvalid')
       }
     }
   }

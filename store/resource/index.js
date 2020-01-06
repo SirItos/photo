@@ -7,9 +7,7 @@ export const actions = {
       .post('/set-resource-params', {
         params: payload
       })
-      .then(response => {
-        console.log(response.data)
-      })
+      .then(response => {})
       .catch(e => {
         console.log(e)
       })

@@ -154,7 +154,7 @@ export default {
           value: this.userEmail
         },
         {
-          field: 'ageRange',
+          field: 'age_range',
           value: this.age
         }
       ])

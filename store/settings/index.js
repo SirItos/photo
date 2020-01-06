@@ -38,7 +38,12 @@ export const actions = {
 
 export const mutations = {
   [MutationsType.settings.SET_TOOLBAR](state, payload) {
-    state.toolbar = payload
+    if (!payload) {
+      ;(state.header = null), (state.toolbar = false)
+      return
+    }
+    state.header = payload.header
+    state.toolbar = payload.toolbar
   },
   [MutationsType.settings.SET_OVERLAY](state, payload) {
     state.overlay = payload || false
