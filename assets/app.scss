@@ -89,3 +89,6 @@
 .theme--light.v-list-item:hover::before {
   opacity: 0 !important;
 }
+.v-navigation-drawer .v-list {
+  background: inherit !important;
+}

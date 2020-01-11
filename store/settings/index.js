@@ -3,6 +3,8 @@ export const state = () => ({
   header: null,
   toolbar: false,
   overlay: false,
+  lastCenterPosition: null,
+  geolocationNotify: false,
   NavList: {
     unauth: [
       { text: 'Входа', icon: 'mdi-account', to: '/signin' },
@@ -33,6 +35,12 @@ export const actions = {
   },
   setOverlay({ commit }, payload) {
     commit(MutationsType.settings.SET_OVERLAY, payload)
+  },
+  setLastCenterPosition({ commit }, payload) {
+    commit(MutationsType.settings.SET_LAST_CENTER, payload)
+  },
+  setGeolocationNotify({ commit }, payload) {
+    commit(MutationsType.settings.SET_GEOLOCATION_NOTIFY, payload)
   }
 }
 
@@ -47,5 +55,11 @@ export const mutations = {
   },
   [MutationsType.settings.SET_OVERLAY](state, payload) {
     state.overlay = payload || false
+  },
+  [MutationsType.settings.SET_LAST_CENTER](state, payload) {
+    state.lastCenterPosition = payload || null
+  },
+  [MutationsType.settings.SET_GEOLOCATION_NOTIFY](state, payload) {
+    state.geolocationNotify = payload
   }
 }

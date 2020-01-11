@@ -3,21 +3,13 @@
     v-if="images.length"
     v-swiper:mySwiper="swiperOptions"
     class="swiper-container px-3"
-    style="min-height:300px"
+    style="height: 328px;"
   >
     <div class="swiper-wrapper">
-      <div class="swiper-slide img-shadow" v-for="n in images" :key="`detail_img${n}`">
-        <v-img
-          src="https://picsum.photos/id/11/500/300"
-          lazy-src="https://picsum.photos/id/11/10/6"
-          class
-          cover
-          height="300px"
-        >
+      <div class="swiper-slide img-shadow" v-for="image in images" :key="`detail_img${image.id}`">
+        <v-img :src="image.url" :lazy-src="image.url" contain height="300px">
           <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-skeleton-loader height="80" type="image" />
-            </v-row>
+            <v-row class="fill-height ma-0" align="center" justify="center">111</v-row>
           </template>
         </v-img>
       </div>
@@ -25,7 +17,7 @@
 
     <div class="swiper-pagination swiper-pagination-bullets"></div>
   </div>
-  <div v-else class="swiper-container px-3">
+  <div v-else class="swiper-container px-3" style="height:328px">
     <div class="img-shadow d-flex fill-height justify-center align-center">
       <v-icon size="64px">mdi-image-off-outline</v-icon>
     </div>
@@ -45,7 +37,7 @@ export default {
     swiperOptions: {
       slidesPerView: 1,
       spaceBetween: 30,
-      loop: true,
+      loop: false,
       pagination: {
         el: '.swiper-pagination'
       }
@@ -56,7 +48,6 @@ export default {
 
 <style lang="scss" >
 .swiper-container {
-  height: 328px;
   width: 100%;
   padding-bottom: 28px;
 }

@@ -1,20 +1,22 @@
 <template>
   <div>
     <VueGallery
-      :images="['https://picsum.photos/id/11/500/300']"
+      :images="galleryArray"
       :index="imgIndex"
       @close="imgIndex=null"
       style="margin-top:calc(env(safe-area-inset-top))"
     />
     <swiper :options="swiperOptions">
-      <swiperSlide v-for="n in 6" :key="`bottom_img_${n}`">
+      <swiperSlide v-for="image in images" :key="`bottom_img_${image.id}`" style="max-height:100px">
         <div>
           <v-img
-            src="https://picsum.photos/id/11/500/300"
-            lazy-src="https://picsum.photos/id/11/10/6"
-            max-width="110"
-            min-height="80"
-            @click="openGallery(n)"
+            :src="image.url"
+            :lazy-src="image.rurl"
+            max-width="120"
+            min-height="100"
+            max-height="100"
+            contain
+            @click="openGallery(image.id)"
           >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -40,6 +42,12 @@ export default {
     swiperSlide,
     VueGallery
   },
+  props: {
+    images: {
+      type: Array,
+      default: () => []
+    }
+  },
   data: () => ({
     swiperOptions: {
       slidesPerView: 3,
@@ -51,6 +59,13 @@ export default {
     },
     imgIndex: null
   }),
+  computed: {
+    galleryArray() {
+      return this.images.map(item => {
+        return item.url
+      })
+    }
+  },
   mounted() {
     this.$nextTick(() => {
       const next = document.querySelector('.blueimp-gallery>.next')
@@ -64,7 +79,11 @@ export default {
   },
   methods: {
     openGallery(index) {
-      this.imgIndex = index
+      const imageIndex = this.images.findIndex(item => {
+        return item.id === index
+      })
+      if (imageIndex === -1) return
+      this.imgIndex = imageIndex
     }
   }
 }

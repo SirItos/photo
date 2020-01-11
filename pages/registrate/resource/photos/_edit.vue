@@ -2,7 +2,15 @@
   <v-row no-gutters class="fill-height flex-column pa-5">
     <v-col>
       <div class="headline text-center font-weight-bold">Добавить фотографии</div>
-      <v-row class="my-10">
+      <v-row class="my-10" v-if="mountEnd">
+        <v-photo-view
+          v-for="(img,index) in savedImage"
+          :key="`photo_view_saved${img.id}`"
+          :src="img"
+          :index="index"
+          :saved="true"
+          @deleteImg="deleteSavedImg"
+        />
         <v-photo-view
           v-for="(img,index) in img"
           :key="`photo_view_${img.name}`"
@@ -22,59 +30,129 @@
         @click="nextBtnClick"
         large
       >{{id ? 'Сохранить' :'Отправить на проверку'}}</v-btn>
+      <v-btn
+        v-if="id"
+        class="text-none font-weight-bold primary--text mt-4"
+        nuxt
+        large
+        width="250"
+        @click="$router.back()"
+        color="secondary "
+      >Отмена</v-btn>
     </div>
   </v-row>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   head: {
     title: 'Загрузка фотографий'
   },
   name: 'Photos',
+  middleware: 'createResource',
   components: {
     'v-photo-input': () => import('@/components/PhotoInput'),
     'v-photo-view': () => import('@/components/PhotoView')
   },
+  async asyncData({ route, $axios }) {
+    if (route.query.edit) {
+      return await $axios
+        .get(`/get-resourece-images?id=${route.query.edit}`)
+        .then(response => {
+          return {
+            savedImage: response.data,
+            startLenght: response.data.length
+          }
+        })
+    }
+    return {}
+  },
   data: () => ({
     img: [],
-    id: null
+    id: null,
+    mountEnd: false,
+    toDelete: []
   }),
   created() {
-    this.id = this.$route.query.id
+    this.id = this.$route.query.edit
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.mountEnd = true
+    })
   },
   methods: {
+    ...mapActions('images', ['uploadImages', 'deleteImages']),
     setNewImg(val) {
       this.img.push(val)
     },
     deleteImg(val) {
       this.img.splice(val, 1)
     },
+    deleteSavedImg(val) {
+      this.savedImage.splice(val.index, 1)
+      this.toDelete.push(val.id)
+    },
     nextBtnClick() {
-      if (!this.img.length) {
-        this.$store.dispatch('dialog/setDialogParams', {
-          visibility: true,
-          title: 'Вы уверены?',
-          text:
-            'Для успешного прохождения модерации рекомендуется добавить фотографии объекта',
-          confirm: true,
-          okLabel: 'Добавить',
-          cancelLabel: 'Потом',
-          cancelAction: () => {
-            this.next()
-            this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
-          }
-        })
+      if (this.id) {
+        this.checkEditStatusAction()
       } else {
-        this.next()
+        if (!this.img.length) {
+          this.$store.dispatch('dialog/setDialogParams', {
+            visibility: true,
+            title: 'Вы уверены?',
+            text:
+              'Для успешного прохождения модерации рекомендуется добавить фотографии объекта',
+            confirm: true,
+            okLabel: 'Добавить',
+            cancelLabel: 'Потом',
+            cancelAction: () => {
+              this.$root.$router.push('/')
+              this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+            }
+          })
+        } else {
+          this.firstSave()
+        }
       }
     },
-    next() {
-      if (this.id) {
-        this.$root.$router.back()
-        return
-      }
+
+    async firstSave() {
+      await this.uploadImages({ upload: this.img })
       this.$root.$router.push('/')
+      this.$store.dispatch('dialog/setDialogParams', {
+        visibility: true,
+        title: 'Ресурс создан!',
+        text:
+          'Ваш ресурс создан и отправлен на проверку. Ожидайте, вскором времени он появиться на карте',
+        okLabel: 'Ок'
+      })
+    },
+    async edtiBack() {
+      this.$root.$router.back()
+    },
+    async checkEditStatusAction() {
+      if (!this.img.length) {
+        if (!this.toDelete.length) {
+          this.edtiBack()
+          return
+        }
+        this.deleteImages(this.toDelete)
+
+        // if (this.toDelete.length >= this.startLenght) {
+
+        // } else {
+        //   console.log('Нужно удалить фотки, загружать нечего')
+        // }
+      } else {
+        await this.uploadImages({ upload: this.img })
+        if (this.toDelete.length) {
+          this.deleteImages(this.toDelete)
+        }
+      }
+      this.edtiBack()
     }
   }
 }

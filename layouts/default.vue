@@ -133,8 +133,7 @@ export default {
           okAction: () => {
             foto
               ? this.$root.$router.push({
-                  path: 'registrate/resource/photos',
-                  query: { edit: this.have_res }
+                  path: 'registrate/resource/photos'
                 })
               : this.$root.$router.push('/registrate/resource/carinfo')
             this.$store.dispatch('dialog/setDialogParams', {}, { root: true })

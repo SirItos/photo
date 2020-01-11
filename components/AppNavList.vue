@@ -7,6 +7,7 @@
       :to="item.to || '/'"
       nuxt
       v-ripple="{class:'white--text'}"
+      style="background:inherit!important"
     >
       <v-list-item-icon>
         <v-icon class="white--text" v-if="item.icon" v-text="item.icon"></v-icon>

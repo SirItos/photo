@@ -6,10 +6,12 @@
   "private": true,
   "scripts": {
     "serve": "nuxt",
+    "servespa": "nuxt --spa",
     "spa": "nuxt build --spa",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "help": "nuxt --help"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",

@@ -63,6 +63,15 @@
         @click="next"
         large
       >{{id ? 'Сохранить' : 'Продолжить'}}</v-btn>
+      <v-btn
+        v-if="id"
+        class="text-none font-weight-bold primary--text mt-4"
+        nuxt
+        large
+        width="250"
+        @click="$router.back()"
+        color="secondary "
+      >Отмена</v-btn>
     </div>
   </v-row>
 </template>
@@ -78,6 +87,7 @@ export default {
     title: 'Информация о ресурсе'
   },
   name: 'CarInfo',
+  middleware: 'createResource',
   components: {
     'v-geo-search': SearchField
   },
@@ -123,9 +133,9 @@ export default {
     valid: false,
     price: ['0', '3000', '6000', '10000', '']
   }),
-  // created() {
-  //   this.edit = this.$route.query.edit
-  // },
+  created() {
+    this.id = this.$route.query.edit
+  },
   methods: {
     ...mapActions('resource', ['setResourceParams']),
     setLocate(val) {

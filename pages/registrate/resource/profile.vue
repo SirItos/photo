@@ -70,6 +70,7 @@ export default {
   head: {
     title: 'Настройка держателя'
   },
+  middleware: 'createResource',
   name: 'ResourceProfile',
   directives: {
     mask

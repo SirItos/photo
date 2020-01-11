@@ -13,8 +13,8 @@
             </v-btn>
           </div>
         </v-row>
-        <v-col cols="12" class="mt-7 mb-4">
-          <Swiper v-if="images.length" />
+        <v-col cols="12" class="mt-7 mb-4" style="max-height:124px">
+          <Swiper v-if="images.length" :images="images" />
           <div v-else class="text-center">Нет изображений</div>
         </v-col>
         <v-col cols="12" class="my-3">
@@ -66,7 +66,7 @@ export default {
       await this.$axios
         .post('/get-resource-params', {
           id: this.id,
-          params: ['id', 'address']
+          all: true
         })
         .then(response => {
           this.address = response.data.address

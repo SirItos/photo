@@ -118,7 +118,7 @@ export const actions = {
           'resource',
           'userDetails'
         ])
-
+        if (this.roles !== 'provider') return
         if (!state.have_res) {
           dispatch(
             'dialog/setDialogParams',

@@ -87,7 +87,9 @@ export default {
       this.$axios
         .post('/geosearch', {
           val: this.search,
-          ll: this.$store.state.user.latlng
+          ll: this.$store.state.user.latlng.lng
+            ? this.$store.state.user.latlng.lng
+            : undefined
         })
         .then(response => {
           const items = response.data.response.GeoObjectCollection.featureMember.map(

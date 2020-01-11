@@ -31,7 +31,8 @@ export default {
    */
   plugins: [
     { src: '~/plugins/cluster.js', mode: 'client' },
-    { src: '~/plugins/swiper.js', ssr: false },
+    { src: '~/plugins/swiper.js', mode: 'client' },
+    { src: '~/plugins/clientInit.js', mode: 'client' },
     { src: '~/plugins/axios.js' }
   ],
   /*
@@ -42,16 +43,13 @@ export default {
    ** Nuxt.js modules
    */
   modules: ['nuxt-leaflet', '@nuxtjs/axios', 'cookie-universal-nuxt'],
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
   axios: {
     baseURL: 'http://photo/api',
     progress: false
   },
+  // https://back.bazabab.ru/api
   generate: {
-    routes: ['/detail/1']
+    // routes: ['/detail/1']
   },
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

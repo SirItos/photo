@@ -140,6 +140,7 @@ export default {
   },
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
+    ...mapActions('settings', ['setLastCenterPosition']),
     mapListners() {
       this.mapInstanse.on('moveend ', e => {
         this.debounce()
@@ -153,14 +154,27 @@ export default {
         })
       this.mapInstanse.on('locationerror', e => {
         if (e.code === 1) {
-          // alert(
-          //   'Для определения местоположения требуется разрешить браузеру запрашиватьэти данные'
-          // )
+          this.geolocationPremission = false
+          if (
+            this.$store.state.dialog.visibility ||
+            this.$store.state.settings.geolocationNotify
+          )
+            return
+
+          this.$store.dispatch('settings/setGeolocationNotify', true)
+          this.$store.dispatch('dialog/setDialogParams', {
+            visibility: true,
+            title: 'Невозможно определить местоположение',
+            okLabel: 'Ок',
+            text:
+              'Для определения Вашего текущего местоположения, необходимо раз'
+          })
         }
         this.mapInstanse.stopLocate()
       })
     },
     debounce() {
+      this.setLastCenterPosition(this.mapInstanse.getCenter())
       if (!this.loadingPoints) {
         this.loadingPoints = true
         setTimeout(() => {
@@ -198,7 +212,11 @@ export default {
       this.mapInstanse.zoomOut()
     },
     currentPosition() {
-      this.mapInstanse.locate({ setView: true })
+      if (this.$store.state.settings.lastCenterPosition) {
+        this.center = this.$store.state.settings.lastCenterPosition
+      } else {
+        this.mapInstanse.locate({ setView: true })
+      }
     },
     unsetFilters() {
       this.changeFilters()
