@@ -44,7 +44,7 @@ export default {
    */
   modules: ['nuxt-leaflet', '@nuxtjs/axios', 'cookie-universal-nuxt'],
   axios: {
-    baseURL: 'http://photo/api',
+    baseURL: 'https://back.bazabab.ru/api',
     progress: false
   },
   // https://back.bazabab.ru/api

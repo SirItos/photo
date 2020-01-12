@@ -88,7 +88,7 @@ export default {
         .post('/geosearch', {
           val: this.search,
           ll: this.$store.state.user.latlng.lng
-            ? this.$store.state.user.latlng.lng
+            ? this.$store.state.user.latlng
             : undefined
         })
         .then(response => {

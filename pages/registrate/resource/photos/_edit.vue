@@ -2,7 +2,7 @@
   <v-row no-gutters class="fill-height flex-column pa-5">
     <v-col>
       <div class="headline text-center font-weight-bold">Добавить фотографии</div>
-      <v-row class="my-10" v-if="mountEnd">
+      <v-row class="my-10 align-stretch" v-if="mountEnd">
         <v-photo-view
           v-for="(img,index) in savedImage"
           :key="`photo_view_saved${img.id}`"

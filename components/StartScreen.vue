@@ -37,6 +37,7 @@
                 :rules="[ v => !!v ||'Укажите пин-код' ,rules.length(4)]"
                 maxlength="4"
                 type="password"
+                inputmode="numeric"
                 class="mt-1 text-center"
                 hide-details
                 placeholder="введите пин-код"
@@ -54,12 +55,14 @@
             </div>
           </div>
 
-          <div class="botom-btn">
+          <div class="botom-btn d-flex justify-center">
             <v-btn
               block
               large
               color="primary"
               class="text-none font-weight-bold"
+              max-width="250"
+              style="min-width:250px!important"
               type="submit"
             >{{ registrate ? 'Регистрация' : 'Вход' }}</v-btn>
           </div>

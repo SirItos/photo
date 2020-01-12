@@ -41,6 +41,7 @@ export const actions = {
             okLabel: 'Войти',
             okAction: () => {
               this.$router.replace('/signin')
+              this.dispatch('dialog/setDialogParams', {}, { root: true })
             }
           },
           { root: true }

@@ -1,8 +1,5 @@
 <template>
-  <v-row
-    no-gutters
-    class="flex-column align-center justify-space-between fill-height pa-5"
-  >
+  <v-row no-gutters class="flex-column align-center justify-space-between fill-height pa-5">
     <v-col>
       <div style="width:100%">
         <div class="d-flex flex-column align-center title" style="width:100%">
@@ -15,6 +12,7 @@
             v-model="pin"
             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show ? 'text' : 'password'"
+            inputmode="numeric"
             name="pin"
             label="Введите пинкод"
             counter
@@ -25,6 +23,7 @@
             v-model="confirm"
             :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show2 ? 'text' : 'password'"
+            inputmode="numeric"
             :error-messages="error"
             name="pinConfirm"
             label="Повторите пин"
@@ -33,9 +32,7 @@
             maxlength="4"
             @click:append="show2 = !show2"
           ></v-text-field>
-          <div class="caption mt-2">
-            Вы сможете изменить или восстановить пинкод в настройках сервиса
-          </div>
+          <div class="caption mt-2">Вы сможете изменить или восстановить пинкод в настройках сервиса</div>
         </div>
       </div>
     </v-col>
@@ -48,8 +45,7 @@
           large
           nuxt
           :disabled="confirmed"
-          >Продолжить</v-btn
-        >
+        >Продолжить</v-btn>
       </div>
     </v-col>
   </v-row>

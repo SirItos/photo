@@ -22,7 +22,7 @@
         <NavList :items="getNavList(list)" @hideDrawler="drawler=false" />
       </AppNavContent>
     </v-navigation-drawer>
-    <v-content>
+    <v-content style="background-color:rgba(255,255,255)">
       <nuxt />
     </v-content>
     <v-overlay :value="overlay" opacity="0.8">
