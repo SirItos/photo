@@ -2,7 +2,9 @@
   <v-row no-gutters class="fill-height flex-column pa-5">
     <v-col>
       <v-form ref="form" lazy-validation :value="valid">
-        <div class="text-center font-weight-bold headline">Информация об автомобиле</div>
+        <div class="text-center font-weight-bold headline">
+          Информация об автомобиле
+        </div>
         <v-geo-search @setLocate="setLocate" :init="location" />
         <div class="pt-5">
           <v-text-field
@@ -17,7 +19,7 @@
           <div>
             <v-checkbox
               v-model="individual"
-              @change="showroom=!individual"
+              @change="showroom = !individual"
               hide-details
               color="primary"
               label="Физические лица"
@@ -27,7 +29,7 @@
           <div>
             <v-checkbox
               v-model="showroom"
-              @change="individual=!showroom"
+              @change="individual = !showroom"
               hide-details
               color="primary"
               label="Автосалоны"
@@ -51,27 +53,35 @@
             ></v-range-slider>
           </div>
         </div>
-        <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
+        <div class="my-6 caption">
+          Вы сможете изменить эти параметры в настройках сервиса
+        </div>
       </v-form>
     </v-col>
 
     <div class="pa-10" style="background-color:#fafafa">
-      <v-btn
-        class="text-none font-weight-bold"
-        color="primary"
-        width="250px"
-        @click="next"
-        large
-      >{{id ? 'Сохранить' : 'Продолжить'}}</v-btn>
-      <v-btn
-        v-if="id"
-        class="text-none font-weight-bold primary--text mt-4"
-        nuxt
-        large
-        width="250"
-        @click="$router.back()"
-        color="secondary "
-      >Отмена</v-btn>
+      <div class="d-flex justify-center">
+        <v-btn
+          class="text-none font-weight-bold"
+          color="primary"
+          width="250px"
+          @click="next"
+          large
+          >{{ id ? 'Сохранить' : 'Продолжить' }}</v-btn
+        >
+      </div>
+      <div class="d-flex justify-center">
+        <v-btn
+          v-if="id"
+          class="text-none font-weight-bold primary--text mt-4"
+          nuxt
+          large
+          width="250"
+          @click="$router.back()"
+          color="secondary "
+          >Отмена</v-btn
+        >
+      </div>
     </div>
   </v-row>
 </template>

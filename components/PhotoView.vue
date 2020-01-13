@@ -10,7 +10,10 @@
         <v-img :src="imgUrl" :lazy-src="imgUrl" contain>
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular :value="progress" color="primary"></v-progress-circular>
+              <v-progress-circular
+                :value="progress"
+                color="primary"
+              ></v-progress-circular>
             </v-row>
           </template>
         </v-img>
@@ -76,8 +79,8 @@ export default {
 
 <style lang="scss" scoped>
 .photo-container {
-  min-height: 77px;
-  max-height: 96px;
+  min-height: 108px;
+  max-height: 108px;
   display: flex;
   height: 100%;
   border: 0.5px solid rgba(74, 74, 74, 0.25);

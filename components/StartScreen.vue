@@ -8,13 +8,15 @@
         ref="form"
         class="d-flex fill-height flex-column justify-center align-center"
       >
-        <div class="d-flex flex-column justify-space-around white--text" style="height:100%">
+        <div
+          class="d-flex flex-column justify-space-around white--text"
+          style="height:100%"
+        >
           <div class="fill-height flex-column justify-end d-flex">
             <div>
               <div class="text-uppercase display-1">
                 Место
-                <br />Твоих
-                <br />Свиданий
+                <br />Твоих <br />Свиданий
               </div>
 
               <div class="py-4" v-if="city">город : {{ city }}</div>
@@ -25,7 +27,7 @@
                 prefix="+7"
                 max="10"
                 type="tel"
-                :rules="[ v => !!v ||'Укажите свой телефон' ,rules.length(13)]"
+                :rules="[v => !!v || 'Укажите свой телефон', rules.length(13)]"
                 hide-details
                 placeholder="_ _ _  _ _ _  _ _  _ _"
                 solo
@@ -34,11 +36,11 @@
               <v-text-field
                 v-if="!registrate"
                 v-model="code"
-                :rules="[ v => !!v ||'Укажите пин-код' ,rules.length(4)]"
+                :rules="[v => !!v || 'Укажите пин-код', rules.length(4)]"
                 maxlength="4"
-                type="password"
+                type="tel"
                 inputmode="numeric"
-                class="mt-1 text-center"
+                class="mt-1 text-center secure"
                 hide-details
                 placeholder="введите пин-код"
                 solo
@@ -50,7 +52,9 @@
                 <br />с кодом подтверждения
               </div>
               <div v-if="!registrate" class="pt-2 d-flex justify-end">
-                <nuxt-link class="link" to="/registrate/confirm">Забыли пин-код?</nuxt-link>
+                <nuxt-link class="link" to="/registrate/confirm"
+                  >Забыли пин-код?</nuxt-link
+                >
               </div>
             </div>
           </div>
@@ -64,7 +68,8 @@
               max-width="250"
               style="min-width:250px!important"
               type="submit"
-            >{{ registrate ? 'Регистрация' : 'Вход' }}</v-btn>
+              >{{ registrate ? 'Регистрация' : 'Вход' }}</v-btn
+            >
           </div>
         </div>
       </v-form>
