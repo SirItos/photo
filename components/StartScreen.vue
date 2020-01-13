@@ -36,9 +36,9 @@
                 v-model="code"
                 :rules="[ v => !!v ||'Укажите пин-код' ,rules.length(4)]"
                 maxlength="4"
-                type="password"
+                type="tel"
                 inputmode="numeric"
-                class="mt-1 text-center"
+                class="mt-1 text-center secure"
                 hide-details
                 placeholder="введите пин-код"
                 solo

@@ -92,3 +92,6 @@
 .v-navigation-drawer .v-list {
   background: inherit !important;
 }
+.secure input {
+  -webkit-text-security: disc;
+}

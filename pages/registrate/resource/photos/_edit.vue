@@ -23,22 +23,26 @@
       <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
     </v-col>
     <div class="pa-10">
-      <v-btn
-        class="text-none font-weight-bold"
-        color="primary"
-        min-width="250"
-        @click="nextBtnClick"
-        large
-      >{{id ? 'Сохранить' :'Отправить на проверку'}}</v-btn>
-      <v-btn
-        v-if="id"
-        class="text-none font-weight-bold primary--text mt-4"
-        nuxt
-        large
-        width="250"
-        @click="$router.back()"
-        color="secondary "
-      >Отмена</v-btn>
+      <div class="d-flex justify-center">
+        <v-btn
+          class="text-none font-weight-bold"
+          color="primary"
+          min-width="250"
+          @click="nextBtnClick"
+          large
+        >{{id ? 'Сохранить' :'Отправить на проверку'}}</v-btn>
+      </div>
+      <div class="d-flex justify-center">
+        <v-btn
+          v-if="id"
+          class="text-none font-weight-bold primary--text mt-4"
+          nuxt
+          large
+          width="250"
+          @click="$router.back()"
+          color="secondary "
+        >Отмена</v-btn>
+      </div>
     </div>
   </v-row>
 </template>

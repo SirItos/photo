@@ -149,10 +149,12 @@ export default {
         this.debounce()
       }),
         this.mapInstanse.on('locationfound', e => {
+          console.log('found')
           this.mapInstanse.setZoom(14)
           this.geolocationPremission = true
         })
       this.mapInstanse.on('locationerror', e => {
+        console.log('disabled')
         if (e.code === 1) {
           this.geolocationPremission = false
           if (

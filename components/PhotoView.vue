@@ -76,8 +76,8 @@ export default {
 
 <style lang="scss" scoped>
 .photo-container {
-  min-height: 77px;
-  max-height: 96px;
+  min-height: 108px;
+  max-height: 108px;
   display: flex;
   height: 100%;
   border: 0.5px solid rgba(74, 74, 74, 0.25);

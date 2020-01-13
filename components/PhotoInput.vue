@@ -1,6 +1,11 @@
 <template>
   <v-col cols="4">
-    <div class="d-flex align-center pa-5 grey-bg" v-ripple @click="$refs.picker.click()">
+    <div
+      class="d-flex align-center pa-5 grey-bg"
+      style="height:108px"
+      v-ripple
+      @click="$refs.picker.click()"
+    >
       <v-img src="/camera.svg"></v-img>
       <input
         multiple
