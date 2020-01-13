@@ -56,26 +56,22 @@
     </v-col>
 
     <div class="pa-10" style="background-color:#fafafa">
-      <div class="d-flex justify-center">
-        <v-btn
-          class="text-none font-weight-bold"
-          color="primary"
-          width="250px"
-          @click="next"
-          large
-        >{{id ? 'Сохранить' : 'Продолжить'}}</v-btn>
-      </div>
-      <div class="d-flex justify-center">
-        <v-btn
-          v-if="id"
-          class="text-none font-weight-bold primary--text mt-4"
-          nuxt
-          large
-          width="250"
-          @click="$router.back()"
-          color="secondary "
-        >Отмена</v-btn>
-      </div>
+      <v-btn
+        class="text-none font-weight-bold"
+        color="primary"
+        width="250px"
+        @click="next"
+        large
+      >{{id ? 'Сохранить' : 'Продолжить'}}</v-btn>
+      <v-btn
+        v-if="id"
+        class="text-none font-weight-bold primary--text mt-4"
+        nuxt
+        large
+        width="250"
+        @click="$router.back()"
+        color="secondary "
+      >Отмена</v-btn>
     </div>
   </v-row>
 </template>
