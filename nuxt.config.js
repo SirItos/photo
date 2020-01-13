@@ -42,7 +42,12 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['nuxt-leaflet', '@nuxtjs/axios', 'cookie-universal-nuxt'],
+  modules: [
+    'nuxt-leaflet',
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt',
+    '@nuxtjs/pwa'
+  ],
   axios: {
     baseURL: 'https://back.bazabab.ru/api',
     progress: false
@@ -63,5 +68,16 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  pwa: {
+    manifest: {
+      name: 'Место твоих свиданий',
+      short_name: 'Место свиданий',
+      description: 'nuxt project not for free',
+      display: 'standalone',
+      orientation: 'portrait',
+      background_color: '#ffffff',
+      theme_color: '#FF473A'
+    }
   }
 }
