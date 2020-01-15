@@ -1,4 +1,4 @@
-export default function({ store, from, redirect }) {
+export default function({ from, redirect }) {
   if (!from) {
     redirect('/')
     return

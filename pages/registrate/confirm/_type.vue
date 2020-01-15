@@ -8,37 +8,39 @@
       </div>
       <div>выслан код подтверждения</div>
       <div class="mt-8">Код из СМС</div>
-      <input v-model="code" type="tel" class="code-input" maxlength="4" />
+      <input
+        v-model="code"
+        type="tel"
+        class="code-input"
+        maxlength="4"
+        @focus="vissible_button=false"
+        @blur="vissible_button=true"
+      />
       <v-fade-transition>
-        <div v-if="timer" class="caption">
-          выслать повторно код можно через {{ timer }} секунд
-        </div>
+        <div v-if="timer" class="caption">выслать повторно код можно через {{ timer }} секунд</div>
       </v-fade-transition>
     </div>
     <v-col>
       <v-row no-gutters class="flex-column justify-end fill-height">
-        <div class="d-flex justify-center">
-          <v-fade-transition mode="out-in">
-            <v-btn
-              v-if="timer"
-              @click="confirmCode"
-              large
-              width="250"
-              color="primary"
-              :disabled="codeEntered"
-              >Подтвердить</v-btn
-            >
-            <v-btn v-else large width="250" color="primary" @click="sendSms"
-              >Отправить код</v-btn
-            >
-          </v-fade-transition>
-        </div>
+        <v-fade-transition appear>
+          <div v-if="vissible_button" class="d-flex justify-center">
+            <v-fade-transition mode="out-in">
+              <v-btn
+                v-if="timer"
+                @click="confirmCode"
+                large
+                width="250"
+                color="primary"
+                :disabled="codeEntered"
+              >Подтвердить</v-btn>
+              <v-btn v-else large width="250" color="primary" @click="sendSms">Отправить код</v-btn>
+            </v-fade-transition>
+          </div>
+        </v-fade-transition>
         <div class="caption pa-3">
-          Нажимая кнопку Отправить код, вы подтверждаете, что вы старше 18 лет и
+          Введя код , вы подтверждаете, что вы старше 18 лет и
           соглашаетесь с
-          <nuxt-link to="/terms?confirm=1"
-            >Условиями использования сервиса</nuxt-link
-          >
+          <nuxt-link to="/terms?confirm=1">Условиями использования сервиса</nuxt-link>
         </div>
       </v-row>
     </v-col>
@@ -60,6 +62,7 @@ export default {
     }
   },
   data: () => ({
+    vissible_button: true,
     code: null,
     timer: 60
   }),
@@ -102,7 +105,6 @@ export default {
         code: this.code
       })
       this.code = null
-      // this.$root.$router.push('/registrate/pin')
     }
   }
 }

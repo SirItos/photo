@@ -8,6 +8,7 @@ export const state = () => ({
   access_token: null,
   have_res: false,
   have_foto: 0,
+  userFill: false,
   online: true,
   city: null,
   latlng: {
@@ -102,10 +103,14 @@ export const actions = {
     await this.$axios
       .post('/auth', payload)
       .then(async response => {
-        this.$cookies.set('token', {
-          access_token: response.data.access_token,
-          refresh_token: response.data.refresh_token
-        })
+        this.$cookies.set(
+          'token',
+          {
+            access_token: response.data.access_token,
+            refresh_token: response.data.refresh_token
+          },
+          { maxAge: 60 * 60 * 24 * 360 }
+        )
         commit(MutationsType.user.SET_USER_FIELD, [
           {
             field: 'access_token',
@@ -176,10 +181,14 @@ export const actions = {
         pin: payload
       })
       .then(response => {
-        this.$cookies.set('token', {
-          access_token: state.access_token.access_token,
-          refresh_token: state.access_token.refresh_token
-        })
+        this.$cookies.set(
+          'token',
+          {
+            access_token: state.access_token.access_token,
+            refresh_token: state.access_token.refresh_token
+          },
+          { maxAge: 60 * 60 * 24 * 360 }
+        )
         commit(MutationsType.user.SET_USER_FIELD, [
           {
             field: 'roles',
@@ -247,6 +256,13 @@ export const actions = {
           {
             field: 'roles',
             value: response.data.roles[0].name
+          },
+          {
+            field: 'userFill',
+            value:
+              !response.data.userDetails.name ||
+              !response.data.userDetails.email ||
+              !response.data.userDetails.age_range
           },
           {
             field: 'have_res',

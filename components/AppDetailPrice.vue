@@ -1,7 +1,7 @@
 <template>
   <div class="primary--text">
     <div>Стоимость услуг</div>
-    <div class="font-weight-bold">{{priceRange}}</div>
+    <div class="font-weight-bold">{{ priceRange }}</div>
   </div>
 </template>
 
@@ -18,24 +18,34 @@ export default {
   },
   computed: {
     priceRange() {
+      if (!this.price[0] && !this.price[1]) {
+        return 'Не указана'
+      }
+      if (Number(this.price[0]) > 10000 && Number(this.price[0]) > 10000) {
+        return 'Вам не по карману'
+      }
+      if (this.price[0] === this.price[1]) {
+        return `${this.price[0]} руб.`
+      }
       if (this.price.length < 2) {
-        return this.price[0] + 'руб.'
+        return `${this.price[0]} руб.`
       }
       return this.startPrice + this.decim + this.endPrice + 'руб.'
     },
     startPrice() {
-      return this.price[0] ? `${this.price[0]} ` : ''
+      const startStr = Number(this.price[1]) > 10000 ? 'от ' : ''
+      return this.price[0] ? `${startStr} ${this.price[0]} ` : ''
     },
     endPrice() {
       if (Number(this.price[1]) > 10000) return ''
-      return this.price[1] ? `${this.price[1]} ` : ''
+      const startStr = Number(!this.price[0]) ? 'до ' : ''
+      return this.price[1] ? `${startStr}${this.price[1]} ` : ''
     },
     decim() {
-      return this.price[0] && this.endPrice ? '-' : ''
+      return this.price[0] && this.endPrice ? '- ' : ''
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

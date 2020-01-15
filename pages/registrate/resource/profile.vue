@@ -8,6 +8,7 @@
             <v-text-field
               v-model="name"
               name="profileName"
+              autocomplete="off"
               label="Имя (видят клиенты)"
               :rules="[val => !!val || 'Укажите как к Вам обращаться']"
               color="primary"
@@ -16,10 +17,12 @@
           <div class="mb-5">
             <v-text-field
               v-model="userPhone"
+              @input="val => {cropAutoSet(val)}"
               name="profilePhone"
               label="Номер телефона (видят клиенты)"
               color="primary"
               v-mask="mask"
+              autocomplete="off"
               prefix="+7"
               max="10"
               type="tel"
@@ -29,6 +32,7 @@
           <div class="mb-5">
             <v-text-field
               v-model="email"
+              autocomplete="off"
               name="profileMail"
               label="Эл. почта"
               :rules="[
@@ -72,6 +76,30 @@ export default {
   },
   middleware: 'createResource',
   name: 'ResourceProfile',
+  async asyncData({ from, $axios, redirect }) {
+    if (!from) {
+      redirect('/')
+      return
+    }
+    if (from.name === 'index' || from.name === 'registrate-createuser') {
+      return await $axios
+        .post('/user-params', {
+          params: ['phone', 'userDetails']
+        })
+        .then(response => {
+          return {
+            userPhone: response.data.userDetails.display_phone,
+            email: response.data.userDetails.email,
+            name: response.data.userDetails.name,
+            ageRange: response.data.userDetails.age_range
+          }
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+    redirect('/')
+  },
   directives: {
     mask
   },
@@ -91,9 +119,14 @@ export default {
     ...mapState('user', ['phone'])
   },
   created() {
-    this.userPhone = this.phone
+    if (!this.userPhone) {
+      this.userPhone = this.phone
+    }
   },
   methods: {
+    cropAutoSet(val) {
+      console.log(val)
+    },
     ...mapActions('user', ['setUserProperties']),
     async next() {
       if (this.$refs.form.validate()) {

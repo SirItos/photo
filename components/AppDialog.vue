@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      <div>{{ title }}</div>
+      <div style="word-break: break-word">{{ title }}</div>
     </v-card-title>
 
     <v-card-text>

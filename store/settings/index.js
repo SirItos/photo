@@ -5,6 +5,7 @@ export const state = () => ({
   overlay: false,
   lastCenterPosition: null,
   geolocationNotify: false,
+  geolocationPremision: true,
   NavList: {
     unauth: [
       { text: 'Входа', icon: 'mdi-account', to: '/signin' },
@@ -26,7 +27,8 @@ export const state = () => ({
 export const getters = {
   getNavList: state => index => {
     return state.NavList[index]
-  }
+  },
+  getGeolocationPermision: state => state.geolocationPremision
 }
 
 export const actions = {
@@ -41,6 +43,9 @@ export const actions = {
   },
   setGeolocationNotify({ commit }, payload) {
     commit(MutationsType.settings.SET_GEOLOCATION_NOTIFY, payload)
+  },
+  setGeolocationPremision({ commit }, payload) {
+    commit(MutationsType.settings.SET_GEOLOCATION_PREMISION, payload)
   }
 }
 
@@ -61,5 +66,8 @@ export const mutations = {
   },
   [MutationsType.settings.SET_GEOLOCATION_NOTIFY](state, payload) {
     state.geolocationNotify = payload
+  },
+  [MutationsType.settings.SET_GEOLOCATION_PREMISION](state, payload) {
+    state.geolocationPremision = payload
   }
 }

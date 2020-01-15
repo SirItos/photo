@@ -11,25 +11,29 @@
             ref="pin"
             v-model="pin"
             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="show ? 'text' : 'password'"
+            type="tel"
             inputmode="numeric"
+            autocomplete="0ff"
             name="pin"
             label="Введите пинкод"
             counter
             maxlength="4"
+            :class="{secure:!show}"
             @click:append="show = !show"
           ></v-text-field>
           <v-text-field
             v-model="confirm"
             :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="show2 ? 'text' : 'password'"
+            type="tel"
             inputmode="numeric"
+            autocomplete="off"
             :error-messages="error"
             name="pinConfirm"
             label="Повторите пин"
             class="mt-4"
             counter
             maxlength="4"
+            :class="{secure:!show2}"
             @click:append="show2 = !show2"
           ></v-text-field>
           <div class="caption mt-2">Вы сможете изменить или восстановить пинкод в настройках сервиса</div>
@@ -58,7 +62,7 @@ export default {
     title: 'Установка пин-кода'
   },
   name: 'PinPage',
-  middleware: 'preRegistratepage',
+  middleware: 'beforePinSet',
   data: () => ({
     show: false,
     show2: false,

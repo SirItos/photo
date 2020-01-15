@@ -123,7 +123,7 @@ export default {
       price: [0, 99999]
     },
     priceRange: [2, 4],
-    price: ['0', '3000', '6000', '10000', '']
+    price: ['0', '3000', '6000', '10000', '99999']
   }),
   computed: {
     ...mapGetters('filters', ['getFilters'])

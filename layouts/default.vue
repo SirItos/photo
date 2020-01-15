@@ -50,7 +50,14 @@ export default {
   },
   computed: {
     ...mapGetters('settings', ['getNavList', 'getToolbar']),
-    ...mapState('user', ['name', 'roles', 'phone', 'have_res', 'have_foto']),
+    ...mapState('user', [
+      'name',
+      'roles',
+      'phone',
+      'have_res',
+      'have_foto',
+      'userFill'
+    ]),
     ...mapState('settings', ['overlay', 'toolbar', 'header']),
     ...mapState('dialog', ['visibility']),
     list() {
@@ -90,7 +97,12 @@ export default {
     },
     checkUser() {
       if (!this.$cookies.get('token')) return
+      if ($nuxt.$route.name !== 'index') return
       if (this.roles === 'provider') {
+        if (this.userFill) {
+          this.dialogAboutUserFillProfile()
+          return
+        }
         if (!this.have_res || !this.have_foto) {
           const mode = this.have_res ? !this.have_foto : false
           this.dialogAboutResource(mode)
@@ -100,9 +112,7 @@ export default {
     findCity(latlng) {
       this.$axios
         .get(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-            latlng.lat
-          }&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}&zoom=10&addressdetails=1&accept-language=ru`
         )
         .then(response => {
           this.setCity([
@@ -116,6 +126,25 @@ export default {
             { field: latlng, value: null }
           ])
         })
+    },
+    dialogAboutUserFillProfile() {
+      this.$store.dispatch(
+        'dialog/setDialogParams',
+        {
+          visibility: true,
+          title: 'Заполните профиль',
+          text:
+            'Для продолжения работы в качестве поставщика услуг, необходимо заполнить информацию профиля',
+          confirm: true,
+          okLabel: 'Заполнить',
+          cancelLabel: 'Позже',
+          okAction: () => {
+            this.$root.$router.push('/registrate/resource/profile')
+            this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+          }
+        },
+        { root: true }
+      )
     },
     dialogAboutResource(foto) {
       if ($nuxt.$route.name.indexOf('registrate') !== -1) return

@@ -3,6 +3,7 @@
     <client-only>
       <l-map
         ref="map"
+        @click="sheet=false"
         @update:zoom="zoomUpdated"
         style="height:100%"
         :center="center"
@@ -43,7 +44,7 @@
     </div>
     <div class="map-contorls">
       <div
-        v-show="geolocationPremission"
+        v-show="getGeolocationPermision"
         @click="currentPosition"
         class="loccate_btn mb-2 pa-2 elevation-1"
         v-ripple
@@ -89,12 +90,11 @@ export default {
     BottomSheetContent
   },
   data: () => ({
-    geolocationPremission: true,
     rememberPosition: null,
     selected: null,
     loadingPoints: false,
     mapInstanse: null,
-    url: 'https://tile.gpnmarket.ru:4443/{z}/{x}/{y}.png',
+    url: 'https://tile.gpnmarket.ru/{z}/{x}/{y}.png',
     zoom: 14,
     minZoom: 8,
     center: { lat: 55.75396, lng: 37.620393 },
@@ -112,6 +112,7 @@ export default {
   }),
   computed: {
     ...mapGetters('filters', ['getFilterActive', 'getGroupedFilters']),
+    ...mapGetters('settings', ['getGeolocationPermision']),
     maxZoomDisable() {
       return this.zoom >= 18
     },
@@ -131,7 +132,11 @@ export default {
     this.$nextTick(() => {
       this.mapInstanse = this.$refs.map.mapObject
       this.mapListners()
-      this.currentPosition()
+      if (this.$store.state.settings.lastCenterPosition) {
+        this.center = this.$store.state.settings.lastCenterPosition
+      } else {
+        this.currentPosition()
+      }
       this.debounce()
     })
   },
@@ -140,7 +145,10 @@ export default {
   },
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
-    ...mapActions('settings', ['setLastCenterPosition']),
+    ...mapActions('settings', [
+      'setLastCenterPosition',
+      'setGeolocationPremision'
+    ]),
     mapListners() {
       this.mapInstanse.on('moveend ', e => {
         this.debounce()
@@ -149,29 +157,29 @@ export default {
         this.debounce()
       }),
         this.mapInstanse.on('locationfound', e => {
-          this.mapInstanse.setZoom(14)
-          this.geolocationPremission = true
+          // this.setGeolocationPremision(true)
+          console.log(e)
+          this.mapInstanse.setView(e.latlng)
         })
       this.mapInstanse.on('locationerror', e => {
         if (e.code === 1) {
-          this.geolocationPremission = false
           if (
             this.$store.state.dialog.visibility ||
             this.$store.state.settings.geolocationNotify
-          )
-            return
-
-          this.$store.dispatch('settings/setGeolocationNotify', true)
-          this.$store.dispatch('dialog/setDialogParams', {
-            visibility: true,
-            title: 'Невозможно определить местоположение',
-            okLabel: 'Ок',
-            text:
-              'Для определения Вашего текущего местоположения, необходимо раз'
-          })
+          ) {
+          } else {
+            this.$store.dispatch('settings/setGeolocationNotify', true)
+            this.$store.dispatch('dialog/setDialogParams', {
+              visibility: true,
+              title: 'Невозможно определить местоположение',
+              okLabel: 'Ок',
+              text:
+                'Для определения Вашего текущего местоположения, необходимо раз'
+            })
+          }
         }
-        this.mapInstanse.stopLocate()
       })
+      this.mapInstanse.stopLocate()
     },
     debounce() {
       this.setLastCenterPosition(this.mapInstanse.getCenter())
@@ -212,11 +220,7 @@ export default {
       this.mapInstanse.zoomOut()
     },
     currentPosition() {
-      if (this.$store.state.settings.lastCenterPosition) {
-        this.center = this.$store.state.settings.lastCenterPosition
-      } else {
-        this.mapInstanse.locate({ setView: true })
-      }
+      this.mapInstanse.locate({ setView: true, maxZoom: 14, watch: false })
     },
     unsetFilters() {
       this.changeFilters()

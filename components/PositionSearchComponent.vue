@@ -11,6 +11,7 @@
     :loading="loading"
     :value="current"
     :rules="[val => !!val || 'Укажите адрес']"
+    :menu-props="menuProps"
     class="no-rotate mt-10"
     append-icon="mdi-map-marker"
     no-filter
@@ -58,6 +59,16 @@ export default {
     mapItems: [],
     current: null
   }),
+  computed: {
+    menuProps() {
+      if (!this.$vuetify.breakpoint.xsOnly) {
+        return {}
+      }
+      return {
+        maxHeight: 200
+      }
+    }
+  },
   watch: {
     search(val) {
       this.search = val
