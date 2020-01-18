@@ -26,7 +26,7 @@ export default {
   data: () => ({
     items: [
       { text: 'Правила сервиса', url: '/terms.svg', to: '/terms' },
-      { text: 'Обратная связь', url: '/message.svg' }
+      { text: 'Обратная связь', url: '/message.svg', to: '/feedback' }
     ]
   }),
   computed: {

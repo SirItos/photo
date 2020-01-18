@@ -1,10 +1,10 @@
 <template>
-  <v-row no-gutters class="px-10 py-10 flex-column fill-height">
+  <v-row no-gutters class="px-8 py-10 flex-column fill-height">
     <v-col class="title text-center">
       <div class="font-weight-bold">Вы у нас впервые?</div>
       <div class="font-weight-regular">Давайте познакомимся!</div>
-      <div class="pt-8 px-8">
-        <v-img :src="require('@/static/car.svg')"></v-img>
+      <div class="pt-8 px-8 d-flex justify-center">
+        <v-img :src="require('@/static/photo.svg')"></v-img>
       </div>
     </v-col>
     <div>

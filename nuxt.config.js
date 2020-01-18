@@ -49,7 +49,7 @@ export default {
     '@nuxtjs/pwa'
   ],
   axios: {
-    baseURL: 'https://back.bazabab.ru/api',
+    baseURL: 'http://photo/api',
     progress: false
   },
   // https://back.bazabab.ru/api
@@ -77,7 +77,8 @@ export default {
       display: 'standalone',
       orientation: 'portrait',
       background_color: '#ffffff',
-      theme_color: '#FF473A'
+      theme_color: '#FF473A',
+      required_features: ['geolocation']
     }
   }
 }

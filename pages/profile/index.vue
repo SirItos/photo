@@ -4,13 +4,27 @@
       <div>
         <v-img src="./empty_avatar.svg" width="100"></v-img>
       </div>
-      <div class="pr-4 pl-6 d-flex align-center">
+      <div class="pr-4 pl-6 d-flex flex-column align-center">
+        <v-text-field
+          v-model="loginPhone"
+          dark
+          readonly
+          v-mask="mask"
+          prefix="+7"
+          max="10"
+          type="tel"
+          name="loginPhone"
+          class="loginPhone"
+          label="Телефон"
+          color="white"
+        ></v-text-field>
         <v-text-field
           v-model="userName"
           dark
           name="profileName"
           label="Имя"
           color="white"
+          :rules="[val => !!val || 'Укажите Ваш телефон']"
           append-icon="mdi-pencil"
         ></v-text-field>
       </div>
@@ -22,9 +36,8 @@
             <div class="px-5">
               <v-text-field
                 v-model="userPhone"
-                @input="val => {autoFill(val)}"
                 name="profilePhone"
-                label="Телефон"
+                label="Номер телефона (видят клиенты)"
                 color="primary"
                 append-icon="mdi-pencil"
                 autocomplete="off"
@@ -32,7 +45,7 @@
                 prefix="+7"
                 max="10"
                 type="tel"
-                :rules="[val => !!val || 'Укажите Ваш телефон']"
+                :rules="[val => !!val || 'Укажите телефон для обращений к Вам']"
               ></v-text-field>
             </div>
             <div v-if="roles==='provider'" class="px-5">
@@ -45,7 +58,9 @@
                   color="primary"
                   append-icon="mdi-pencil"
                   type="email"
-                  :rules="[val => !!val || 'Укажите Ваш Email',emailRule]"
+                  :rules="[
+                        val => !!val || 'Укажите Ваш Email',
+                        email_rules]"
                 ></v-text-field>
               </div>
               <div>
@@ -123,6 +138,7 @@ export default {
       })
       .then(response => {
         return {
+          loginPhone: response.data.userDetails.display_phone,
           userPhone: response.data.userDetails.display_phone,
           userEmail: response.data.userDetails.email,
           userName: response.data.userDetails.name,
@@ -137,8 +153,9 @@ export default {
   data: () => ({
     mask: '### ### ## ##',
     age: null,
-    emailRule: val => {
-      return true
+    email_rules: value => {
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return pattern.test(value) || 'Некоректный email'
     },
     valid: false
   }),
@@ -159,7 +176,7 @@ export default {
         },
         {
           field: 'display_phone',
-          value: this.userPhone
+          value: this.userPhone.replace(/\s+/g, '')
         },
         {
           field: 'email',
@@ -171,13 +188,15 @@ export default {
         }
       ])
       this.$root.$router.back()
-    },
-    autoFill(val) {
-      console.log(val)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+.loginPhone {
+  .v-text-field__prefix {
+    color: #ffffff !important;
+  }
+}
 </style>

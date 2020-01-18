@@ -9,6 +9,7 @@
         :center="center"
         :zoom="zoom"
         :minZoom="1"
+        :maxZoom="16"
         :zoomAnimation="true"
         :options="mapOptions"
       >
@@ -92,11 +93,11 @@ export default {
   data: () => ({
     rememberPosition: null,
     selected: null,
+    getPosition: false,
     loadingPoints: false,
     mapInstanse: null,
-    url: 'https://tile.gpnmarket.ru/{z}/{x}/{y}.png',
+    url: 'https://tile.gpnmarket.ru:/{z}/{x}/{y}.png',
     zoom: 14,
-    minZoom: 8,
     center: { lat: 55.75396, lng: 37.620393 },
     mapOptions: {
       zoomControl: false,
@@ -157,26 +158,28 @@ export default {
         this.debounce()
       }),
         this.mapInstanse.on('locationfound', e => {
-          // this.setGeolocationPremision(true)
-          console.log(e)
+          this.setGeolocationPremision(true)
           this.mapInstanse.setView(e.latlng)
+          this.getPosition = false
         })
       this.mapInstanse.on('locationerror', e => {
+        this.getPosition = false
+        this.setGeolocationPremision(false)
         if (e.code === 1) {
-          if (
-            this.$store.state.dialog.visibility ||
-            this.$store.state.settings.geolocationNotify
-          ) {
-          } else {
-            this.$store.dispatch('settings/setGeolocationNotify', true)
-            this.$store.dispatch('dialog/setDialogParams', {
-              visibility: true,
-              title: 'Невозможно определить местоположение',
-              okLabel: 'Ок',
-              text:
-                'Для определения Вашего текущего местоположения, необходимо раз'
-            })
-          }
+          // if (
+          // this.$store.state.dialog.visibility ||
+          // this.$store.state.settings.geolocationNotify
+          // ) {
+          // } else {
+          // this.$store.dispatch('settings/setGeolocationNotify', true)
+          // this.$store.dispatch('dialog/setDialogParams', {
+          //   visibility: true,
+          //   title: 'Невозможно определить местоположение',
+          //   okLabel: 'Ок',
+          //   text:
+          //     'Для определения Вашего текущего местоположения, необходимо раз'
+          // })
+          // }
         }
       })
       this.mapInstanse.stopLocate()
@@ -220,7 +223,14 @@ export default {
       this.mapInstanse.zoomOut()
     },
     currentPosition() {
-      this.mapInstanse.locate({ setView: true, maxZoom: 14, watch: false })
+      if (this.getPosition) return
+      this.mapInstanse.locate({
+        setView: true,
+        maxZoom: 14,
+        watch: false,
+        enableHighAccuracy: false,
+        maximumAge: 600000
+      })
     },
     unsetFilters() {
       this.changeFilters()

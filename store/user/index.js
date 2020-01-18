@@ -289,9 +289,7 @@ export const mutations = {
   [MutationsType.user.SET_USER_FIELD](state, payload) {
     payload.forEach(property => {
       if (!property) return
-      const paramName =
-        property.field === 'display_phone' ? 'phone' : property.field
-      state[paramName] = property.value
+      state[property.field] = property.value
     })
   },
   [MutationsType.user.CLEAR](state) {
