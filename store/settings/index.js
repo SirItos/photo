@@ -8,7 +8,7 @@ export const state = () => ({
   geolocationPremision: true,
   NavList: {
     unauth: [
-      { text: 'Входа', icon: 'mdi-account', to: '/signin' },
+      { text: 'Вход', icon: 'mdi-account', to: '/signin' },
       { text: 'Регистрация', icon: 'mdi-arrow-right', to: '/registrate' }
     ],
     customer: [
@@ -18,7 +18,7 @@ export const state = () => ({
     ],
     provider: [
       { text: 'Профиль', icon: 'mdi-account', to: '/profile' },
-      // { text: 'Статистика', icon: 'mdi-calendar', to: 'stats' },
+      { text: 'Статистика', icon: 'mdi-calendar', to: '/statistic' },
       { text: 'Выход', icon: 'mdi-close-circle', action: 'exit' }
     ]
   }

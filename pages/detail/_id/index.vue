@@ -25,7 +25,13 @@
           </v-btn>
         </v-col>
         <v-col class="px-2">
-          <v-btn :href="`tel:+7${phone}`" block large color="primary">
+          <v-btn
+            :href="`tel:+7${phone}`"
+            @click="sendStatisticEvent('call')"
+            block
+            large
+            color="primary"
+          >
             <span class="white--text">Позвонить</span>
           </v-btn>
         </v-col>
@@ -58,6 +64,7 @@ export default {
           title: response.data.title || response.data.address,
           phone: response.data.user.phone,
           id: response.data.id,
+          user_id: response.data.user.id,
           description: response.data.description,
           cost_range: [response.data.min_cost, response.data.max_cost],
           type: response.data.resource_type,
@@ -77,6 +84,8 @@ export default {
       header: 'Контакт',
       toolbar: true
     })
+
+    this.sendStatisticEvent('details')
   },
   beforeDestroy() {
     this.$store.dispatch('settings/setToolbar')
@@ -87,6 +96,13 @@ export default {
       await this.$axios.post('/set-favorite', {
         id: this.id,
         delete: !this.like
+      })
+    },
+    sendStatisticEvent(event) {
+      if (this.$store.state.user.id === this.user_id) return
+      this.$axios.post('/event', {
+        resourse_id: this.id,
+        event: event
       })
     }
   }

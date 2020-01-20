@@ -39,7 +39,7 @@
               class="text-none font-weight-bold"
             >Отправить</v-btn>
             <v-btn
-              to="/"
+              @click="$nuxt.$router.back()"
               block
               large
               max-width="250"

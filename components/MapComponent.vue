@@ -159,7 +159,8 @@ export default {
       }),
         this.mapInstanse.on('locationfound', e => {
           this.setGeolocationPremision(true)
-          this.mapInstanse.setView(e.latlng)
+          // this.mapInstanse.setView(e.latlng)
+          this.mapInstanse.setZoom(14)
           this.getPosition = false
         })
       this.mapInstanse.on('locationerror', e => {
