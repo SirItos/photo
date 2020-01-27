@@ -2,7 +2,7 @@
   <v-row no-gutters class="fill-height flex-column pa-5">
     <v-col>
       <v-form ref="form" lazy-validation :value="valid">
-        <div class="text-center font-weight-bold headline">Информация об автомобиле</div>
+        <div class="text-center font-weight-bold headline">Информация о себе</div>
         <v-geo-search @setLocate="setLocate" :init="location" />
         <div class="pt-5">
           <v-text-field
@@ -13,16 +13,20 @@
           <v-textarea v-model="description" label="Описание" rows="4" />
         </div>
         <div class="py-5">
-          <div class="font-weight-bold">Как вы работаете?</div>
+          <div class="font-weight-bold">Как вы встречаетесь?</div>
           <div>
             <v-checkbox
               v-model="individual"
               @change="showroom = !individual"
               hide-details
               color="primary"
-              label="Физические лица"
+              label="Встречи индивидуально"
               class="mt-2"
-            ></v-checkbox>
+            >
+              <template v-slot:prepend>
+                <v-img src="/one.png" height="36" width="56" contain></v-img>
+              </template>
+            </v-checkbox>
           </div>
           <div>
             <v-checkbox
@@ -30,13 +34,17 @@
               @change="individual = !showroom"
               hide-details
               color="primary"
-              label="Автосалоны"
+              label="Встречи с подругами"
               class="mt-2"
-            ></v-checkbox>
+            >
+              <template v-slot:prepend>
+                <v-img src="/many.png" height="36" width="56" contain></v-img>
+              </template>
+            </v-checkbox>
           </div>
         </div>
         <div class="py-5">
-          <div class="font-weight-bold">Сколько стоят Ваши услуги?</div>
+          <div class="font-weight-bold">Оцените ваше свидание?</div>
           <div>
             <v-range-slider
               :tick-labels="price"
@@ -51,11 +59,11 @@
             ></v-range-slider>
           </div>
         </div>
-        <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
+        <div class="my-6 caption">Вы сможете изменить эти параметры в личном кабинете</div>
       </v-form>
     </v-col>
 
-    <div class="pa-10">
+    <div class="pt-10">
       <div class="d-flex justify-center">
         <v-btn
           class="text-none font-weight-bold"
@@ -88,10 +96,10 @@ const SearchField = () => import('@/components/PositionSearchComponent')
 
 export default {
   head: {
-    title: 'Информация о ресурсе'
+    title: 'Информация о себе'
   },
   name: 'CarInfo',
-  middleware: 'createResource',
+  middleware: 'isProvider',
   components: {
     'v-geo-search': SearchField
   },

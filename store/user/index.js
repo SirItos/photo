@@ -170,12 +170,50 @@ export const actions = {
       })
   },
 
+  async refreshToken({ state, commit, dispatch }, payload) {
+    dispatch('settings/setOverlay', true, { root: true })
+    await this.$axios
+      .post('refresh-token', {
+        refreshToken: state.access_token.refresh_token
+      })
+      .then(response => {
+        this.$cookies.set(
+          'token',
+          {
+            access_token: response.data.access_token,
+            refresh_token: response.data.refresh_token
+          },
+          { maxAge: 60 * 60 * 24 * 360 }
+        )
+        commit(MutationsType.user.SET_USER_FIELD, [
+          {
+            field: 'access_token',
+            value: response.data
+          }
+        ])
+      })
+      .catch(e => {
+        dispatch('exit')
+        if ($nuxt.$route.name !== 'index') {
+          $nux.$router.replace('/')
+        }
+      })
+  },
+
   exit({ commit }) {
     this.$cookies.remove('token')
     commit(MutationsType.user.CLEAR)
   },
   async setPin({ state, commit, dispatch }, payload) {
     dispatch('settings/setOverlay', true, { root: true })
+    dispatch(
+      'settings/setChainAction',
+      {
+        action: 'user/setPin',
+        payload: payload
+      },
+      { root: true }
+    )
     await this.$axios
       .post('/set-pin', {
         pin: payload
@@ -203,6 +241,14 @@ export const actions = {
   },
   async setUserProperties({ commit, dispatch }, payload) {
     dispatch('settings/setOverlay', true, { root: true })
+    dispatch(
+      'settings/setChainAction',
+      {
+        action: 'user/setUserProperties',
+        payload: payload
+      },
+      { root: true }
+    )
     await this.$axios
       .post('/set-user-details', {
         params: payload
@@ -216,6 +262,14 @@ export const actions = {
   },
   async setUserRole({ commit, dispatch }, payload) {
     dispatch('settings/setOverlay', true, { root: true })
+    dispatch(
+      'settings/setChainAction',
+      {
+        action: 'user/setUserRole',
+        payload: payload
+      },
+      { root: true }
+    )
     await this.$axios
       .post('/set-role', {
         role: payload.params[0].value
@@ -242,7 +296,15 @@ export const actions = {
   setCity({ commit }, payload) {
     commit(MutationsType.user.SET_USER_FIELD, payload)
   },
-  async getUserParams({ commit }, payload) {
+  async getUserParams({ dispatch, commit }, payload) {
+    dispatch(
+      'settings/setChainAction',
+      {
+        action: 'user/getUserParams',
+        payload: payload
+      },
+      { root: true }
+    )
     await this.$axios
       .post('/user-params', {
         params: payload

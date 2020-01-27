@@ -1,9 +1,11 @@
 <template>
   <v-list>
-    <v-list-item @click="changeValue" v-ripple="{class:'white--text'}">
+    <v-list-item @click="changeValue" v-ripple="{ class: 'white--text' }">
       <v-list-item-icon></v-list-item-icon>
       <v-list-item-content>
-        <v-list-item-title class="white--text font-weight-bold">Онлайн</v-list-item-title>
+        <v-list-item-title class="white--text font-weight-bold">{{
+          status ? 'Онлайн' : 'Оффлайн'
+        }}</v-list-item-title>
       </v-list-item-content>
 
       <v-list-item-action>
@@ -44,5 +46,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

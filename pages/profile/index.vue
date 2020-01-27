@@ -30,7 +30,7 @@
       </div>
     </div>
     <v-col>
-      <v-form ref="form" lazy-validation :value="valid">
+      <v-form ref="form" class="fill-height" lazy-validation :value="valid">
         <v-row no-gutters class="py-5 flex-column fill-height">
           <v-col>
             <div class="px-5">
@@ -48,7 +48,7 @@
                 :rules="[val => !!val || 'Укажите телефон для обращений к Вам']"
               ></v-text-field>
             </div>
-            <div v-if="roles==='provider'" class="px-5">
+            <div v-if="roles === 'provider'" class="px-5">
               <div>
                 <v-text-field
                   v-model="userEmail"
@@ -58,27 +58,34 @@
                   color="primary"
                   append-icon="mdi-pencil"
                   type="email"
-                  :rules="[
-                        val => !!val || 'Укажите Ваш Email',
-                        email_rules]"
+                  :rules="[val => !!val || 'Укажите Ваш Email', email_rules]"
                 ></v-text-field>
               </div>
               <div>
-                <v-select v-model="age" clearable :items="['20-30','30-40','40-50','старше 50']" />
+                <v-select
+                  v-model="age"
+                  clearable
+                  :items="['18-30', '30-40', '40-50', 'старше 50']"
+                />
               </div>
             </div>
           </v-col>
 
           <div>
-            <div v-if="roles==='provider'">
+            <div v-if="roles === 'provider'">
               <v-divider></v-divider>
               <div
                 class="px-5"
                 v-ripple
-                @click="$router.push({path:'/registrate/resource/carinfo',query:{edit:resource_id}})"
+                @click="
+                  $router.push({
+                    path: '/registrate/resource/carinfo',
+                    query: { edit: resource_id }
+                  })
+                "
               >
                 <v-row>
-                  <v-col>Редактировать информацию о автомобиле</v-col>
+                  <v-col>Редактировать информацию о себе</v-col>
                   <div class="d-flex align-center">
                     <v-icon>mdi-chevron-right</v-icon>
                   </div>
@@ -88,7 +95,12 @@
               <div
                 class="px-5"
                 v-ripple
-                @click="$router.push({path:'/registrate/resource/photos',query:{edit:resource_id}})"
+                @click="
+                  $router.push({
+                    path: '/registrate/resource/photos',
+                    query: { edit: resource_id }
+                  })
+                "
               >
                 <v-row>
                   <v-col>Редактирование фотографий</v-col>
@@ -99,7 +111,7 @@
               </div>
               <v-divider></v-divider>
             </div>
-            <div class="pa-5">
+            <div class="px-5 pt-5">
               <div class="d-flex justify-center">
                 <v-btn
                   block
@@ -109,7 +121,8 @@
                   color="primary"
                   class="text-none font-weight-bold"
                   @click="saveChange"
-                >Сохранить</v-btn>
+                  >Сохранить</v-btn
+                >
               </div>
             </div>
           </div>
@@ -193,7 +206,7 @@ export default {
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .loginPhone {
   .v-text-field__prefix {
     color: #ffffff !important;

@@ -40,6 +40,7 @@ export default {
   head: {
     title: 'Избранное'
   },
+  middleware: 'isCustomer',
   name: 'Favorite',
   async asyncData({ $axios }) {
     return await $axios.get('get-favorite').then(response => {

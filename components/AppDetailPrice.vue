@@ -1,6 +1,6 @@
 <template>
   <div class="primary--text">
-    <div>Стоимость услуг</div>
+    <div>Оценка свидания</div>
     <div class="font-weight-bold">{{ priceRange }}</div>
   </div>
 </template>
@@ -25,12 +25,12 @@ export default {
         return 'Вам не по карману'
       }
       if (this.price[0] === this.price[1]) {
-        return `${this.price[0]} руб.`
+        return `${this.price[0]} `
       }
       if (this.price.length < 2) {
-        return `${this.price[0]} руб.`
+        return `${this.price[0]} `
       }
-      return this.startPrice + this.decim + this.endPrice + 'руб.'
+      return this.startPrice + this.decim + this.endPrice
     },
     startPrice() {
       const startStr = Number(this.price[1]) > 10000 ? 'от ' : ''

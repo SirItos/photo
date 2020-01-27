@@ -10,23 +10,25 @@
     <div>
       <div class="d-flex justify-center" style="width:100%;">
         <v-btn
-          color="primary"
-          class="text-none font-weight-bold"
-          width="250"
+          class="text-none font-weight-bold white--text"
           nuxt
           large
-          @click="setUser('customer','/registrate/customer-name')"
-        >Я хочу фотографироваться</v-btn>
+          width="250"
+          @click="setUser('provider', '/registrate/resource/profile', true)"
+          color="primary "
+          >Регистрация для девушек</v-btn
+        >
       </div>
       <div class="d-flex justify-center mt-4" style="width:100%">
         <v-btn
+          color="secondary"
           class="text-none font-weight-bold primary--text"
+          width="250"
           nuxt
           large
-          width="250"
-          @click="setUser('provider','/registrate/resource/profile',true)"
-          color="secondary "
-        >У меня есть машины</v-btn>
+          @click="setUser('customer', '/registrate/customer-name')"
+          >Регистрация для мужчин</v-btn
+        >
       </div>
     </div>
   </v-row>
@@ -58,5 +60,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -3,24 +3,31 @@
     <g-detail-slider :images="images" />
     <div class="detail_title" ref="title">
       <v-row no-gutters class="px-3">
-        <v-col class="headline">{{title}}</v-col>
+        <v-col class="headline">{{ title }}</v-col>
         <div v-if="$store.state.user.roles === 'customer'">
           <v-btn text icon @click="setFavorite">
-            <v-icon
-              :class="{'primary--text':like}"
-            >{{like ? 'mdi-cards-heart' :'mdi-heart-outline'}}</v-icon>
+            <v-icon :class="{ 'primary--text': like }">{{
+              like ? 'mdi-cards-heart' : 'mdi-heart-outline'
+            }}</v-icon>
           </v-btn>
         </div>
       </v-row>
     </div>
     <v-col class="px-3">
-      <div>{{description}}</div>
+      <div>{{ description }}</div>
       <g-detail-price :price="cost_range" />
     </v-col>
     <div>
       <v-row no-gutters class="px-3 py-4">
         <v-col class="px-2">
-          <v-btn block large color="secondary" @click="$root.$router.back()" nuxt>
+          <v-btn
+            block
+            large
+            color="secondary"
+            class="text-none font-weight-bold"
+            @click="$root.$router.back()"
+            nuxt
+          >
             <span class="primary--text">Отмена</span>
           </v-btn>
         </v-col>
@@ -31,6 +38,7 @@
             block
             large
             color="primary"
+            class="text-none font-weight-bold"
           >
             <span class="white--text">Позвонить</span>
           </v-btn>
@@ -81,7 +89,7 @@ export default {
   }),
   created() {
     this.$store.dispatch('settings/setToolbar', {
-      header: 'Контакт',
+      header: this.title,
       toolbar: true
     })
 

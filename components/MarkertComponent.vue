@@ -3,7 +3,7 @@
     <l-icon
       :icon-size="dymanicSize"
       :icon-anchor="dynamicAnchor"
-      :icon-url="require('@/static/Frame.svg')"
+      :icon-url="require(`@/static/${dinamycUrl}`)"
     ></l-icon>
   </l-marker>
 </template>
@@ -25,6 +25,9 @@ export default {
     },
     dynamicAnchor() {
       return [20, 46]
+    },
+    dinamycUrl() {
+      return this.item.resource_type ? 'Frame.svg' : 'frame_many.svg'
     }
   },
   methods: {

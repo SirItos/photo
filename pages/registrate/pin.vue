@@ -1,5 +1,8 @@
 <template>
-  <v-row no-gutters class="flex-column align-center justify-space-between fill-height pa-5">
+  <v-row
+    no-gutters
+    class="flex-column align-center justify-space-between fill-height pa-5"
+  >
     <v-col>
       <div style="width:100%">
         <div class="d-flex flex-column align-center title" style="width:100%">
@@ -18,7 +21,7 @@
             label="Введите пинкод"
             counter
             maxlength="4"
-            :class="{secure:!show}"
+            :class="{ secure: !show }"
             @click:append="show = !show"
           ></v-text-field>
           <v-text-field
@@ -33,10 +36,12 @@
             class="mt-4"
             counter
             maxlength="4"
-            :class="{secure:!show2}"
+            :class="{ secure: !show2 }"
             @click:append="show2 = !show2"
           ></v-text-field>
-          <div class="caption mt-2">Вы сможете изменить или восстановить пинкод в настройках сервиса</div>
+          <div class="caption mt-2">
+            Вы сможете изменить или восстановить пинкод в личном кабинете
+          </div>
         </div>
       </div>
     </v-col>
@@ -45,11 +50,13 @@
         <v-btn
           width="250"
           color="primary"
+          class="text-none font-weight-bold"
           @click="createUser"
           large
           nuxt
           :disabled="confirmed"
-        >Продолжить</v-btn>
+          >Продолжить</v-btn
+        >
       </div>
     </v-col>
   </v-row>

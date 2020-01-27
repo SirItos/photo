@@ -1,18 +1,24 @@
 <template>
   <v-row no-gutters class="fill-height flex-column white">
     <v-col class="mb-4">
-      <v-row no-gutters class="pa-4" style="box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25)">
+      <v-row
+        no-gutters
+        class="pa-4"
+        style="box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25)"
+      >
         <v-col cols="12" class="mb-3">
           <div
             class="title font-weight-medium"
             style="	font-family: 'Montserrat', sans-serif !important;"
-          >Как Вы любите работать?</div>
+          >
+            Какие встречи Вас интересуют?
+          </div>
           <div>
             <v-checkbox
               v-model="filters.individual"
               hide-details
               color="primary"
-              label="Физические лица"
+              label="Встречи индивидуально"
               class="mt-2"
             ></v-checkbox>
           </div>
@@ -21,7 +27,7 @@
               v-model="filters.showroom"
               hide-details
               color="primary"
-              label="Автосалоны"
+              label="Встречи с подругами"
               class="mt-2"
             ></v-checkbox>
           </div>
@@ -30,14 +36,16 @@
           <div
             class="title font-weight-medium"
             style="	font-family: 'Montserrat', sans-serif !important;"
-          >Какой возраст Вам нравится?</div>
+          >
+            Какой возраст Вам нравится?
+          </div>
           <div>
             <v-checkbox
               v-model="filters.twenty"
               hide-details
               color="primary"
               class="mt-2"
-              label="20-30 лет"
+              label="18-30 лет"
             ></v-checkbox>
           </div>
           <div>
@@ -72,12 +80,18 @@
           <div
             class="title font-weight-medium"
             style="	font-family: 'Montserrat', sans-serif !important;"
-          >Сколько Вы готовы потратить</div>
+          >
+            Сколько Вы готовы потратить
+          </div>
           <div>
             <v-range-slider
               :tick-labels="price"
               v-model="priceRange"
-              @change="val=>{changeSliderRange(val)}"
+              @change="
+                val => {
+                  changeSliderRange(val)
+                }
+              "
               min="0"
               max="4"
               :ticks="true"
@@ -89,15 +103,28 @@
         </v-col>
       </v-row>
     </v-col>
-    <div class="px-4 py-6">
+    <div class="px-4 py-5">
       <v-row no-gutters>
         <v-col cols="6" class="px-2">
-          <v-btn block large color="secondary" to="/" nuxt>
+          <v-btn
+            block
+            large
+            color="secondary"
+            @click="$router.back()"
+            class="text-none font-weight-bold"
+            nuxt
+          >
             <span class="primary--text">Отмена</span>
           </v-btn>
         </v-col>
         <v-col cols="6" class="px-2">
-          <v-btn @click="confirmFilters" block large color="primary">
+          <v-btn
+            @click="confirmFilters"
+            block
+            large
+            color="primary"
+            class="text-none font-weight-bold"
+          >
             <span class="white--text">Применить</span>
           </v-btn>
         </v-col>
@@ -158,7 +185,7 @@ export default {
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .scrollFilters {
   max-height: calc(100vh - 92px - 56px);
 }

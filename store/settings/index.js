@@ -6,6 +6,10 @@ export const state = () => ({
   lastCenterPosition: null,
   geolocationNotify: false,
   geolocationPremision: true,
+  chainAction: {
+    action: null,
+    payload: null
+  },
   NavList: {
     unauth: [
       { text: 'Вход', icon: 'mdi-account', to: '/signin' },
@@ -46,6 +50,9 @@ export const actions = {
   },
   setGeolocationPremision({ commit }, payload) {
     commit(MutationsType.settings.SET_GEOLOCATION_PREMISION, payload)
+  },
+  setChainAction({ commit }, payload) {
+    commit(MutationsType.settings.SET_AWAIT_ACTION, payload)
   }
 }
 
@@ -69,5 +76,11 @@ export const mutations = {
   },
   [MutationsType.settings.SET_GEOLOCATION_PREMISION](state, payload) {
     state.geolocationPremision = payload
+  },
+  [MutationsType.settings.SET_AWAIT_ACTION](state, payload) {
+    state.chainAction = {
+      action: payload.action || null,
+      payload: payload.payload || null
+    }
   }
 }

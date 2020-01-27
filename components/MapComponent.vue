@@ -15,6 +15,11 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <v-marker-cluster :options="clusterOptions">
+          <l-marker v-if="userLocation" ref="user_point" :lat-lng="userLocation">
+            <l-icon :icon-size="[36, 36]" :icon-anchor="[18, 36]" :icon-url="null">
+              <v-icon style="transform:rotate(45deg)" color="#268E9C" size="36px">mdi-navigation</v-icon>
+            </l-icon>
+          </l-marker>
           <Markers
             v-for="marker in points"
             :key="`marker_${marker.id}`"
@@ -30,7 +35,7 @@
         large
         min-width="250"
         color="primary"
-        class="font-weight-bold"
+        class="text-none font-weight-bold"
         nuxt
         to="/filters"
       >Поиск</v-btn>
@@ -39,7 +44,7 @@
         large
         min-width="250"
         color="primary"
-        class="font-weight-bold"
+        class="font-weight-bold text-none"
         @click="unsetFilters"
       >Сбросить фильтр</v-btn>
     </div>
@@ -92,6 +97,7 @@ export default {
   },
   data: () => ({
     rememberPosition: null,
+    userLocation: null,
     selected: null,
     getPosition: false,
     loadingPoints: false,
@@ -159,29 +165,22 @@ export default {
       }),
         this.mapInstanse.on('locationfound', e => {
           this.setGeolocationPremision(true)
+
           // this.mapInstanse.setView(e.latlng)
           this.mapInstanse.setZoom(14)
+          this.userLocation = e.latlng
           this.getPosition = false
         })
       this.mapInstanse.on('locationerror', e => {
         this.getPosition = false
         this.setGeolocationPremision(false)
-        if (e.code === 1) {
-          // if (
-          // this.$store.state.dialog.visibility ||
-          // this.$store.state.settings.geolocationNotify
-          // ) {
-          // } else {
-          // this.$store.dispatch('settings/setGeolocationNotify', true)
-          // this.$store.dispatch('dialog/setDialogParams', {
-          //   visibility: true,
-          //   title: 'Невозможно определить местоположение',
-          //   okLabel: 'Ок',
-          //   text:
-          //     'Для определения Вашего текущего местоположения, необходимо раз'
-          // })
-          // }
-        }
+        this.$store.dispatch('settings/setOverlay', true)
+        this.$axios.get('http://ip-api.com/json').then(response => {
+          this.mapInstanse.setView({
+            lat: response.data.lat,
+            lng: response.data.lon
+          })
+        })
       })
       this.mapInstanse.stopLocate()
     },

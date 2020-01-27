@@ -21,12 +21,12 @@
     hide-no-data
     no-data-text
     hide-selected
-    label="Местонахождение авто"
+    label="Ваше местоположение (отображается на карте)"
   >
     <template v-slot:item="objects">
       <v-row no-gutters class="pa-1">
-        <v-col cols="12">{{objects.item.label}}</v-col>
-        <div class="caption">{{objects.item.sub}}</div>
+        <v-col cols="12">{{ objects.item.label }}</v-col>
+        <div class="caption">{{ objects.item.sub }}</div>
       </v-row>
     </template>
   </v-autocomplete>

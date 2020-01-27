@@ -16,6 +16,14 @@ export const actions = {
   },
   async sendFeedbackAuth({ commit, dispatch }, payload) {
     dispatch('settings/setOverlay', true, { root: true })
+    dispatch(
+      'settings/setChainAction',
+      {
+        action: 'feedback/sendFeedbackAuth',
+        payload: payload
+      },
+      { root: true }
+    )
     await this.$axios
       .post('/feedback-auth', payload)
       .then(response => {

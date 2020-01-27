@@ -23,7 +23,7 @@ export const getters = {
         showroom: state.filters.showroom
       },
       age: {
-        twenty: state.filters.twenty ? '20-30' : null,
+        twenty: state.filters.twenty ? '18-30' : null,
         thirty: state.filters.thirty ? '30-40' : null,
         forty: state.filters.forty ? '40-50' : null,
         fifty: state.filters.fifty ? 'старше 50' : null

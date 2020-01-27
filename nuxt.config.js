@@ -52,7 +52,8 @@ export default {
     baseURL: 'http://photo/api',
     progress: false
   },
-  // https://back.bazabab.ru/api
+  //
+  //https://back.bazabab.ru/api
   generate: {
     // routes: ['/detail/1']
   },

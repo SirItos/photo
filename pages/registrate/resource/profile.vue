@@ -9,7 +9,7 @@
               v-model="name"
               name="profileName"
               autocomplete="off"
-              label="Имя (видят клиенты)"
+              label="Имя (Видят все)"
               :rules="[val => !!val || 'Укажите как к Вам обращаться']"
               color="primary"
             ></v-text-field>
@@ -17,14 +17,10 @@
           <div class="mb-5">
             <v-text-field
               v-model="userPhone"
-              @input="val => {cropAutoSet(val)}"
               name="profilePhone"
-              label="Номер телефона (видят клиенты)"
+              label="Номер телефона (Видят все)"
               color="primary"
-              v-mask="mask"
               autocomplete="off"
-              prefix="+7"
-              max="10"
               type="tel"
               :rules="[val => !!val || 'Укажите Ваш телефон']"
             ></v-text-field>
@@ -35,9 +31,7 @@
               autocomplete="off"
               name="profileMail"
               label="Эл. почта"
-              :rules="[
-                        val => !!val || 'Укажите Ваш Email',
-                        email_rules]"
+              :rules="[val => !!val || 'Укажите Ваш Email', email_rules]"
               color="primary"
             ></v-text-field>
           </div>
@@ -46,17 +40,17 @@
               v-model="ageRange"
               label="Возростной диапазон"
               clearable
-              :items="['20-30','30-40','40-50','старше 50']"
+              :items="['18-30', '30-40', '40-50', 'старше 50']"
             />
-            <!-- <v-text-field disabled name="ageRange" label="Возрастной диапозон" color="primary"></v-text-field> -->
           </div>
         </v-form>
       </div>
       <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
     </v-col>
-    <div class="pa-10">
+    <div class="pt-10 d-flex justify-center">
       <v-btn
-        width="250"
+        max-width="250"
+        style="min-width:250px!important"
         large
         class="text-none font-weight-bold"
         color="primary"
@@ -74,7 +68,7 @@ export default {
   head: {
     title: 'Настройка держателя'
   },
-  middleware: 'createResource',
+  middleware: 'isProvider',
   name: 'ResourceProfile',
   async asyncData({ from, $axios, redirect }) {
     if (!from) {
@@ -120,13 +114,11 @@ export default {
   },
   created() {
     if (!this.userPhone) {
-      this.userPhone = this.phone
+      this.userPhone =
+        this.phone.length <= 10 ? `+ 7 ${this.phone}` : this.phone
     }
   },
   methods: {
-    cropAutoSet(val) {
-      console.log(val)
-    },
     ...mapActions('user', ['setUserProperties']),
     async next() {
       if (this.$refs.form.validate()) {
@@ -155,5 +147,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

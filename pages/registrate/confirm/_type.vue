@@ -30,10 +30,18 @@
                 @click="confirmCode"
                 large
                 width="250"
+                class="text-none font-weight-bold"
                 color="primary"
                 :disabled="codeEntered"
               >Подтвердить</v-btn>
-              <v-btn v-else large width="250" color="primary" @click="sendSms">Отправить код</v-btn>
+              <v-btn
+                v-else
+                large
+                width="250"
+                class="text-none font-weight-bold"
+                color="primary"
+                @click="sendSms"
+              >Отправить код</v-btn>
             </v-fade-transition>
           </div>
         </v-fade-transition>

@@ -10,8 +10,17 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn v-if="confirm" color="primary" @click="cancel" text>{{ cancelLabel}}</v-btn>
-      <v-btn class="text-none" color="primary" depressed @click="call">{{okLabel}}</v-btn>
+      <v-btn
+        v-if="confirm"
+        class="text-none"
+        color="primary"
+        @click="cancel"
+        text
+        >{{ cancelLabel }}</v-btn
+      >
+      <v-btn class="text-none" color="primary" depressed @click="call">{{
+        okLabel
+      }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -51,5 +60,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

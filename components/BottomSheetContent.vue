@@ -3,9 +3,9 @@
     <v-fade-transition appear mode="out-in">
       <v-col v-if="!loading" key="content_bottom" cols="12">
         <v-row no-gutters>
-          <v-col class="px-1 d-flex align-center primary--text" v-if="address">
+          <v-col class="px-1 d-flex align-center primary--text" v-if="title">
             <v-icon color="primary">mdi-map-marker</v-icon>
-            <div>{{address}}</div>
+            <div>{{title}}</div>
           </v-col>
           <div>
             <v-btn icon @click="$emit('closeSheet')">
@@ -13,13 +13,25 @@
             </v-btn>
           </div>
         </v-row>
-        <v-col cols="12" class="mt-7 mb-4" style="max-height:124px">
+        <v-col cols="12" class="my-3" style="max-height:124px">
           <Swiper v-if="images.length" :images="images" />
           <div v-else class="text-center">Нет изображений</div>
         </v-col>
+        <v-col col="12" class="d-flex justify-start primary--text">
+          <div>Стоимость свидания:</div>
+          <div class="ml-1">{{cost || 'Не указана'}}</div>
+        </v-col>
         <v-col cols="12" class="my-3">
           <div class="d-flex justify-center">
-            <v-btn v-if="true" nuxt :to="`/detail/${id}`" min-width="250" color="primary">Подробнее</v-btn>
+            <v-btn
+              v-if="true"
+              nuxt
+              :to="`/detail/${id}`"
+              min-width="250"
+              min-height="44"
+              class="text-none font-weight-bold"
+              color="primary"
+            >Подробнее</v-btn>
           </div>
         </v-col>
       </v-col>
@@ -46,7 +58,8 @@ export default {
   data: () => ({
     loading: true,
     images: [],
-    address: null
+    title: null,
+    cost: null
   }),
   watch: {
     id: function(newVal, oldVal) {
@@ -69,9 +82,9 @@ export default {
           all: true
         })
         .then(response => {
-          this.address = response.data.address
+          this.title = response.data.title
           this.images = response.data.images
-          this.loading = false
+          ;(this.loading = false), (this.cost = response.data.cost)
         })
         .catch(e => {
           console.log(e)

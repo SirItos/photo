@@ -53,13 +53,26 @@ export default {
   head: {
     title: 'Статистика'
   },
+  middleware: 'isProvider',
   async asyncData({ store, $axios }) {
     return await $axios
-      .post('/get-events', { id: store.state.user.id, period: 'today' })
+      .post('/get-events', { period: 'today' })
       .then(response => {
-        return response.data
+        return {
+          call: response.data.call || 0,
+          details: response.data.details || 0,
+          favorite: response.data.favorite || 0
+        }
       })
-      .catch(e => {
+      .catch(async e => {
+        // if (e.response) {
+        //   console.log(e.response)
+        //   if (e.response.status === 401) {
+        //     await store.dispatch('user/refreshToken')
+        //     await this.asyncData
+        //     return
+        //   }
+        // }
         store.dispatch('dialog/setDialogParams', {
           visibility: true,
           title: 'Ошибка формирования статистики',
@@ -71,6 +84,9 @@ export default {
   },
   data: () => ({
     current_period: 'today',
+    call: 0,
+    details: 0,
+    favorite: 0,
     periods: [
       {
         label: 'Сегодня',
@@ -86,11 +102,11 @@ export default {
       },
       {
         label: 'Месяц',
-        value: 'mounth'
+        value: 'month'
       },
       {
         label: 'Квартал',
-        value: 'quart'
+        value: 'quarter'
       },
       {
         label: 'Год',
@@ -109,11 +125,18 @@ export default {
           timestamp: currentTimeZoneOffsetInHours
         })
         .then(response => {
-          this.call = response.data.call
-          this.details = response.data.details
-          this.favorite = response.data.favorite
+          this.call = response.data.call || 0
+          this.details = response.data.details || 0
+          this.favorite = response.data.favorite || 0
         })
-        .catch(e => {
+        .catch(async e => {
+          if (e.response) {
+            if (e.response.status === 401) {
+              await store.dispatch('user/refreshToken')
+              await this.loadStats()
+              return
+            }
+          }
           this.$store.dispatch('dialog/setDialogParams', {
             visibility: true,
             title: 'Ошибка формирования статистики',
