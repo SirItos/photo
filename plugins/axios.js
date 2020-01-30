@@ -6,22 +6,10 @@ export default function({ $axios, store }) {
     return config
   })
   $axios.onResponse(() => {
-    store.dispatch('settings/setChainAction', {})
+    // store.dispatch('settings/setChainAction', {})
     store.dispatch('settings/setOverlay', false)
   })
   $axios.onError(error => {
-    // if (error.response) {
-    //   if (error.response.status === 401) {
-    //     await store.dispatch('user/refreshToken')
-    //     if (store.state.settings.chainAction.action) {
-    //       await store.dispatch(
-    //         store.state.settings.chainAction.action,
-    //         store.state.settings.chainAction.payload
-    //       )
-    //     }
-    //     return
-    //   }
-    // }
     // console.log('global error handler')
     store.dispatch('settings/setOverlay', false)
   })

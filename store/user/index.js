@@ -170,13 +170,13 @@ export const actions = {
       })
   },
 
-  async refreshToken({ state, commit, dispatch }, payload) {
+  async refreshToken({ state, commit, dispatch, rootGetters }) {
     dispatch('settings/setOverlay', true, { root: true })
     await this.$axios
       .post('refresh-token', {
-        refreshToken: state.access_token.refresh_token
+        refreshToken: this.$cookies.get('token').refresh_token
       })
-      .then(response => {
+      .then(async response => {
         this.$cookies.set(
           'token',
           {
@@ -191,12 +191,18 @@ export const actions = {
             value: response.data
           }
         ])
+
+        await dispatch(
+          rootGetters['settings/getLastAction'].action,
+          rootGetters['settings/getLastAction'].payload,
+          { root: true }
+        )
       })
       .catch(e => {
-        dispatch('exit')
         if ($nuxt.$route.name !== 'index') {
           $nux.$router.replace('/')
         }
+        dispatch('exit')
       })
   },
 
@@ -235,8 +241,10 @@ export const actions = {
         ])
         $nuxt.$router.push('/registrate/createuser')
       })
-      .catch(e => {
-        console.log(e)
+      .catch(async e => {
+        if (e.response.status === 401) {
+          // await dispatch('refreshToken')
+        }
       })
   },
   async setUserProperties({ commit, dispatch }, payload) {
@@ -256,8 +264,10 @@ export const actions = {
       .then(response => {
         commit(MutationsType.user.SET_USER_FIELD, payload)
       })
-      .catch(e => {
-        console.log(e)
+      .catch(async e => {
+        if (e.response.status === 401) {
+          // await dispatch('refreshToken')
+        }
       })
   },
   async setUserRole({ commit, dispatch }, payload) {
@@ -278,7 +288,11 @@ export const actions = {
         commit(MutationsType.user.SET_USER_FIELD, payload.params)
         $nuxt.$router.push(payload.nextRoute)
       })
-      .catch(e => {
+      .catch(async e => {
+        // if (e.response.status === 401) {
+        //   await dispatch('refreshToken')
+        //   return
+        // }
         dispatch(
           'dialog/setDialogParams',
           {
@@ -343,7 +357,11 @@ export const actions = {
         ]
         commit(MutationsType.user.SET_USER_FIELD, data)
       })
-      .catch(e => {})
+      .catch(e => {
+        if (e.response.status === 401) {
+          dispatch('refreshToken')
+        }
+      })
   }
 }
 

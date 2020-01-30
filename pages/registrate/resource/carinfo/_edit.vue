@@ -46,11 +46,21 @@
         <div class="py-5">
           <div class="font-weight-bold">Оцените ваше свидание?</div>
           <div>
+            <v-text-field
+              label="Стоимость"
+              class="mt-3"
+              v-model="cost"
+              type="number"
+              color="primary"
+            />
+          </div>
+          <div>
             <v-range-slider
+              :disabled="cost ? true : false"
               :tick-labels="price"
               v-model="priceRange"
               min="0"
-              max="4"
+              max="10"
               :ticks="true"
               tick-size="4"
               track-color="rgba(0, 0, 0, 0.26)"
@@ -114,11 +124,19 @@ export default {
             'title',
             'resource_type',
             'description',
+            'cost',
             'min_cost',
             'max_cost'
           ]
         })
         .then(response => {
+          const range = response.data.cost
+            ? [3, 5]
+            : [
+                rangeHelper(response.data.min_cost),
+                rangeHelper(response.data.max_cost)
+              ]
+
           return {
             id: response.data.id,
             title: response.data.title,
@@ -126,10 +144,8 @@ export default {
             individual: response.data.resource_type,
             showroom: !response.data.resource_type,
             description: response.data.description,
-            priceRange: [
-              rangeHelper(response.data.min_cost),
-              rangeHelper(response.data.max_cost)
-            ]
+            cost: response.data.cost,
+            priceRange: range
           }
         })
     }
@@ -141,9 +157,22 @@ export default {
     individual: true,
     showroom: null,
     description: null,
-    priceRange: [1, 2],
+    cost: null,
+    priceRange: [3, 5],
     valid: false,
-    price: ['0', '3000', '6000', '10000', '99999']
+    price: [
+      '1000',
+      '2000',
+      '3000',
+      '4000',
+      '5000',
+      '6000',
+      '7000',
+      '8000',
+      '9000',
+      '10000',
+      '999999999'
+    ]
   }),
   created() {
     this.id = this.$route.query.edit
@@ -184,12 +213,16 @@ export default {
           value: this.individual
         },
         {
+          field: 'cost',
+          value: this.cost
+        },
+        {
           field: 'min_cost',
-          value: this.price[this.priceRange[0]]
+          value: this.cost || this.price[this.priceRange[0]]
         },
         {
           field: 'max_cost',
-          value: this.price[this.priceRange[1]] || 99999999
+          value: this.cost || this.price[this.priceRange[1]]
         },
         {
           field: 'activated',
@@ -209,8 +242,14 @@ export default {
 <style lang="scss">
 .v-slider__tick:first-child {
   background: transparent !important;
-  div {
-    transform: traslateX(-12px) !important;
+}
+.v-slider__tick-label {
+  display: none !important;
+}
+.v-slider__tick:nth-child(odd) {
+  .v-slider__tick-label {
+    display: block !important;
+    transform: translateX(-16px) !important;
   }
 }
 .v-slider__tick:last-child {

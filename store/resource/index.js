@@ -19,5 +19,20 @@ export const actions = {
       .catch(e => {
         console.log(e)
       })
+  },
+  async deleteRes({ dispatch }, payload) {
+    dispatch('settings/setOverlay', true, { root: true })
+    await this.$axios
+      .post('/delete-resource', {
+        id: payload
+      })
+      .then(response => {
+        dispatch('dialog/setDialogParams', {})
+        $nuxt.$router.replace('/')
+      })
+      .catch(e => {
+        console.log(e)
+        dispatch('dialog/setDialogParams', {})
+      })
   }
 }

@@ -32,7 +32,8 @@ export const getters = {
   getNavList: state => index => {
     return state.NavList[index]
   },
-  getGeolocationPermision: state => state.geolocationPremision
+  getGeolocationPermision: state => state.geolocationPremision,
+  getLastAction: state => state.chainAction
 }
 
 export const actions = {

@@ -6,6 +6,7 @@
         change(val)
       }
     "
+    @click:append="findOnMap"
     :search-input.sync="search"
     :items="mapItems"
     :loading="loading"
@@ -126,29 +127,6 @@ export default {
         .catch(e => {
           console.log(e)
         })
-
-      // if (val.length >= 3 && !this.loading) {
-      //   this.loading = true
-      //   provider.search({ query: val }).then(response => {
-      //     const items = response.map(item => {
-      //       const label = `${item.raw.address.road || ''} ${item.raw.address
-      //         .house_number ||
-      //         item.raw.address.house ||
-      //         ''} ${item.raw.address.state}`
-      //       return {
-      //         label: label,
-      //         value: item.raw.osm_id,
-      //         latlng: {
-      //           lat: Number(item.y),
-      //           lng: Number(item.x)
-      //         }
-      //       }
-      //     })
-
-      //     this.mapItems = items
-      //     this.loading = false
-      //   })
-      // }
     },
     change(val) {
       const selected = this.mapItems.find(object => {
@@ -159,6 +137,9 @@ export default {
     },
     clear() {
       this.mapItems = []
+    },
+    findOnMap() {
+      $nuxt.$router.push('/findMap')
     }
   }
 }

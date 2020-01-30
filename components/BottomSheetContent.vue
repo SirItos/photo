@@ -17,9 +17,8 @@
           <Swiper v-if="images.length" :images="images" />
           <div v-else class="text-center">Нет изображений</div>
         </v-col>
-        <v-col col="12" class="d-flex justify-start primary--text">
-          <div>Стоимость свидания:</div>
-          <div class="ml-1">{{cost || 'Не указана'}}</div>
+        <v-col col="12" class="d-flex py-0 justify-start primary--text">
+          <Price :price="cost" />
         </v-col>
         <v-col cols="12" class="my-3">
           <div class="d-flex justify-center">
@@ -44,6 +43,7 @@
 
 <script>
 const Swiper = () => import('./SwiperComponent')
+const Price = () => import('./AppDetailPrice')
 export default {
   name: 'BottomSheetContent',
   props: {
@@ -53,7 +53,8 @@ export default {
     }
   },
   components: {
-    Swiper
+    Swiper,
+    Price
   },
   data: () => ({
     loading: true,
@@ -84,12 +85,19 @@ export default {
         .then(response => {
           this.title = response.data.title
           this.images = response.data.images
-          ;(this.loading = false), (this.cost = response.data.cost)
+          ;(this.loading = false),
+            (this.cost = [response.data.min_cost, response.data.max_cost])
+          this.callRecenter()
         })
         .catch(e => {
-          console.log(e)
+          this.callRecenter()
           this.loading = false
         })
+    },
+    callRecenter() {
+      setTimeout(() => {
+        this.$emit('loadEnd')
+      }, 500)
     }
   }
 }

@@ -72,6 +72,8 @@
 .v-slider__thumb {
   width: 20px !important;
   height: 20px !important;
+  left: -10px !important;
+  background: rgb(189, 189, 189) !important;
   &::before {
     // display: none;
     top: -8px !important;
@@ -102,3 +104,12 @@
 // .v-menu__content.theme--light.menuable__content__active.v-autocomplete__content {
 //   top: 68px !important;
 // }
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

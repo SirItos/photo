@@ -1,7 +1,7 @@
 <template>
-  <div class="primary--text">
-    <div>Оценка свидания</div>
-    <div class="font-weight-bold">{{ priceRange }}</div>
+  <div class="primary--text d-flex">
+    <div>Оценка свидания:</div>
+    <div class="pl-2 font-weight-bold">{{ priceRange }}</div>
   </div>
 </template>
 

@@ -1,18 +1,12 @@
 <template>
   <v-row no-gutters class="fill-height flex-column white">
     <v-col class="mb-4">
-      <v-row
-        no-gutters
-        class="pa-4"
-        style="box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25)"
-      >
+      <v-row no-gutters class="pa-4" style="box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25)">
         <v-col cols="12" class="mb-3">
           <div
             class="title font-weight-medium"
             style="	font-family: 'Montserrat', sans-serif !important;"
-          >
-            Какие встречи Вас интересуют?
-          </div>
+          >Какие встречи Вас интересуют?</div>
           <div>
             <v-checkbox
               v-model="filters.individual"
@@ -36,9 +30,7 @@
           <div
             class="title font-weight-medium"
             style="	font-family: 'Montserrat', sans-serif !important;"
-          >
-            Какой возраст Вам нравится?
-          </div>
+          >Какой возраст Вам нравится?</div>
           <div>
             <v-checkbox
               v-model="filters.twenty"
@@ -80,9 +72,7 @@
           <div
             class="title font-weight-medium"
             style="	font-family: 'Montserrat', sans-serif !important;"
-          >
-            Сколько Вы готовы потратить
-          </div>
+          >Сколько Вы готовы потратить</div>
           <div>
             <v-range-slider
               :tick-labels="price"
@@ -93,7 +83,7 @@
                 }
               "
               min="0"
-              max="4"
+              max="10"
               :ticks="true"
               tick-size="4"
               track-color="rgba(0, 0, 0, 0.26)"
@@ -147,10 +137,34 @@ export default {
       thirty: false,
       forty: false,
       fifty: false,
-      price: [0, 99999]
+      price: [
+        '1000',
+        '2000',
+        '3000',
+        '4000',
+        '5000',
+        '6000',
+        '7000',
+        '8000',
+        '9000',
+        '10000',
+        '999999999'
+      ]
     },
     priceRange: [2, 4],
-    price: ['0', '3000', '6000', '10000', '99999']
+    price: [
+      '1000',
+      '2000',
+      '3000',
+      '4000',
+      '5000',
+      '6000',
+      '7000',
+      '8000',
+      '9000',
+      '10000',
+      '999999999'
+    ]
   }),
   computed: {
     ...mapGetters('filters', ['getFilters'])
@@ -189,7 +203,18 @@ export default {
 .scrollFilters {
   max-height: calc(100vh - 92px - 56px);
 }
-.v-slider__tick:first-child,
+.v-slider__tick:first-child {
+  background: transparent !important;
+}
+.v-slider__tick-label {
+  display: none !important;
+}
+.v-slider__tick:nth-child(odd) {
+  .v-slider__tick-label {
+    display: block !important;
+    transform: translateX(-16px) !important;
+  }
+}
 .v-slider__tick:last-child {
   display: none;
 }

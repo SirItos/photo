@@ -121,8 +121,20 @@
                   color="primary"
                   class="text-none font-weight-bold"
                   @click="saveChange"
-                  >Сохранить</v-btn
+                >Сохранить</v-btn>
+              </div>
+              <div v-if="resource_id" class="d-flex pt-2 justify-center">
+                <v-btn
+                  block
+                  large
+                  max-width="250"
+                  style="min-width:250px!important"
+                  color="secondary"
+                  class="text-none font-weight-bold"
+                  @click="deleting"
                 >
+                  <span class="primary--text">Удалить анкету</span>
+                </v-btn>
               </div>
             </div>
           </div>
@@ -160,7 +172,7 @@ export default {
         }
       })
       .catch(e => {
-        console.log(e)
+        
       })
   },
   data: () => ({
@@ -178,6 +190,8 @@ export default {
   methods: {
     ...mapActions('settings', ['setToolbar']),
     ...mapActions('user', ['setUserProperties']),
+    ...mapActions('dialog', ['setDialogParams']),
+    ...mapActions('resource', ['deleteRes']),
     saveChange() {
       if (!this.$refs.form.validate()) {
         return
@@ -201,6 +215,19 @@ export default {
         }
       ])
       this.$root.$router.back()
+    },
+    deleting() {
+      this.setDialogParams({
+        visibility: true,
+        title: 'Подтвердите действие',
+        text: 'Вы уверены, что хотите удалить анкету?',
+        confirm: true,
+        okLabel: 'Да',
+        cancelLabel: 'Нет',
+        okAction: () => {
+          this.deleteRes(this.resource_id)
+        }
+      })
     }
   }
 }

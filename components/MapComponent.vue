@@ -14,7 +14,7 @@
         :options="mapOptions"
       >
         <l-tile-layer :url="url"></l-tile-layer>
-        <v-marker-cluster :options="clusterOptions">
+        <v-marker-cluster v-if="!finding" :options="clusterOptions">
           <l-marker v-if="userLocation" ref="user_point" :lat-lng="userLocation">
             <l-icon :icon-size="[36, 36]" :icon-anchor="[18, 36]" :icon-url="null">
               <v-icon style="transform:rotate(45deg)" color="#268E9C" size="36px">mdi-navigation</v-icon>
@@ -29,7 +29,10 @@
         </v-marker-cluster>
       </l-map>
     </client-only>
-    <div class="fillter-btn d-flex d-sm-none justify-center">
+    <div v-if="finding" class="center_markerck">
+      <v-img src="/frame.svg"></v-img>
+    </div>
+    <div v-if="!finding" class="fillter-btn d-flex d-sm-none justify-center">
       <v-btn
         v-if="!getFilterActive"
         large
@@ -48,7 +51,7 @@
         @click="unsetFilters"
       >Сбросить фильтр</v-btn>
     </div>
-    <div class="map-contorls">
+    <div v-if="!finding" class="map-contorls">
       <div
         v-show="getGeolocationPermision"
         @click="currentPosition"
@@ -69,7 +72,38 @@
     </div>
     <v-bottom-sheet v-model="sheet" hide-overlay>
       <v-divider class="white"></v-divider>
-      <BottomSheetContent ref="bottomSheet" @closeSheet="closeSheet" :id="selected" />
+      <BottomSheetContent
+        ref="bottomSheet"
+        @loadEnd="recenter"
+        @closeSheet="closeSheet"
+        :id="selected"
+      />
+    </v-bottom-sheet>
+    <v-bottom-sheet v-model="positionFinding" hide-overlay>
+      <v-row no-gutters class="pa-3 white">
+        <v-fade-transition appear mode="out-in">
+          <v-col v-if="!findingLoading">
+            <v-row no-gutters>
+              <div class="pr-2">Адрес:</div>
+              <v-col>{{findingOnMap.address}}</v-col>
+            </v-row>
+            <div class="py-3 d-flex justify-center">
+              <v-btn
+                @click="setLocation"
+                large
+                min-width="250"
+                color="primary"
+                class="text-none font-weight-bold"
+              >Принять</v-btn>
+            </div>
+          </v-col>
+          <v-col v-else>
+            <v-row no-gutters class="justify-center">
+              <v-progress-circular indeterminate color="primary" size="48" width="6"></v-progress-circular>
+            </v-row>
+          </v-col>
+        </v-fade-transition>
+      </v-row>
     </v-bottom-sheet>
   </v-col>
 </template>
@@ -95,9 +129,14 @@ export default {
     Markers,
     BottomSheetContent
   },
+  props: {
+    finding: Boolean
+  },
   data: () => ({
     rememberPosition: null,
     userLocation: null,
+    findingLoading: false,
+    positionFinding: false,
     selected: null,
     getPosition: false,
     loadingPoints: false,
@@ -113,6 +152,10 @@ export default {
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: false,
       disableClusteringAtZoom: 14
+    },
+    findingOnMap: {
+      address: null,
+      coords: null
     },
     sheet: false,
     points: []
@@ -156,7 +199,11 @@ export default {
       'setLastCenterPosition',
       'setGeolocationPremision'
     ]),
+    ...mapActions('resource', ['setResourceParams']),
     mapListners() {
+      this.mapInstanse.on('movestart', () => {
+        this.positionFinding = false
+      })
       this.mapInstanse.on('moveend ', e => {
         this.debounce()
       })
@@ -165,8 +212,6 @@ export default {
       }),
         this.mapInstanse.on('locationfound', e => {
           this.setGeolocationPremision(true)
-
-          // this.mapInstanse.setView(e.latlng)
           this.mapInstanse.setZoom(14)
           this.userLocation = e.latlng
           this.getPosition = false
@@ -186,10 +231,22 @@ export default {
     },
     debounce() {
       this.setLastCenterPosition(this.mapInstanse.getCenter())
+
       if (!this.loadingPoints) {
         this.loadingPoints = true
+        if (this.finding) {
+          console.log(111)
+          this.findingLoading = true
+          this.positionFinding = true
+        }
         setTimeout(() => {
-          this.loadPoints()
+          if (this.finding) {
+            this.positionFinding = true
+            this.reverseGeocoding()
+          } else {
+            this.loadPoints()
+          }
+
           this.loadingPoints = false
         }, 1000)
       }
@@ -211,6 +268,22 @@ export default {
         .catch(e => {
           console.log(e)
           this.loadingPoints = false
+        })
+    },
+    async reverseGeocoding() {
+      const center = this.mapInstanse.getCenter()
+
+      await this.$axios
+        .post('/geosearch', { val: center.lat + ',' + center.lng })
+        .then(response => {
+          this.findingLoading = false
+          this.findingOnMap.address =
+            response.data.response.GeoObjectCollection.featureMember[0].GeoObject.name
+          this.findingOnMap.coords = center
+        })
+        .catch(e => {
+          this.findingLoading = false
+          this.findingOnMap.address = 'Ошибка получения адреса'
         })
     },
     zoomUpdated(zoom) {
@@ -242,13 +315,17 @@ export default {
       this.mapInstanse.panTo(val.latlng)
       this.selected = val.id
       this.sheet = true
+      this.recenter()
+    },
+    recenter() {
       this.$nextTick(() => {
-        const availableSpaceCenter =
-          (window.innerHeight - this.$refs.bottomSheet.$el.offsetHeight - 56) /
-          2
-        const offset = window.innerHeight / 2 - availableSpaceCenter
-        this.panWithOffset(this.rememberPosition, [0, offset])
+        this.panWithOffset(this.rememberPosition, [0, this.calcOffset()])
       })
+    },
+    calcOffset() {
+      const availableSpaceCenter =
+        (window.innerHeight - this.$refs.bottomSheet.$el.offsetHeight - 56) / 2
+      return window.innerHeight / 2 - availableSpaceCenter
     },
     panWithOffset(latlng, offset) {
       const x = this.mapInstanse.latLngToContainerPoint(latlng).x + offset[0]
@@ -260,6 +337,23 @@ export default {
     closeSheet() {
       this.sheet = false
       this.selected = null
+    },
+    async setLocation() {
+      await this.setResourceParams([
+        {
+          field: 'address',
+          value: this.findingOnMap.address
+        },
+        {
+          field: 'lat',
+          value: this.findingOnMap.coords.lat
+        },
+        {
+          field: 'long',
+          value: this.findingOnMap.coords.lng
+        }
+      ])
+      this.$root.$router.back()
     }
   }
 }
@@ -301,5 +395,14 @@ export default {
 .marker-cluster {
   background-color: #ff473a;
   color: white;
+}
+.center_markerck {
+  position: absolute;
+  height: 46px;
+  width: 40px;
+  // z-index: 202;
+  top: 50%;
+  left: 50%;
+  margin: -46px 0 0 -20px;
 }
 </style>
