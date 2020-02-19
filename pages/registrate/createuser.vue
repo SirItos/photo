@@ -16,19 +16,17 @@
           width="250"
           @click="setUser('provider', '/registrate/resource/profile', true)"
           color="primary "
-          >Регистрация для девушек</v-btn
-        >
+        >Регистрация для девушек</v-btn>
       </div>
       <div class="d-flex justify-center mt-4" style="width:100%">
         <v-btn
-          color="secondary"
-          class="text-none font-weight-bold primary--text"
+          color="primary"
+          class="text-none font-weight-bold"
           width="250"
           nuxt
           large
           @click="setUser('customer', '/registrate/customer-name')"
-          >Регистрация для мужчин</v-btn
-        >
+        >Регистрация для мужчин</v-btn>
       </div>
     </div>
   </v-row>

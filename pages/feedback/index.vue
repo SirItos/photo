@@ -45,7 +45,8 @@
               max-width="250"
               min-width="250"
               style="min-width:250px!important"
-              color="secondary"
+              text
+              color="primary"
               class="text-none font-weight-bold mt-3 primary--text"
             >Назад</v-btn>
           </div>

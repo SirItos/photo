@@ -114,8 +114,7 @@ export default {
   },
   created() {
     if (!this.userPhone) {
-      this.userPhone =
-        this.phone.length <= 10 ? `+ 7 ${this.phone}` : this.phone
+      this.userPhone = this.phone.length <= 10 ? `+7${this.phone}` : this.phone
     }
   },
   methods: {

@@ -3,7 +3,7 @@
     <client-only>
       <l-map
         ref="map"
-        @click="sheet=false"
+        @click="clickOutsde"
         @update:zoom="zoomUpdated"
         style="height:100%"
         :center="center"
@@ -13,16 +13,18 @@
         :zoomAnimation="true"
         :options="mapOptions"
       >
-        <l-tile-layer :url="url"></l-tile-layer>
+        <!-- <l-tile-layer :url="url"></l-tile-layer> -->
+        <v-tilelayer-googlemutant :apikey="googleApiKey" lang="ru"></v-tilelayer-googlemutant>
+        <l-marker v-if="userLocation && !finding" ref="user_point" :lat-lng="userLocation">
+          <l-icon :icon-size="[36, 36]" :icon-anchor="[18, 36]" :icon-url="null">
+            <v-icon style="transform:rotate(45deg)" color="primary" size="36px">mdi-navigation</v-icon>
+          </l-icon>
+        </l-marker>
         <v-marker-cluster v-if="!finding" :options="clusterOptions">
-          <l-marker v-if="userLocation" ref="user_point" :lat-lng="userLocation">
-            <l-icon :icon-size="[36, 36]" :icon-anchor="[18, 36]" :icon-url="null">
-              <v-icon style="transform:rotate(45deg)" color="#268E9C" size="36px">mdi-navigation</v-icon>
-            </l-icon>
-          </l-marker>
           <Markers
             v-for="marker in points"
             :key="`marker_${marker.id}`"
+            :current="currentMarker"
             :item="marker"
             @markerCLick="markerClick"
           />
@@ -30,7 +32,7 @@
       </l-map>
     </client-only>
     <div v-if="finding" class="center_markerck">
-      <v-img src="/frame.svg"></v-img>
+      <v-img :src="pin==='solo' ? '/frame.png' : 'frame_many.png'"></v-img>
     </div>
     <div v-if="!finding" class="fillter-btn d-flex d-sm-none justify-center">
       <v-btn
@@ -85,7 +87,7 @@
           <v-col v-if="!findingLoading">
             <v-row no-gutters>
               <div class="pr-2">Адрес:</div>
-              <v-col>{{findingOnMap.address}}</v-col>
+              <v-col>{{ findingOnMap.address }}</v-col>
             </v-row>
             <div class="py-3 d-flex justify-center">
               <v-btn
@@ -112,16 +114,8 @@
 const Markers = () => import('./MarkertComponent')
 const BottomSheetContent = () => import('./BottomSheetContent')
 import { mapGetters, mapActions } from 'vuex'
-import { OpenStreetMapProvider } from 'leaflet-geosearch'
 
-const provider = new OpenStreetMapProvider({
-  params: {
-    addressdetails: 1,
-    limit: 20,
-    'accept-language': 'ru',
-    countrycodes: 'ru'
-  }
-})
+// AIzaSyDzFFmjZh6ZVHJPoSEt0BsoSSApgir3y1k
 
 export default {
   name: 'MapComponent',
@@ -130,9 +124,15 @@ export default {
     BottomSheetContent
   },
   props: {
-    finding: Boolean
+    finding: { type: Boolean, default: false },
+    pin: {
+      type: String,
+      default: 'solo'
+    }
   },
   data: () => ({
+    googleApiKey: 'AIzaSyDzFFmjZh6ZVHJPoSEt0BsoSSApgir3y1k',
+    resource_id: null,
     rememberPosition: null,
     userLocation: null,
     findingLoading: false,
@@ -158,6 +158,7 @@ export default {
       coords: null
     },
     sheet: false,
+    currentMarker: null,
     points: []
   }),
   computed: {
@@ -220,11 +221,13 @@ export default {
         this.getPosition = false
         this.setGeolocationPremision(false)
         this.$store.dispatch('settings/setOverlay', true)
-        this.$axios.get('http://ip-api.com/json').then(response => {
-          this.mapInstanse.setView({
-            lat: response.data.lat,
-            lng: response.data.lon
-          })
+        this.$axios.get('/alt-locate').then(response => {
+          if (response.data.latitude) {
+            this.mapInstanse.setView({
+              lat: response.data.latitude,
+              lng: response.data.longitude
+            })
+          }
         })
       })
       this.mapInstanse.stopLocate()
@@ -235,7 +238,6 @@ export default {
       if (!this.loadingPoints) {
         this.loadingPoints = true
         if (this.finding) {
-          console.log(111)
           this.findingLoading = true
           this.positionFinding = true
         }
@@ -274,11 +276,10 @@ export default {
       const center = this.mapInstanse.getCenter()
 
       await this.$axios
-        .post('/geosearch', { val: center.lat + ',' + center.lng })
+        .post('/geosearch', { latlng: center.lat + ',' + center.lng })
         .then(response => {
           this.findingLoading = false
-          this.findingOnMap.address =
-            response.data.response.GeoObjectCollection.featureMember[0].GeoObject.name
+          this.findingOnMap.address = response.data.results[0].formatted_address
           this.findingOnMap.coords = center
         })
         .catch(e => {
@@ -311,11 +312,19 @@ export default {
       this.debounce()
     },
     markerClick(val) {
+      this.currentMarker = val.id
       this.rememberPosition = val.latlng
       this.mapInstanse.panTo(val.latlng)
       this.selected = val.id
       this.sheet = true
       this.recenter()
+    },
+    clickOutsde() {
+      if (this.sheet) {
+        this.sheet = false
+        return
+      }
+      this.currentMarker = null
     },
     recenter() {
       this.$nextTick(() => {
@@ -353,7 +362,10 @@ export default {
           value: this.findingOnMap.coords.lng
         }
       ])
-      this.$root.$router.back()
+      this.$root.$router.replace({
+        path: '/registrate/resource/carinfo',
+        query: { from_map: this.$store.state.resource.lastResourceId }
+      })
     }
   }
 }

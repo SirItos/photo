@@ -16,7 +16,7 @@ export const actions = {
     }
     await dispatch(
       'user/getUserParams',
-      ['roles', 'id', 'resource', 'userDetails'],
+      ['roles', 'id', 'resource', 'userDetails', 'phone'],
       {
         root: true
       }

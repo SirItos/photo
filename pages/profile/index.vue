@@ -32,7 +32,7 @@
     <v-col>
       <v-form ref="form" class="fill-height" lazy-validation :value="valid">
         <v-row no-gutters class="py-5 flex-column fill-height">
-          <v-col>
+          <v-col v-if="roles === 'provider'">
             <div class="px-5">
               <v-text-field
                 v-model="userPhone"
@@ -41,8 +41,6 @@
                 color="primary"
                 append-icon="mdi-pencil"
                 autocomplete="off"
-                v-mask="mask"
-                prefix="+7"
                 max="10"
                 type="tel"
                 :rules="[val => !!val || 'Укажите телефон для обращений к Вам']"
@@ -129,7 +127,8 @@
                   large
                   max-width="250"
                   style="min-width:250px!important"
-                  color="secondary"
+                  text
+                  color="primary"
                   class="text-none font-weight-bold"
                   @click="deleting"
                 >
@@ -163,7 +162,7 @@ export default {
       })
       .then(response => {
         return {
-          loginPhone: response.data.userDetails.display_phone,
+          loginPhone: response.data.phone,
           userPhone: response.data.userDetails.display_phone,
           userEmail: response.data.userDetails.email,
           userName: response.data.userDetails.name,
@@ -171,9 +170,7 @@ export default {
           resource_id: response.data.resource ? response.data.resource.id : null
         }
       })
-      .catch(e => {
-        
-      })
+      .catch(e => {})
   },
   data: () => ({
     mask: '### ### ## ##',

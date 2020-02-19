@@ -19,7 +19,7 @@
     item-text="label"
     item-value="value"
     clearable
-    hide-no-data
+    :hide-no-data="!error_msg"
     no-data-text
     hide-selected
     label="Ваше местоположение (отображается на карте)"
@@ -27,38 +27,33 @@
     <template v-slot:item="objects">
       <v-row no-gutters class="pa-1">
         <v-col cols="12">{{ objects.item.label }}</v-col>
-        <div class="caption">{{ objects.item.sub }}</div>
       </v-row>
+    </template>
+    <template v-slot:no-data>
+      <v-list-item>
+        <v-list-item-title>Поиск не принес результатов</v-list-item-title>
+      </v-list-item>
     </template>
   </v-autocomplete>
 </template>
 
 <script>
-// import { OpenStreetMapProvider } from 'leaflet-geosearch'
-
-// const provider = new OpenStreetMapProvider({
-//   params: {
-//     addressdetails: 1,
-//     limit: 20,
-//     'accept-language': 'ru',
-//     countrycodes: 'ru'
-//   }
-// })
-
 export default {
   name: 'PositionSearchComponent',
   props: {
     init: {
       type: [String, Object],
       default: null
-    }
+    },
+    many: Boolean
   },
   data: () => ({
     loading: false,
     wait: false,
     search: null,
     mapItems: [],
-    current: null
+    current: null,
+    error_msg: false
   }),
   computed: {
     menuProps() {
@@ -98,25 +93,23 @@ export default {
       this.loading = true
       this.$axios
         .post('/geosearch', {
-          val: this.search,
-          ll: this.$store.state.user.latlng.lng
-            ? this.$store.state.user.latlng
-            : undefined
+          address: this.search
         })
         .then(response => {
-          const items = response.data.response.GeoObjectCollection.featureMember.map(
-            (item, index) => {
-              return {
-                value: item.GeoObject.name + '_' + index,
-                label: item.GeoObject.name,
-                sub: item.GeoObject.description,
-                latlng: {
-                  lat: item.GeoObject.Point.pos.split(' ')[1],
-                  lng: item.GeoObject.Point.pos.split(' ')[0]
-                }
-              }
+          if (response.data.status !== 'OK') {
+            this.loading = false
+            this.error_msg = true
+
+            return
+          }
+          this.error_msg = false
+          const items = response.data.results.map((item, index) => {
+            return {
+              value: item.place_id,
+              label: item.formatted_address,
+              latlng: item.geometry.location
             }
-          )
+          })
           this.mapItems = items
           if (getFirst) {
             this.current = this.mapItems[0]
@@ -139,7 +132,16 @@ export default {
       this.mapItems = []
     },
     findOnMap() {
-      $nuxt.$router.push('/findMap')
+      $nuxt.$router.push({
+        path: '/findMap',
+        query: { type: this.many ? 'many' : 'solo' }
+      })
+    },
+    findInResponse(item, target) {
+      const result = item.find(address => {
+        return address.types.includes(target)
+      })
+      return result
     }
   }
 }

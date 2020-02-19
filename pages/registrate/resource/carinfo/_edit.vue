@@ -3,7 +3,7 @@
     <v-col>
       <v-form ref="form" lazy-validation :value="valid">
         <div class="text-center font-weight-bold headline">Информация о себе</div>
-        <v-geo-search @setLocate="setLocate" :init="location" />
+        <v-geo-search @setLocate="setLocate" :init="location" :many="showroom" />
         <div class="pt-5">
           <v-text-field
             v-model="title"
@@ -91,7 +91,8 @@
           large
           width="250"
           @click="$router.back()"
-          color="secondary "
+          text
+          color="primary"
         >Отмена</v-btn>
       </div>
     </div>
@@ -114,41 +115,42 @@ export default {
     'v-geo-search': SearchField
   },
   async asyncData({ route, $axios }) {
-    if (route.query.edit) {
-      return await $axios
-        .post('/get-resource-params', {
-          id: route.query.edit,
-          params: [
-            'id',
-            'address',
-            'title',
-            'resource_type',
-            'description',
-            'cost',
-            'min_cost',
-            'max_cost'
-          ]
-        })
-        .then(response => {
-          const range = response.data.cost
-            ? [3, 5]
-            : [
-                rangeHelper(response.data.min_cost),
-                rangeHelper(response.data.max_cost)
-              ]
-
-          return {
-            id: response.data.id,
-            title: response.data.title,
-            location: response.data.address,
-            individual: response.data.resource_type,
-            showroom: !response.data.resource_type,
-            description: response.data.description,
-            cost: response.data.cost,
-            priceRange: range
-          }
-        })
+    if (!route.query.edit && !route.query.from_map) {
+      return
     }
+    return await $axios
+      .post('/get-resource-params', {
+        id: route.query.edit || route.query.from_map,
+        params: [
+          'id',
+          'address',
+          'title',
+          'resource_type',
+          'description',
+          'cost',
+          'min_cost',
+          'max_cost'
+        ]
+      })
+      .then(response => {
+        const range = !response.data.cost
+          ? [3, 5]
+          : [
+              rangeHelper(response.data.min_cost),
+              rangeHelper(response.data.max_cost)
+            ]
+
+        return {
+          id: response.data.id,
+          title: response.data.title,
+          location: response.data.address,
+          individual: response.data.resource_type,
+          showroom: !response.data.resource_type,
+          description: response.data.description,
+          cost: response.data.cost,
+          priceRange: range
+        }
+      })
   },
   data: () => ({
     id: null,

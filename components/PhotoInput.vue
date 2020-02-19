@@ -11,7 +11,7 @@
         multiple
         ref="picker"
         type="file"
-        accept="image/*"
+        accept="image/jpg, image/jpeg, image/png"
         style="display:none"
         @change="onFileChange($event)"
       />

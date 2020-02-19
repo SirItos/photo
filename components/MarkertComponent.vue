@@ -1,5 +1,5 @@
 <template>
-  <l-marker ref="marker" :lat-lng="{lat:item.lat, lng:item.long}" @click="clickEvent">
+  <l-marker ref="marker" :lat-lng="{ lat: item.lat, lng: item.long }" @click="clickEvent">
     <l-icon
       :icon-size="dymanicSize"
       :icon-anchor="dynamicAnchor"
@@ -17,17 +17,28 @@ export default {
     item: {
       type: Object,
       default: () => ({})
+    },
+    current: {
+      type: Number,
+      default: null
     }
   },
   computed: {
+    currentMarker() {
+      return this.current === this.item.id ? 10 : 0
+    },
     dymanicSize() {
-      return [40, 46]
+      return [40, 52]
     },
     dynamicAnchor() {
-      return [20, 46]
+      return [20, 52]
     },
     dinamycUrl() {
-      return this.item.resource_type ? 'Frame.svg' : 'frame_many.svg'
+      let start = this.item.resource_type ? 'frame' : 'frame_many'
+      if (this.current === this.item.id) {
+        start += '_active'
+      }
+      return start + '.png'
     }
   },
   methods: {
@@ -41,5 +52,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

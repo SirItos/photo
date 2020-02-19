@@ -2,13 +2,13 @@
   <v-app style="margin-top:0px ;margin-top:env(safe-area-inset-top)">
     <v-app-bar app :value="toolbar" class="elevation-0">
       <div class="d-flex justify-start align-center" style="min-width:68px">
-        <v-btn icon @click.stop="drawler=true">
+        <v-btn icon @click.stop="drawler = true">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
       </div>
       <v-row no-gutters>
         <v-col class="d-flex align-center justify-center">
-          <div class="primary--text font-weight-bold">{{header}}</div>
+          <div class="primary--text font-weight-bold">{{ header }}</div>
         </v-col>
         <div class="overline texg-uppercase text-right">
           <div class="text-right">Место</div>
@@ -17,18 +17,32 @@
         </div>
       </v-row>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawler" class="primary white--text fix-nav" app temporary>
+    <v-navigation-drawer
+      v-model="drawler"
+      class="primary white--text fix-nav"
+      app
+      temporary
+    >
       <AppNavContent>
-        <NavList :items="getNavList(list)" @hideDrawler="drawler=false" />
+        <NavList :items="getNavList(list)" @hideDrawler="drawler = false" />
       </AppNavContent>
     </v-navigation-drawer>
     <v-content style="background-color:rgba(255,255,255)">
       <nuxt />
     </v-content>
     <v-overlay :value="overlay" opacity="0.8">
-      <v-progress-circular indeterminate color="primary" width="7" size="64"></v-progress-circular>
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        width="7"
+        size="64"
+      ></v-progress-circular>
     </v-overlay>
-    <v-dialog :value="visibility" @click:outside="closeDialog" style="z-index:1200">
+    <v-dialog
+      :value="visibility"
+      @click:outside="closeDialog"
+      style="z-index:1200"
+    >
       <dialog-content />
     </v-dialog>
   </v-app>
@@ -152,12 +166,12 @@ export default {
         'dialog/setDialogParams',
         {
           visibility: true,
-          title: foto ? 'Добавьте фотографии' : 'Создайте ресурс',
+          title: foto ? 'Добавьте фотографии' : 'Заполните анкету',
           text: foto
             ? 'Для продолжения работы, необходимо добавить фотографии'
             : 'Для продолжения работы, необходимо заполнить всю анкету',
           confirm: true,
-          okLabel: foto ? 'Добавить' : 'Создать',
+          okLabel: foto ? 'Добавить' : 'Заполнить',
           cancelLabel: 'Позже',
           okAction: () => {
             foto
@@ -175,7 +189,7 @@ export default {
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .fix-nav {
   max-height: calc(var(--vh, 1vh) * 100) !important;
 }

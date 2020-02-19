@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="fill-height flex-column white">
     <v-col class="mb-4">
-      <v-row no-gutters class="pa-4" style="box-shadow:  0px 4px 4px rgba(0, 0, 0, 0.25)">
+      <v-row no-gutters class="pa-4">
         <v-col cols="12" class="mb-3">
           <div
             class="title font-weight-medium"
@@ -99,7 +99,8 @@
           <v-btn
             block
             large
-            color="secondary"
+            text
+            color="primary"
             @click="$router.back()"
             class="text-none font-weight-bold"
             nuxt

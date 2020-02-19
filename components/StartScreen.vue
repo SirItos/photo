@@ -128,7 +128,8 @@ export default {
       if (this.$refs.form.validate()) {
         await this.enter({
           phone: this.phone.replace(/\s+/g, ''),
-          code: this.code
+          code: this.code,
+          type: 'phone'
         })
       } else {
       }

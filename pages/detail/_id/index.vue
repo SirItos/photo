@@ -6,9 +6,11 @@
         <v-col class="headline">{{ title }}</v-col>
         <div v-if="$store.state.user.roles === 'customer'">
           <v-btn text icon @click="setFavorite">
-            <v-icon :class="{ 'primary--text': like }">{{
+            <v-icon :class="{ 'primary--text': like }">
+              {{
               like ? 'mdi-cards-heart' : 'mdi-heart-outline'
-            }}</v-icon>
+              }}
+            </v-icon>
           </v-btn>
         </div>
       </v-row>
@@ -23,7 +25,8 @@
           <v-btn
             block
             large
-            color="secondary"
+            text
+            color="primary"
             class="text-none font-weight-bold"
             @click="$root.$router.back()"
             nuxt

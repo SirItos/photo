@@ -1,6 +1,7 @@
 <template>
   <v-row no-gutters class="fill-height" style="width:100%">
-    <MapComponent finding></MapComponent>
+    <!--  -->
+    <MapComponent :finding="true" :pin="$route.query.type"></MapComponent>
   </v-row>
 </template>
 

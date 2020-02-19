@@ -1,10 +1,8 @@
-import colors from 'vuetify/es5/util/colors'
-
 export default {
   mode: 'universal',
   head: {
     titleTemplate: '%s - Место твоих свиданий',
-    title: 'Место твоих свиданийы',
+    title: 'BazaBab',
     meta: [
       { charset: 'utf-8' },
       {
@@ -49,10 +47,13 @@ export default {
     '@nuxtjs/pwa'
   ],
   axios: {
-    baseURL: 'http://photo/api',
+    baseURL:
+      process.env.NODE_ENV === 'development'
+        ? 'http://photo/api'
+        : 'https://back.bazabab.ru/api',
     progress: false
   },
-  //
+  //http://photo/api
   //https://back.bazabab.ru/api
   generate: {
     // routes: ['/detail/1']

@@ -130,11 +130,11 @@ export const actions = {
             'dialog/setDialogParams',
             {
               visibility: true,
-              title: 'Создайте ресурс',
+              title: 'Заполните анкету',
               text:
-                'Для продолжения работы в качестве поставщика услуг, необходимо создать ресурс',
+                'Для продолжения работы в качестве поставщика услуг, необходимо заполнить анкету',
               confirm: true,
-              okLabel: 'Создать',
+              okLabel: 'Заполнить',
               cancelLabel: 'Позже',
               okAction: () => {
                 $nuxt.$router.push('/registrate/resource/carinfo')
@@ -328,6 +328,10 @@ export const actions = {
           {
             field: 'id',
             value: response.data.id
+          },
+          {
+            field: 'phone',
+            value: response.data.phone
           },
           {
             field: 'roles',

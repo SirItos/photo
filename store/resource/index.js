@@ -1,4 +1,6 @@
-export const state = () => ({})
+export const state = () => ({
+  lastResourceId: null
+})
 
 export const actions = {
   async setResourceParams({ commit, dispatch }, payload) {
@@ -15,7 +17,9 @@ export const actions = {
       .post('/set-resource-params', {
         params: payload
       })
-      .then(response => {})
+      .then(response => {
+        commit('setLastResourceId', response.data.id)
+      })
       .catch(e => {
         console.log(e)
       })
@@ -27,12 +31,18 @@ export const actions = {
         id: payload
       })
       .then(response => {
-        dispatch('dialog/setDialogParams', {})
+        dispatch('dialog/setDialogParams', {}, { root: true })
         $nuxt.$router.replace('/')
       })
       .catch(e => {
         console.log(e)
-        dispatch('dialog/setDialogParams', {})
+        dispatch('dialog/setDialogParams', {}, { root: true })
       })
+  }
+}
+
+export const mutations = {
+  setLastResourceId(state, payload) {
+    state.lastResourceId = payload
   }
 }

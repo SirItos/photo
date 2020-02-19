@@ -39,9 +39,10 @@
         style="min-width:250px!important"
         block
         large
+        text
         color="primary"
       >
-        <span class="white--text">Закрыть</span>
+        <span>Закрыть</span>
       </v-btn>
     </div>
   </v-row>
