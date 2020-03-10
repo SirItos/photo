@@ -21,7 +21,7 @@ nav {
   // min-height: calc(100vh - env(safe-area-inset-top, 66px)) !important;
 }
 .v-dialog__content {
-  z-index: 2020 !important;
+  // z-index: 2020 !important;
 }
 .v-slider__tick {
   border-radius: 50% !important;
@@ -119,4 +119,11 @@ input[type='number'] {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+.gm-style {
+  iframe + div {
+    display: none;
+    z-index: 0 !important;
+  }
 }

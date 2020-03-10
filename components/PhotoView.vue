@@ -10,10 +10,7 @@
         <v-img :src="imgUrl" :lazy-src="imgUrl" contain>
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular
-                :value="progress"
-                color="primary"
-              ></v-progress-circular>
+              <v-progress-circular :value="progress" color="primary"></v-progress-circular>
             </v-row>
           </template>
         </v-img>

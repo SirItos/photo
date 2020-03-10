@@ -225,10 +225,6 @@ export default {
         {
           field: 'max_cost',
           value: this.cost || this.price[this.priceRange[1]]
-        },
-        {
-          field: 'activated',
-          value: true
         }
       ])
       if (this.id) {

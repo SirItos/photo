@@ -17,12 +17,7 @@
         </div>
       </v-row>
     </v-app-bar>
-    <v-navigation-drawer
-      v-model="drawler"
-      class="primary white--text fix-nav"
-      app
-      temporary
-    >
+    <v-navigation-drawer v-model="drawler" class="primary white--text fix-nav" app temporary>
       <AppNavContent>
         <NavList :items="getNavList(list)" @hideDrawler="drawler = false" />
       </AppNavContent>
@@ -31,20 +26,29 @@
       <nuxt />
     </v-content>
     <v-overlay :value="overlay" opacity="0.8">
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        width="7"
-        size="64"
-      ></v-progress-circular>
+      <v-progress-circular indeterminate color="primary" width="7" size="64"></v-progress-circular>
     </v-overlay>
-    <v-dialog
-      :value="visibility"
-      @click:outside="closeDialog"
-      style="z-index:1200"
-    >
+    <v-dialog :value="visibility" @click:outside="closeDialog">
       <dialog-content />
     </v-dialog>
+    <v-bottom-sheet v-model="installSheet">
+      <v-sheet class="text-center" style="position:relative" :height="400">
+        <div style="position:absolute; width:100%" class="d-flex justify-end">
+          <v-btn text icon @click="installSheet = !installSheet">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
+        <div class="pa-4">
+          <v-img src="/tutorial.gif" max-height="364px" contain>
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
+        </div>
+      </v-sheet>
+    </v-bottom-sheet>
   </v-app>
 </template>
 
@@ -59,11 +63,12 @@ export default {
   },
   data() {
     return {
-      drawler: false
+      drawler: false,
+      installSheet: false
     }
   },
   computed: {
-    ...mapGetters('settings', ['getNavList', 'getToolbar']),
+    ...mapGetters('settings', ['getNavList']),
     ...mapState('user', [
       'name',
       'roles',
@@ -77,6 +82,14 @@ export default {
     list() {
       if (!this.roles) return 'unauth'
       return this.roles
+    },
+    checkMode() {
+      return (
+        navigator.standalone || matchMedia('(display-mode: standalone)').matches
+      )
+    },
+    checkDevice() {
+      return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
     }
   },
   watch: {
@@ -100,6 +113,12 @@ export default {
           })
         })
       }
+      window.addEventListener('beforeinstallprompt', this.installHandler)
+      if (!this.checkMode && this.checkDevice) {
+        setTimeout(() => {
+          this.installDialog()
+        }, 500)
+      }
       this.checkUser()
     })
   },
@@ -112,6 +131,7 @@ export default {
     checkUser() {
       if (!this.$cookies.get('token')) return
       if ($nuxt.$route.name !== 'index') return
+      if (this.$store.state.dialog.visibility) return
       if (this.roles === 'provider') {
         if (this.userFill) {
           this.dialogAboutUserFillProfile()
@@ -180,6 +200,42 @@ export default {
                 })
               : this.$root.$router.push('/registrate/resource/carinfo')
             this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+          }
+        },
+        { root: true }
+      )
+    },
+    installHandler(e) {
+      if (this.checkMode) return
+      e.preventDefault()
+      this.installDialog(e)
+    },
+    installDialog(event = null) {
+      this.$store.dispatch(
+        'dialog/setDialogParams',
+        {
+          visibility: true,
+          title: 'Добавить на главный экран',
+          text:
+            'Вы может добавить приложение на главный экран для быстрого доступа к нему',
+          confirm: true,
+          okLabel: this.checkDevice ? 'Как добавить?' : 'Добавить',
+          cancelLabel: 'Отмена',
+          okAction: () => {
+            if (this.checkDevice) {
+              this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+              this.installSheet = true
+            } else {
+              event.prompt()
+              event.userChoice.then(choiceResult => {
+                if (choiceResult.outcome === 'accepted') {
+                  window.removeEventListener(
+                    'beforeinstallprompt',
+                    this.installHandler
+                  )
+                }
+              })
+            }
           }
         },
         { root: true }

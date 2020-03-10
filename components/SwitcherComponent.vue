@@ -3,13 +3,16 @@
     <v-list-item @click="changeValue" v-ripple="{ class: 'white--text' }">
       <v-list-item-icon></v-list-item-icon>
       <v-list-item-content>
-        <v-list-item-title class="white--text font-weight-bold">{{
+        <v-list-item-title class="white--text font-weight-bold">
+          {{
           status ? 'Онлайн' : 'Оффлайн'
-        }}</v-list-item-title>
+          }}
+        </v-list-item-title>
       </v-list-item-content>
 
       <v-list-item-action>
-        <v-switch v-model="status" color="white"></v-switch>
+        <!-- <v-checkbox v-model="status" color="white" ></v-checkbox> -->
+        <v-switch v-model="status" @click.stop="changeValue" color="white"></v-switch>
       </v-list-item-action>
     </v-list-item>
   </v-list>

@@ -97,14 +97,17 @@ export default {
           email: this.email,
           description: this.description
         })
-        if (this.$store.state.feedback.error) {
-          this.$store.dispatch('dialog/setDialogParams', {
-            visibility: true,
-            title: 'Ошибка отправки сообщения ',
-            okLabel: 'Ок',
-            text: 'Произошла ошибка при отправке сообщения. Попробуйте позже.'
-          })
-        }
+
+        this.$store.dispatch('dialog/setDialogParams', {
+          visibility: true,
+          title: this.$store.state.feedback.error
+            ? 'Ошибка отправки сообщения '
+            : 'Сообщение отправлено',
+          okLabel: 'Ок',
+          text: this.$store.state.feedback.error
+            ? 'Произошла ошибка при отправке сообщения. Попробуйте позже.'
+            : 'Благодарим за обращение'
+        })
       }
     }
   }
