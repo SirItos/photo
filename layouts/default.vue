@@ -122,6 +122,9 @@ export default {
       this.checkUser()
     })
   },
+  beforeDestroy() {
+    window.removeEventListener('beforeinstallprompt', this.installHandler)
+  },
   methods: {
     ...mapActions('dialog', ['setDialogParams']),
     ...mapActions('user', ['setCity']),
@@ -211,13 +214,14 @@ export default {
       this.installDialog(e)
     },
     installDialog(event = null) {
+      if (this.$store.state.dialog.visibility) return
       this.$store.dispatch(
         'dialog/setDialogParams',
         {
           visibility: true,
           title: 'Добавить на главный экран',
           text:
-            'Вы может добавить приложение на главный экран для быстрого доступа к нему',
+            'Вы можете добавить приложение на главный экран для быстрого доступа к нему',
           confirm: true,
           okLabel: this.checkDevice ? 'Как добавить?' : 'Добавить',
           cancelLabel: 'Отмена',
@@ -230,7 +234,7 @@ export default {
               event.userChoice.then(choiceResult => {
                 if (choiceResult.outcome === 'accepted') {
                   window.removeEventListener(
-                    'beforeinstallprompt',
+                    ' installprompt',
                     this.installHandler
                   )
                 }
