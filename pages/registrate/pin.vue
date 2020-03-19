@@ -9,7 +9,7 @@
         <div class="w-100 py-12">
           <v-text-field
             ref="pin"
-            v-model="password"
+            v-model="pin"
             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
             type="tel"
             inputmode="numeric"
