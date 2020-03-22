@@ -13,8 +13,8 @@
         :zoomAnimation="true"
         :options="mapOptions"
       >
-        <l-tile-layer :url="url"></l-tile-layer>
-        <!-- <v-tilelayer-googlemutant :apikey="googleApiKey" lang="ru"></v-tilelayer-googlemutant> -->
+        <!-- <l-tile-layer :url="url"></l-tile-layer> -->
+        <v-tilelayer-googlemutant :apikey="googleApiKey" lang="ru"></v-tilelayer-googlemutant>
         <l-marker v-if="userLocation && !finding" ref="user_point" :lat-lng="userLocation">
           <l-icon :icon-size="[36, 36]" :icon-anchor="[18, 36]" :icon-url="null">
             <v-icon style="transform:rotate(45deg)" color="primary" size="36px">mdi-navigation</v-icon>
@@ -131,7 +131,7 @@ export default {
     }
   },
   data: () => ({
-    googleApiKey: 'AIzaSyDzFFmjZh6ZVHJPoSEt0BsoSSApgir3y1k',
+    googleApiKey: 'AIzaSyBGWeItHlBAoNVIiQ1_JsXZy3iWEkC0Zow',
     resource_id: null,
     rememberPosition: null,
     userLocation: null,
@@ -212,12 +212,14 @@ export default {
         this.debounce()
       }),
         this.mapInstanse.on('locationfound', e => {
+          console.log(e)
           this.setGeolocationPremision(true)
           this.mapInstanse.setZoom(14)
           this.userLocation = e.latlng
           this.getPosition = false
         })
       this.mapInstanse.on('locationerror', e => {
+        console.log(e)
         this.getPosition = false
         this.setGeolocationPremision(false)
         this.$store.dispatch('settings/setOverlay', true)

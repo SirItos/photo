@@ -8,7 +8,9 @@ nav {
 .v-application {
   font-family: 'Montserrat', sans-serif !important;
 }
-
+.caption {
+  font-family: 'Montserrat', sans-serif !important;
+}
 .v-application--wrap {
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100) !important;

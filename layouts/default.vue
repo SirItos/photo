@@ -171,7 +171,7 @@ export default {
           visibility: true,
           title: 'Заполните профиль',
           text:
-            'Для продолжения работы, необходимо заполнить информацию профиля в анкете',
+            'Для продолжения работы необходимо заполнить информацию профиля в анкете',
           confirm: true,
           okLabel: 'Заполнить',
           cancelLabel: 'Позже',
@@ -191,8 +191,8 @@ export default {
           visibility: true,
           title: foto ? 'Добавьте фотографии' : 'Заполните анкету',
           text: foto
-            ? 'Для продолжения работы, необходимо добавить фотографии'
-            : 'Для продолжения работы, необходимо заполнить всю анкету',
+            ? 'Для продолжения работы необходимо добавить фотографии'
+            : 'Для продолжения работы необходимо заполнить всю анкету',
           confirm: true,
           okLabel: foto ? 'Добавить' : 'Заполнить',
           cancelLabel: 'Позже',
@@ -227,9 +227,10 @@ export default {
           cancelLabel: 'Отмена',
           okAction: () => {
             if (this.checkDevice) {
-              this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+              this.$store.dispatch('dialog/setDialogParams', {})
               this.installSheet = true
             } else {
+              this.$store.dispatch('dialog/setDialogParams', {})
               event.prompt()
               event.userChoice.then(choiceResult => {
                 if (choiceResult.outcome === 'accepted') {

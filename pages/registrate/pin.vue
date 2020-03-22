@@ -36,7 +36,10 @@
             :class="{ secure: !show2 }"
             @click:append="show2 = !show2"
           ></v-text-field>
-          <div class="caption mt-2">Вы сможете изменить или восстановить пинкод в личном кабинете</div>
+          <div
+            class="caption mt-2"
+            style=" font-family: 'Montserrat', sans-serif !important;"
+          >Вы сможете изменить или восстановить пинкод в личном кабинете</div>
         </div>
       </div>
     </v-col>

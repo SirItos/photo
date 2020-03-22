@@ -16,6 +16,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
+    "@nuxtjs/recaptcha": "^0.6.2",
     "babel-runtime": "^6.26.0",
     "cookie-universal-nuxt": "^2.1.2",
     "leaflet-geosearch": "^2.7.0",
@@ -30,6 +31,7 @@
     "vue-yandex-maps": "^0.10.6",
     "vue2-leaflet-googlemutant": "^2.0.0",
     "vue2-leaflet-markercluster": "^3.0.0",
+    "vuetify-google-autocomplete": "^2.0.1",
     "ymaps": "^0.2.1"
   },
   "devDependencies": {

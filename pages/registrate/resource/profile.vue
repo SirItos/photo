@@ -38,14 +38,17 @@
           <div>
             <v-select
               v-model="ageRange"
-              label="Возростной диапазон"
+              label="Возраст"
               clearable
               :items="['18-30', '30-40', '40-50', 'старше 50']"
             />
           </div>
         </v-form>
       </div>
-      <div class="my-6 caption">Вы сможете изменить эти параметры в настройках сервиса</div>
+      <div
+        class="my-6 caption"
+        style=" font-family: 'Montserrat', sans-serif !important;"
+      >Вы сможете изменить эти параметры в настройках сервиса</div>
     </v-col>
     <div class="pt-10 d-flex justify-center">
       <v-btn

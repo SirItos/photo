@@ -52,7 +52,7 @@
                 <br />с кодом подтверждения
               </div>
               <div v-if="!registrate" class="pt-2 d-flex justify-end">
-                <nuxt-link class="link" to="/registrate/confirm">Забыли пин-код?</nuxt-link>
+                <div class="link" @click="fogetPassword">Забыли пин-код?</div>
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@ export default {
     ...mapState('user', ['city'])
   },
   methods: {
-    ...mapActions('user', ['registrateApi', 'enter']),
+    ...mapActions('user', ['registrateApi', 'enter', 'resetPassword']),
     call(e) {
       this.registrate ? this.registrateAction() : this.enterAction()
 
@@ -128,6 +128,16 @@ export default {
         })
       } else {
       }
+    },
+    async fogetPassword() {
+      if (this.phone) {
+        await this.resetPassword({
+          field: 'phone',
+          value: this.phone
+        })
+        return
+      }
+      $nuxt.$router.push('/foget')
     }
   }
 }

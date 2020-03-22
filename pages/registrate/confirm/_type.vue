@@ -17,7 +17,11 @@
         @blur="vissible_button=true"
       />
       <v-fade-transition>
-        <div v-if="timer" class="caption">выслать повторно код можно через {{ timer }} секунд</div>
+        <div
+          v-if="timer"
+          class="caption"
+          style=" font-family: 'Montserrat', sans-serif !important;"
+        >выслать повторно код можно через {{ timer }} секунд</div>
       </v-fade-transition>
     </div>
     <v-col>
@@ -45,7 +49,7 @@
             </v-fade-transition>
           </div>
         </v-fade-transition>
-        <div class="caption pa-3">
+        <div class="caption pa-3" style=" font-family: 'Montserrat', sans-serif !important;">
           Введя код , вы подтверждаете, что вы старше 18 лет и
           соглашаетесь с
           <nuxt-link to="/terms?confirm=1">Условиями использования сервиса</nuxt-link>

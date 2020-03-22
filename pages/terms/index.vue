@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="flex-column fill-height">
     <div class="d-flex justify-end pt-3">
-      <v-btn text color="primary" class="text-none caption">Switch to English</v-btn>
+      <v-btn text color="primary" class="text-none caption" style=" font-family: 'Montserrat', sans-serif !important;">Switch to English</v-btn>
     </div>
     <v-col class="pt-3 d-flex flex-column">
       <v-content
@@ -99,12 +99,12 @@
           min-width="250"
         >Продолжить</v-btn>
       </div>
-      <div class="pt-5 caption black--text" style="line-height:15px">
+      <div class="pt-5 caption black--text"  style="line-height:15px; font-family: 'Montserrat', sans-serif !important;">
         Нажимая кнопку “Продолжить” вы подтверждаете, что вы старше 18 лет и соглашаетесь с
         <a
           href = "https://www.barev.ru/legal/rules-and-privacy-policy/ru.html"
           class="black--text"
-        >Полными&nbsp;условиями использованиями сервиса</a>
+        >Полными&nbsp;условиями использования сервиса</a>
       </div>
     </div>
   </v-row>

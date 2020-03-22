@@ -1,9 +1,7 @@
 <template>
   <v-row no-gutters class="fill-height flex-column pa-5">
     <v-col>
-      <div class="headline text-center font-weight-bold">
-        Добавить фотографии
-      </div>
+      <div class="headline text-center font-weight-bold">Добавить фотографии</div>
       <v-row class="my-10 align-stretch" v-if="mountEnd">
         <v-photo-view
           v-for="(img, index) in savedImage"
@@ -22,9 +20,10 @@
         />
         <v-photo-input @pickImg="setNewImg" />
       </v-row>
-      <div class="my-6 caption">
-        Вы сможете изменить эти параметры в личном кабинете
-      </div>
+      <div
+        class="my-6 caption"
+        style=" font-family: 'Montserrat', sans-serif !important;"
+      >Вы сможете изменить эти параметры в личном кабинете</div>
     </v-col>
     <div class="pt-10">
       <div class="d-flex justify-center">
@@ -34,8 +33,7 @@
           min-width="250"
           @click="nextBtnClick"
           large
-          >{{ id ? 'Сохранить' : 'Отправить на проверку' }}</v-btn
-        >
+        >{{ id ? 'Сохранить' : 'Отправить на проверку' }}</v-btn>
       </div>
       <div class="d-flex justify-center">
         <v-btn
@@ -46,8 +44,7 @@
           width="250"
           @click="$router.back()"
           color="secondary "
-          >Отмена</v-btn
-        >
+        >Отмена</v-btn>
       </div>
     </div>
   </v-row>

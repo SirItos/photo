@@ -14,7 +14,8 @@ export const state = () => ({
   latlng: {
     lat: null,
     lng: null
-  }
+  },
+  resetPassword: false
 })
 
 export const actions = {
@@ -27,7 +28,8 @@ export const actions = {
       .then(response => {
         commit(MutationsType.user.SET_USER_FIELD, [
           payload,
-          { field: 'id', value: response.data.user_id }
+          { field: 'id', value: response.data.user_id },
+          { field: 'resetPassword', value: false }
         ])
         $nuxt.$router.push('/registrate/confirm')
       })
@@ -39,10 +41,13 @@ export const actions = {
             title: 'Ошибка регистрации',
             text: e.response.data,
             confirm: false,
-            okLabel: 'Войти',
+            okLabel: payload.fromEnter ? 'Ок' : 'Войти',
             okAction: () => {
-              this.$router.replace('/signin')
               this.dispatch('dialog/setDialogParams', {}, { root: true })
+              if (payload.fromEnter) {
+                return
+              }
+              this.$router.replace('/signin')
             }
           },
           { root: true }
@@ -72,7 +77,7 @@ export const actions = {
           {
             visibility: true,
             title: 'Неверный код',
-            text: e.response.data,
+            text: null,
             confirm: false,
             okLabel: 'Ок',
             okAction: () => {
@@ -153,6 +158,7 @@ export const actions = {
             title: 'Ошибка входа',
             text: e.response.data,
             confirm: false,
+
             okLabel: e.response.status === 401 ? 'Зарегистрироваться' : 'Ок',
             okAction:
               e.response.status === 401
@@ -160,7 +166,8 @@ export const actions = {
                     this.dispatch('dialog/setDialogParams', {})
                     this.dispatch('user/registrateApi', {
                       field: 'phone',
-                      value: payload.phone
+                      value: payload.phone,
+                      fromEnter: true
                     })
                   }
                 : null
@@ -233,13 +240,17 @@ export const actions = {
           },
           { maxAge: 60 * 60 * 24 * 360 }
         )
+        $nuxt.$router.push(state.resetPassword ? '/' : '/registrate/createuser')
         commit(MutationsType.user.SET_USER_FIELD, [
           {
             field: 'roles',
             value: response.data.roles
+          },
+          {
+            field: 'resetPassword',
+            value: false
           }
         ])
-        $nuxt.$router.push('/registrate/createuser')
       })
       .catch(async e => {
         if (e.response.status === 401) {
@@ -365,6 +376,37 @@ export const actions = {
         if (e.response.status === 401) {
           dispatch('refreshToken')
         }
+      })
+  },
+  async resetPassword({ dispatch, commit }, payload) {
+    dispatch('settings/setOverlay', true, { root: true })
+    await this.$axios
+      .post('/reset-password', { phone: payload.value.replace(/\s+/g, '') })
+      .then(response => {
+        commit(MutationsType.user.SET_USER_FIELD, [
+          payload,
+          { field: 'id', value: response.data.user_id },
+          { field: 'resetPassword', value: true }
+        ])
+        console.log('reseted')
+        $nuxt.$router.push('/registrate/confirm')
+      })
+      .catch(e => {
+        dispatch(
+          'dialog/setDialogParams',
+          {
+            visibility: true,
+            title: 'Ошибка',
+            text: e.response.data,
+            confirm: false,
+            okLabel: 'Ок',
+            okAction: () => {
+              this.dispatch('dialog/setDialogParams', {}, { root: true })
+              this.$router.replace('/signin')
+            }
+          },
+          { root: true }
+        )
       })
   }
 }

@@ -69,7 +69,10 @@
             ></v-range-slider>
           </div>
         </div>
-        <div class="my-6 caption">Вы сможете изменить эти параметры в личном кабинете</div>
+        <div
+          class="my-6 caption"
+          style=" font-family: 'Montserrat', sans-serif !important;"
+        >Вы сможете изменить эти параметры в личном кабинете</div>
       </v-form>
     </v-col>
 

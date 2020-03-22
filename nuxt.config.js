@@ -44,7 +44,17 @@ export default {
     'nuxt-leaflet',
     '@nuxtjs/axios',
     'cookie-universal-nuxt',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    [
+      '@nuxtjs/recaptcha',
+      {
+        hideBadge: false,
+        language: 'ru-Ru',
+        siteKey: '6LeFF-MUAAAAAOOm_u2BLz2V90S0WNor7SmFc0iR', // Site key for requests
+        version: 3 // Version
+        // size: 'compact' // Size: 'compact', 'normal', 'invisible' (v2)
+      }
+    ]
   ],
   axios: {
     baseURL:

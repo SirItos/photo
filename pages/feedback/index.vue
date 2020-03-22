@@ -62,6 +62,7 @@ export default {
   head: {
     title: 'Обратная связь'
   },
+
   async asyncData({ store, $axios }) {
     if (!store.state.user.access_token) {
       return {
@@ -87,15 +88,26 @@ export default {
       return pattern.test(value) || 'Некоректный email'
     }
   }),
+  async mounted() {
+    await this.$recaptcha.init()
+  },
+  async beforeDestroy() {
+    const recap = document.querySelector('.grecaptcha-badge')
+    recap.parentNode.removeChild(recap)
+    this.$recaptcha.destroy()
+  },
   methods: {
     async send() {
       if (this.$refs.form.validate()) {
+        const token = await this.$recaptcha.execute('login')
+        if (!token) return
         const action = this.$store.state.user.access_token
           ? 'sendFeedbackAuth'
           : 'sendFeedback'
         await this.$store.dispatch(`feedback/${action}`, {
           email: this.email,
-          description: this.description
+          description: this.description,
+          token: token
         })
 
         this.$store.dispatch('dialog/setDialogParams', {

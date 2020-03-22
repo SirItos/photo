@@ -13,6 +13,7 @@ export const state = () => ({
 
 export const actions = {
   setDialogParams({ commit }, payload) {
+    console.log('call dialg', payload)
     commit(MutationsType.dialog.SET_DIALOG_PARAMS, payload)
   }
 }
