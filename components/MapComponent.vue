@@ -212,14 +212,12 @@ export default {
         this.debounce()
       }),
         this.mapInstanse.on('locationfound', e => {
-          console.log(e)
           this.setGeolocationPremision(true)
           this.mapInstanse.setZoom(14)
           this.userLocation = e.latlng
           this.getPosition = false
         })
       this.mapInstanse.on('locationerror', e => {
-        console.log(e)
         this.getPosition = false
         this.setGeolocationPremision(false)
         this.$store.dispatch('settings/setOverlay', true)
@@ -232,7 +230,6 @@ export default {
           }
         })
       })
-      this.mapInstanse.stopLocate()
     },
     debounce() {
       this.setLastCenterPosition(this.mapInstanse.getCenter())

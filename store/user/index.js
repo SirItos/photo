@@ -15,6 +15,8 @@ export const state = () => ({
     lat: null,
     lng: null
   },
+  resStatus: 1,
+  notification: null,
   resetPassword: false
 })
 
@@ -358,6 +360,16 @@ export const actions = {
           {
             field: 'have_res',
             value: response.data.resource ? response.data.resource.id : 0
+          },
+          {
+            field: 'notification',
+            value: response.data.notification
+              ? response.data.notification[0]
+              : null
+          },
+          {
+            field: 'resStatus',
+            value: response.data.resource ? response.data.resource.status : -1
           },
           {
             field: 'have_foto',

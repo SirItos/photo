@@ -64,7 +64,8 @@ export default {
   data() {
     return {
       drawler: false,
-      installSheet: false
+      installSheet: false,
+      installPromptIsShowed: false
     }
   },
   computed: {
@@ -75,7 +76,9 @@ export default {
       'phone',
       'have_res',
       'have_foto',
-      'userFill'
+      'userFill',
+      'resStatus',
+      'notification'
     ]),
     ...mapState('settings', ['overlay', 'toolbar', 'header']),
     ...mapState('dialog', ['visibility']),
@@ -140,6 +143,14 @@ export default {
           this.dialogAboutUserFillProfile()
           return
         }
+
+        if (this.notification) {
+          this.notificationDialog()
+          return
+        }
+        if (this.resStatus === 3 || this.resStatus === 6) {
+          return
+        }
         if (!this.have_res || !this.have_foto) {
           const mode = this.have_res ? !this.have_foto : false
           this.dialogAboutResource(mode)
@@ -163,6 +174,18 @@ export default {
             { field: latlng, value: null }
           ])
         })
+    },
+    notificationDialog() {
+      this.$store.dispatch('dialog/setDialogParams', {
+        visibility: true,
+        title: this.notification.title,
+        text: this.notification.description,
+        okLabel: 'Ок',
+        okAction: () => {
+          this.$axios.post('/saw-notification', { id: this.notification.id })
+          this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+        }
+      })
     },
     dialogAboutUserFillProfile() {
       this.$store.dispatch(
@@ -214,37 +237,35 @@ export default {
       this.installDialog(e)
     },
     installDialog(event = null) {
+      if (this.installPromptIsShowed) return
       if (this.$store.state.dialog.visibility) return
-      this.$store.dispatch(
-        'dialog/setDialogParams',
-        {
-          visibility: true,
-          title: 'Добавить на главный экран',
-          text:
-            'Вы можете добавить приложение на главный экран для быстрого доступа к нему',
-          confirm: true,
-          okLabel: this.checkDevice ? 'Как добавить?' : 'Добавить',
-          cancelLabel: 'Отмена',
-          okAction: () => {
-            if (this.checkDevice) {
-              this.$store.dispatch('dialog/setDialogParams', {})
-              this.installSheet = true
-            } else {
-              this.$store.dispatch('dialog/setDialogParams', {})
-              event.prompt()
-              event.userChoice.then(choiceResult => {
-                if (choiceResult.outcome === 'accepted') {
-                  window.removeEventListener(
-                    ' installprompt',
-                    this.installHandler
-                  )
-                }
-              })
-            }
+      this.$store.dispatch('dialog/setDialogParams', {
+        visibility: true,
+        title: 'Добавить на главный экран',
+        text:
+          'Вы можете добавить приложение на главный экран для быстрого доступа к нему',
+        confirm: true,
+        okLabel: this.checkDevice ? 'Как добавить?' : 'Добавить',
+        cancelLabel: 'Отмена',
+        okAction: () => {
+          debugger
+          this.$store.dispatch('dialog/setDialogParams', {})
+          if (this.checkDevice) {
+            this.installSheet = true
+          } else {
+            this.installPromptIsShowed = true
+            this.addPwa(event)
           }
-        },
-        { root: true }
-      )
+        }
+      })
+    },
+    addPwa(event) {
+      event.prompt()
+      event.userChoice.then(choiceResult => {
+        if (choiceResult.outcome === 'accepted') {
+          window.removeEventListener('installprompt', this.installHandler)
+        }
+      })
     }
   }
 }
