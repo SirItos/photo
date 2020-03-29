@@ -3,7 +3,7 @@
     <g-detail-slider :images="images" />
     <div class="detail_title" ref="title">
       <v-row no-gutters class="px-3">
-        <v-col class="headline">{{ title }}</v-col>
+        <v-col class="headline">{{ address.replace(/, Россия, \d{5,}/g, '') }}</v-col>
         <div v-if="$store.state.user.roles === 'customer'">
           <v-btn text icon @click="setFavorite">
             <v-icon :class="{ 'primary--text': like }">
@@ -16,6 +16,7 @@
       </v-row>
     </div>
     <v-col class="px-3">
+      <div class="primary--text">Информация о себе:</div>
       <div>{{ description }}</div>
       <g-detail-price :price="cost_range" />
     </v-col>
@@ -55,7 +56,7 @@
 export default {
   head() {
     return {
-      title: 'Ресурс ' + this.title
+      title: this.name
     }
   },
   name: 'DetailPage',
@@ -72,7 +73,7 @@ export default {
       .then(response => {
         return {
           address: response.data.address,
-          title: response.data.title || response.data.address,
+          name: response.data.user.user_details.name || response.data.address,
           phone: response.data.user.phone,
           id: response.data.id,
           user_id: response.data.user.id,
@@ -92,7 +93,7 @@ export default {
   }),
   created() {
     this.$store.dispatch('settings/setToolbar', {
-      header: this.title,
+      header: this.name,
       toolbar: true
     })
 

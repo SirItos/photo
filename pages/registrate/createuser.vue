@@ -14,7 +14,7 @@
           nuxt
           large
           width="250"
-          @click="setUser('provider', '/registrate/resource/profile', true)"
+          @click="setUser('provider', '/placement', true)"
           color="primary "
         >Регистрация для девушек</v-btn>
       </div>

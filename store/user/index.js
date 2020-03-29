@@ -400,7 +400,6 @@ export const actions = {
           { field: 'id', value: response.data.user_id },
           { field: 'resetPassword', value: true }
         ])
-        console.log('reseted')
         $nuxt.$router.push('/registrate/confirm')
       })
       .catch(e => {
@@ -414,7 +413,9 @@ export const actions = {
             okLabel: 'Ок',
             okAction: () => {
               this.dispatch('dialog/setDialogParams', {}, { root: true })
-              this.$router.replace('/signin')
+              if (this.$router.currentRoute.name !== 'signin') {
+                this.$router.replace('/signin')
+              }
             }
           },
           { root: true }

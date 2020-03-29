@@ -78,7 +78,11 @@ export default {
       redirect('/')
       return
     }
-    if (from.name === 'index' || from.name === 'registrate-createuser') {
+    if (
+      from.name === 'index' ||
+      from.name === 'registrate-createuser' ||
+      from.name === 'placement'
+    ) {
       return await $axios
         .post('/user-params', {
           params: ['phone', 'userDetails']

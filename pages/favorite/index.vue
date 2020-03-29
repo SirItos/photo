@@ -26,7 +26,9 @@
       <div v-else class="favorite-no-img d-flex justify-center align-center">
         <v-icon size="32px">mdi-image-off-outline</v-icon>
       </div>
-      <div class="primary--text text-uppercase">{{item.resource.title || item.resource.address}}</div>
+      <div
+        class="primary--text text-uppercase"
+      >{{item.name || item.resource.address.replace(/, Россия, \d{5,}/g, '')}}</div>
     </v-col>
   </v-row>
   <v-row v-else no-gutters class="fill-height px-8 align-center justify-center">

@@ -8,7 +8,7 @@
       </div>
       <v-row no-gutters>
         <v-col class="d-flex align-center justify-center">
-          <div class="primary--text font-weight-bold">{{ header }}</div>
+          <div class="primary--text text-capitalize font-weight-bold">{{ header }}</div>
         </v-col>
         <div class="overline texg-uppercase text-right">
           <div class="text-right">Место</div>

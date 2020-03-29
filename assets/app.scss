@@ -129,3 +129,16 @@ input::-webkit-inner-spin-button {
     z-index: 0 !important;
   }
 }
+
+.always_white {
+  .error--text {
+    color: white !important;
+    caret-color: white !important;
+  }
+  .v-input__control > .v-input__slot {
+    &::before,
+    &::after {
+      border-color: rgba(255, 255, 255, 0.7) !important;
+    }
+  }
+}

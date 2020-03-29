@@ -3,8 +3,10 @@
     <v-col>
       <div style="width:100%">
         <div class="d-flex flex-column align-center title" style="width:100%">
-          <span class="font-weight-bold">Придумайт свой пинкод</span>
-          <span class="font-weight-regular">для входа в сервис</span>
+          <span
+            class="font-weight-bold"
+          >Придумайте {{$store.state.user.resetPassword ? 'новый' : 'свой'}} пинкод</span>
+          <span class="font-weight-regular">для входа в приложение</span>
         </div>
         <div class="w-100 py-12">
           <v-text-field

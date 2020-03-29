@@ -3,7 +3,7 @@
     <div class="primary pa-6 pb-10 white--text">
       <div>
         На
-        <span v-if="phone">номер+7 {{ phone }}</span>
+        <span v-if="phone">номер +7 {{ phone }}</span>
         <span v-else>телефонный номер</span>
       </div>
       <div>выслан код подтверждения</div>
@@ -63,7 +63,7 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   head: {
-    title: 'Подтвердитt Email'
+    title: 'Подтвердитt номер телефона'
   },
   name: 'confrimCode',
   middleware: 'preRegistratepage',

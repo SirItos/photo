@@ -194,7 +194,11 @@ export default {
       this.$root.$router.push('/')
     },
     changeSliderRange(val) {
-      this.filters.price = [this.price[val[0]], this.price[val[1]] || 99999]
+      const min = rangeHelper(this.price[val[0]])
+      this.filters.price = [
+        min > 20000 ? 20000 : min,
+        this.price[val[1]] || 99999
+      ]
     }
   }
 }

@@ -24,7 +24,8 @@
           name="profileName"
           label="Имя"
           color="white"
-          :rules="[val => !!val || 'Укажите Ваш телефон']"
+          class="always_white"
+          :rules="[val => !!val || 'Укажите Ваше Имя']"
           append-icon="mdi-pencil"
         ></v-text-field>
       </div>
@@ -71,6 +72,25 @@
 
           <div>
             <div v-if="roles === 'provider'">
+              <v-divider></v-divider>
+              <div
+                class="px-5"
+                v-ripple
+                @click="
+                  $router.push({
+                    path: '/placement',
+                    query: { profile:1 }
+                  })
+                "
+              >
+                <v-row>
+                  <v-col>Правила размещения анкет</v-col>
+                  <div class="d-flex align-center">
+                    <v-icon>mdi-chevron-right</v-icon>
+                  </div>
+                </v-row>
+              </div>
+              <v-divider></v-divider>
               <v-divider></v-divider>
               <div
                 class="px-5"

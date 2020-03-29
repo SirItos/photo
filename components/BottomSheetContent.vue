@@ -3,9 +3,9 @@
     <v-fade-transition appear mode="out-in">
       <v-col v-if="!loading" key="content_bottom" cols="12">
         <v-row no-gutters>
-          <v-col class="px-1 d-flex align-center primary--text" v-if="title">
+          <v-col class="px-1 d-flex align-center primary--text" v-if="name">
             <v-icon color="primary">mdi-map-marker</v-icon>
-            <div>{{title}}</div>
+            <div class="text-capitalize">{{name}}</div>
           </v-col>
           <div>
             <v-btn icon @click="$emit('closeSheet')">
@@ -59,7 +59,7 @@ export default {
   data: () => ({
     loading: true,
     images: [],
-    title: null,
+    name: null,
     cost: null
   }),
   watch: {
@@ -83,7 +83,7 @@ export default {
           all: true
         })
         .then(response => {
-          this.title = response.data.title
+          this.name = response.data.user.user_details.name
           this.images = response.data.images
           ;(this.loading = false),
             (this.cost = [response.data.min_cost, response.data.max_cost])

@@ -21,9 +21,9 @@ export default {
       if (!this.price[0] && !this.price[1]) {
         return 'Не указана'
       }
-      if (Number(this.price[0]) > 10000 && Number(this.price[0]) > 10000) {
-        return 'Вам не по карману'
-      }
+      // if (Number(this.price[0]) > 10000 && Number(this.price[0]) > 10000) {
+      //   return 'Вам не по карману'
+      // }
       if (this.price[0] === this.price[1]) {
         return `${this.price[0]} `
       }

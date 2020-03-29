@@ -43,7 +43,8 @@
           large
           width="250"
           @click="$router.back()"
-          color="secondary "
+          text
+          color="primary"
         >Отмена</v-btn>
       </div>
     </div>

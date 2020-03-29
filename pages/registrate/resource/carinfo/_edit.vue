@@ -5,12 +5,7 @@
         <div class="text-center font-weight-bold headline">Информация о себе</div>
         <v-geo-search @setLocate="setLocate" :init="location" :many="showroom" />
         <div class="pt-5">
-          <v-text-field
-            v-model="title"
-            label="Заголовок"
-            :rules="[val => !!val || 'Укажите заголовок для ресурса']"
-          ></v-text-field>
-          <v-textarea v-model="description" label="Описание" rows="4" />
+          <v-textarea v-model="description" label="Информация о себе" rows="4" />
         </div>
         <div class="py-5">
           <div class="font-weight-bold">Как вы встречаетесь?</div>
@@ -47,14 +42,26 @@
           <div class="font-weight-bold">Оцените ваше свидание?</div>
           <div>
             <v-text-field
-              label="Стоимость"
+              label="Cтоимость"
               class="mt-3"
               v-model="cost"
               type="number"
               color="primary"
             />
           </div>
-          <div>
+          <v-select
+            :disabled="cost ? true : false"
+            return-object
+            v-model="priceRange"
+            clearable
+            :items="options"
+            item-value="id"
+            label="Выберите стоимость"
+          >
+            <template v-slot:item="{item}">{{`${item.min}${checkMaxValue(item.max)}`}}</template>
+            <template v-slot:selection="{item}">{{`${item.min}${checkMaxValue(item.max)}`}}</template>
+          </v-select>
+          <!-- <div>
             <v-range-slider
               :disabled="cost ? true : false"
               :tick-labels="price"
@@ -67,7 +74,7 @@
               color="primary"
               class="mt-5"
             ></v-range-slider>
-          </div>
+          </div>-->
         </div>
         <div
           class="my-6 caption"
@@ -104,7 +111,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { rangeHelper } from '~/utils'
+import { rangeHelperSelect } from '~/utils'
 
 const SearchField = () => import('@/components/PositionSearchComponent')
 
@@ -127,7 +134,6 @@ export default {
         params: [
           'id',
           'address',
-          'title',
           'resource_type',
           'description',
           'cost',
@@ -136,28 +142,21 @@ export default {
         ]
       })
       .then(response => {
-        const range = !response.data.cost
-          ? [3, 5]
-          : [
-              rangeHelper(response.data.min_cost),
-              rangeHelper(response.data.max_cost)
-            ]
-
         return {
           id: response.data.id,
-          title: response.data.title,
           location: response.data.address,
           individual: response.data.resource_type,
           showroom: !response.data.resource_type,
           description: response.data.description,
           cost: response.data.cost,
-          priceRange: range
+          priceRange: response.data.cost
+            ? null
+            : rangeHelperSelect(response.data.min_cost)
         }
       })
   },
   data: () => ({
     id: null,
-    title: null,
     location: null,
     individual: true,
     showroom: null,
@@ -165,18 +164,12 @@ export default {
     cost: null,
     priceRange: [3, 5],
     valid: false,
-    price: [
-      '1000',
-      '2000',
-      '3000',
-      '4000',
-      '5000',
-      '6000',
-      '7000',
-      '8000',
-      '9000',
-      '10000',
-      '999999999'
+    options: [
+      { id: 1, min: 1000, max: 3000 },
+      { id: 2, min: 3000, max: 6000 },
+      { id: 3, min: 6000, max: 10000 },
+      { id: 4, min: 10000, max: 20000 },
+      { id: 5, min: 20000, max: 999999999 }
     ]
   }),
   created() {
@@ -197,10 +190,7 @@ export default {
           field: 'address',
           value: this.location.label
         },
-        {
-          field: 'title',
-          value: this.title
-        },
+
         {
           field: 'lat',
           value: this.location.latlng.lat
@@ -223,11 +213,11 @@ export default {
         },
         {
           field: 'min_cost',
-          value: this.cost || this.price[this.priceRange[0]]
+          value: this.cost || this.priceRange.min
         },
         {
           field: 'max_cost',
-          value: this.cost || this.price[this.priceRange[1]]
+          value: this.cost || this.priceRange.max
         }
       ])
       if (this.id) {
@@ -235,6 +225,9 @@ export default {
         return
       }
       this.$root.$router.push('/registrate/resource/photos')
+    },
+    checkMaxValue(value) {
+      return value >= 999999999 ? ' и более' : ` - ${value}`
     }
   }
 }
