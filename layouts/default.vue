@@ -139,11 +139,14 @@ export default {
       if ($nuxt.$route.name !== 'index') return
       if (this.$store.state.dialog.visibility) return
       if (this.roles === 'provider') {
+        console.log(this.resStatus)
+        if (this.resStatus === 7) {
+          return
+        }
         if (this.userFill) {
           this.dialogAboutUserFillProfile()
           return
         }
-
         if (this.notification) {
           this.notificationDialog()
           return
@@ -176,10 +179,16 @@ export default {
         })
     },
     notificationDialog() {
+      const text =
+        this.notification.status === 3
+          ? `Причина&nbsp;: ${this.notification.description}. Откорректируйте анкету и отправьте ее на проверку повторно.`
+          : this.notification.status === 6
+          ? `Ваша анкета была заблокированна администрацией. Воспользуйтесь "обратной связью" для восстановления доступа. Причина&nbsp;: ${this.notification.description}. `
+          : this.notification.description
       this.$store.dispatch('dialog/setDialogParams', {
         visibility: true,
         title: this.notification.title,
-        text: this.notification.description,
+        text: text,
         okLabel: 'Ок',
         okAction: () => {
           this.$axios.post('/saw-notification', { id: this.notification.id })

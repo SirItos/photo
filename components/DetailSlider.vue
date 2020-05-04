@@ -7,9 +7,9 @@
   >
     <div class="swiper-wrapper">
       <div class="swiper-slide img-shadow" v-for="image in images" :key="`detail_img${image.id}`">
-        <v-img :src="image.url" :lazy-src="image.url" contain height="300px">
+        <v-img :src="image.url['320']" :lazy-src="image.url['320']" contain height="300px">
           <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">111</v-row>
+            <v-row class="fill-height ma-0" align="center" justify="center">Нет изображения</v-row>
           </template>
         </v-img>
       </div>

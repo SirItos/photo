@@ -30,7 +30,7 @@
         ></v-text-field>
       </div>
     </div>
-    <v-col>
+    <v-col v-if="!trashed">
       <v-form ref="form" class="fill-height" lazy-validation :value="valid">
         <v-row no-gutters class="py-5 flex-column fill-height">
           <v-col v-if="roles === 'provider'">
@@ -160,6 +160,24 @@
         </v-row>
       </v-form>
     </v-col>
+    <v-col v-else>
+      <v-row no-gutters class="py-5 flex-column fill-height justify-center align-center">
+        <div
+          class="px-5 py-2 text-center"
+        >Ваша анкета удалена Вами. Для востановления анкеты нажмити кнопку</div>
+        <div class="d-flex justify-center">
+          <v-btn
+            block
+            large
+            max-width="250"
+            style="min-width:250px!important"
+            color="primary"
+            class="text-none font-weight-bold"
+            @click="restoreDialog"
+          >Востановить анкету</v-btn>
+        </div>
+      </v-row>
+    </v-col>
   </v-row>
 </template>
 
@@ -187,7 +205,12 @@ export default {
           userEmail: response.data.userDetails.email,
           userName: response.data.userDetails.name,
           age: response.data.userDetails.age_range,
-          resource_id: response.data.resource ? response.data.resource.id : null
+          resource_id: response.data.resource
+            ? response.data.resource.id
+            : null,
+          trashed: response.data.resource
+            ? response.data.resource.status === 7
+            : false
         }
       })
       .catch(e => {})
@@ -242,9 +265,51 @@ export default {
         okLabel: 'Да',
         cancelLabel: 'Нет',
         okAction: () => {
+          this.setDialogParams({})
           this.deleteRes(this.resource_id)
         }
       })
+    },
+    restoreDialog() {
+      this.setDialogParams({
+        visibility: true,
+        title: 'Подтвердите действие',
+        text: 'Вы уверены, что хотите востановить  анкету?',
+        confirm: true,
+        okLabel: 'Да',
+        cancelLabel: 'Нет',
+        okAction: () => {
+          this.setDialogParams({})
+          this.restore()
+        }
+      })
+    },
+    restore() {
+      this.$store.dispatch('settings/setOverlay', true)
+      this.$axios
+        .post('/restore-resources', {
+          obj: [this.resource_id]
+        })
+        .then(response => {
+          this.trashed = false
+          this.setDialogParams({
+            visibility: true,
+            title: 'Успех!',
+            text:
+              'Ваша анкета востановлена и направлена на повторную проверку. В скором времени она появится на карте',
+            confirm: false,
+            okLabel: 'Ок'
+          })
+        })
+        .catch(e => {
+          this.setDialogParams({
+            visibility: true,
+            title: 'Ошибка',
+            text: 'Не удалось востановить анкету. Повторите попытку позже',
+            confirm: false,
+            okLabel: 'Ок'
+          })
+        })
     }
   }
 }

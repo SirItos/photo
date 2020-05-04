@@ -12,10 +12,19 @@
               label="Email"
               color="primary"
               type="email"
-              append-icon="mdi-email"
+              append-icon="mdi-at"
               :rules="[
                         val => !!val || 'Укажите Ваш Email',
                         email_rules]"
+            ></v-text-field>
+            <v-text-field
+              v-model="theme"
+              name="theme"
+              autocomplete="off"
+              label="Тема"
+              color="primary"
+              type="text"
+              append-icon="mdi-email"
             ></v-text-field>
             <v-textarea
               v-model="description"
@@ -82,6 +91,7 @@ export default {
   },
   data: () => ({
     valid: false,
+    theme: null,
     description: null,
     email_rules: value => {
       const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -107,7 +117,8 @@ export default {
         await this.$store.dispatch(`feedback/${action}`, {
           email: this.email,
           description: this.description,
-          token: token
+          theme: this.theme
+          // token: token
         })
 
         this.$store.dispatch('dialog/setDialogParams', {

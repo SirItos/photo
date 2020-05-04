@@ -120,6 +120,17 @@ export default {
             cancelAction: () => {
               this.$root.$router.push('/')
               this.$store.dispatch('dialog/setDialogParams', {}, { root: true })
+              if (!this.$route.query.edit) {
+                setTimeout(() => {
+                  this.$store.dispatch('dialog/setDialogParams', {
+                    visibility: true,
+                    title: 'Поздравляем!',
+                    text:
+                      'Ваша анкета создана и отправлена на проверку. Скоро она появится на карте',
+                    okLabel: 'Ок'
+                  })
+                }, 1500)
+              }
             }
           })
         } else {

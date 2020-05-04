@@ -359,7 +359,11 @@ export const actions = {
           },
           {
             field: 'have_res',
-            value: response.data.resource ? response.data.resource.id : 0
+            value: response.data.resource
+              ? response.data.resource.deleted_at
+                ? -1
+                : response.data.resource.id
+              : 0
           },
           {
             field: 'notification',

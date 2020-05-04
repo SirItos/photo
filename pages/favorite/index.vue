@@ -10,8 +10,8 @@
     >
       <v-img
         v-if="item.img"
-        :src="item.img.url"
-        :lazy-src="item.img.url"
+        :src="item.img.url['320']"
+        :lazy-src="item.img.url['320']"
         contain
         min-width="100%"
         height="124px"

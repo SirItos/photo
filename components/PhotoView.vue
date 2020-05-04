@@ -39,7 +39,7 @@ export default {
   },
   created() {
     if (this.saved) {
-      this.imgUrl = this.src.url
+      this.imgUrl = this.src.url['320']
     }
   },
   mounted() {

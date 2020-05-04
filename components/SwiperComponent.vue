@@ -10,8 +10,8 @@
       <swiperSlide v-for="image in images" :key="`bottom_img_${image.id}`" style="max-height:100px">
         <div>
           <v-img
-            :src="image.url"
-            :lazy-src="image.rurl"
+            :src="image.url['320']"
+            :lazy-src="image.url['320']"
             max-width="120"
             min-height="100"
             max-height="100"
@@ -62,7 +62,7 @@ export default {
   computed: {
     galleryArray() {
       return this.images.map(item => {
-        return item.url
+        return item.url.origin
       })
     }
   },
@@ -73,8 +73,6 @@ export default {
       const close = document.querySelector('.blueimp-gallery>.close')
       next.remove()
       prev.remove()
-      close.innerHTML = ''
-      close.classList.add('custom-close')
     })
   },
   methods: {

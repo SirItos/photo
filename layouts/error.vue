@@ -1,14 +1,27 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
+  <v-app style="margin-top:0px ;margin-top:env(safe-area-inset-top)">
+    <v-row class="flex-column fill-height align-center justify-center px-5">
+      <div class="text-center">
+        <h1 v-if="error.statusCode === 404">404</h1>
+        <h1 v-else>А где все девушки?</h1>
+        <div>
+          Ищем дам по красивее,
+          <br />они точно есть где-то на карте
+        </div>
+      </div>
+
+      <div class="pt-5 px-5">
+        <v-btn
+          v-if="!getFilterActive"
+          large
+          min-width="250"
+          color="primary"
+          class="text-none font-weight-bold"
+          nuxt
+          to="/"
+        >На карту!</v-btn>
+      </div>
+    </v-row>
   </v-app>
 </template>
 
@@ -21,17 +34,22 @@ export default {
       default: null
     }
   },
-  head () {
+  head() {
     const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+      this.error.statusCode === 404
+        ? this.pageNotFound.header
+        : this.otherError.header
     return {
       title
     }
   },
-  data () {
+  data() {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
+      pageNotFound: {
+        header: '404 Страница не найдена.',
+        body: 'Ищем дам покрасивее..'
+      },
+      otherError: ''
     }
   }
 }
