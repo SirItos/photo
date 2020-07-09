@@ -69,26 +69,20 @@
           </div>
         </v-col>
         <v-col cols="12" class="mb-3 pr-2">
-          <div
-            class="title font-weight-medium"
-            style="	font-family: 'Montserrat', sans-serif !important;"
-          >Сколько Вы готовы потратить</div>
           <div>
-            <v-range-slider
-              :tick-labels="price"
-              v-model="priceRange"
-              @change="
-                val => {
-                  changeSliderRange(val)
-                }
-              "
-              min="0"
-              max="10"
-              :ticks="true"
-              tick-size="4"
-              track-color="rgba(0, 0, 0, 0.26)"
-              color="primary"
-            ></v-range-slider>
+            <v-select
+              multiple
+              v-model="price"
+              :items="optionsPriceRange"
+              chips
+              item-value="id"
+              item-text="value"
+              label="Сколько Вы готовы потратить"
+            >
+              <template v-slot:selection="{item}">
+                <v-chip @click:close="spliceSelected(item.id)" close color="primary">{{item.value}}</v-chip>
+              </template>
+            </v-select>
           </div>
         </v-col>
       </v-row>
@@ -126,7 +120,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { rangeHelper } from '~/utils'
+import { rangeHelperSelect } from '~/utils'
 
 export default {
   name: 'FilterComponent',
@@ -138,44 +132,34 @@ export default {
       thirty: false,
       forty: false,
       fifty: false,
-      price: [
-        '1000',
-        '2000',
-        '3000',
-        '4000',
-        '5000',
-        '6000',
-        '7000',
-        '8000',
-        '9000',
-        '10000',
-        '999999999'
-      ]
+      price: []
     },
-    priceRange: [2, 4],
-    price: [
-      '1000',
-      '2000',
-      '3000',
-      '4000',
-      '5000',
-      '6000',
-      '7000',
-      '8000',
-      '9000',
-      '10000',
-      '999999999'
+    price: [],
+    options: [
+      { id: 1, min: 1000, max: 3000 },
+      { id: 2, min: 3000, max: 6000 },
+      { id: 3, min: 6000, max: 10000 },
+      { id: 4, min: 10000, max: 20000 },
+      { id: 5, min: 20000, max: 999999999 }
     ]
   }),
   computed: {
-    ...mapGetters('filters', ['getFilters'])
+    ...mapGetters('filters', ['getFilters']),
+    optionsPriceRange() {
+      return this.options.map(item => {
+        return {
+          id: item.id,
+          value: `${item.min}  ${this.checkMaxValue(item.max)}`
+        }
+      })
+    }
   },
   created() {
     this.filters = Object.assign({}, this.getFilters)
-    this.priceRange = [
-      rangeHelper(this.filters.price[0]),
-      rangeHelper(this.filters.price[1])
-    ]
+    console.log(this.filters.price.length)
+    if (this.filters.price.length) {
+      this.price = rangeHelperSelect(this.filters.price)
+    }
     this.$store.dispatch('settings/setToolbar', {
       header: 'Фильтры',
       toolbar: true
@@ -188,18 +172,34 @@ export default {
   methods: {
     ...mapActions('filters', ['changeFilters', 'activateFilters']),
     confirmFilters() {
-      const filters = this.filters
+      this.preparePriceFilter()
       this.changeFilters(this.filters)
       this.activateFilters(true)
       this.$root.$router.push('/')
     },
-    changeSliderRange(val) {
-      const min = rangeHelper(this.price[val[0]])
-      this.filters.price = [
-        min > 20000 ? 20000 : min,
-        this.price[val[1]] || 99999
-      ]
+    checkMaxValue(value) {
+      return value >= 999999999 ? ' и более' : ` - ${value}`
+    },
+    spliceSelected(id) {
+      const index = this.filters.price.findIndex(item => {
+        return item.id === id
+      })
+      this.filters.price.splice(index, 1)
+    },
+    preparePriceFilter() {
+      this.filters.price = this.price.map(item => {
+        return this.options.find(option => {
+          return option.id === item
+        })
+      })
     }
+    // changeSliderRange(val) {
+    //   const min = rangeHelper(this.price[val[0]])
+    //   this.filters.price = [
+    //     min > 20000 ? 20000 : min,
+    //     this.price[val[1]] || 99999
+    //   ]
+    // }
   }
 }
 </script>

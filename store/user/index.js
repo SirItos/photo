@@ -97,9 +97,7 @@ export const actions = {
       .post('/ask-code', {
         id: state.id
       })
-      .then(response => {
-        console.log(response.data)
-      })
+      .then(response => {})
       .catch(e => {
         console.log(e)
       })

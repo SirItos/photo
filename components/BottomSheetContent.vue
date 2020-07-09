@@ -85,8 +85,7 @@ export default {
         .then(response => {
           this.name = response.data.user.user_details.name
           this.images = response.data.images
-          ;(this.loading = false),
-            (this.cost = [response.data.min_cost, response.data.max_cost])
+          ;(this.loading = false), (this.cost = response.data.price_range)
           this.callRecenter()
         })
         .catch(e => {

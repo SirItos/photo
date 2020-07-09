@@ -117,8 +117,8 @@ export default {
         await this.$store.dispatch(`feedback/${action}`, {
           email: this.email,
           description: this.description,
-          theme: this.theme
-          // token: token
+          theme: this.theme,
+          token: token
         })
 
         this.$store.dispatch('dialog/setDialogParams', {

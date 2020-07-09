@@ -1,7 +1,11 @@
 <template>
-  <div class="primary--text d-flex">
+  <div class="primary--text">
     <div>Оценка свидания:</div>
-    <div class="pl-2 font-weight-bold">{{ priceRange }}</div>
+    <div
+      v-for="range in preparePriceArray"
+      :key="range.id"
+      class="font-weight-bold"
+    >{{ priceRange(range) }}</div>
   </div>
 </template>
 
@@ -17,32 +21,64 @@ export default {
     }
   },
   computed: {
-    priceRange() {
-      if (!this.price[0] && !this.price[1]) {
+    preparePriceArray() {
+      const first_iterration = this.price.sort(this.sortByMin)
+      return this.mergePrice(first_iterration)
+    }
+  },
+  methods: {
+    priceRange(price) {
+      if (!price.min_cost && !price.max_cost) {
         return 'Не указана'
       }
-      // if (Number(this.price[0]) > 10000 && Number(this.price[0]) > 10000) {
-      //   return 'Вам не по карману'
-      // }
-      if (this.price[0] === this.price[1]) {
-        return `${this.price[0]} `
+      if (price.min_cost === price.max_cost) {
+        return `${price.min_cost} `
       }
-      if (this.price.length < 2) {
-        return `${this.price[0]} `
+      if (price.length < 2) {
+        return `${price.min_cost} `
       }
-      return this.startPrice + this.decim + this.endPrice
+
+      return this.startPrice(price) + this.decim(price) + this.endPrice(price)
     },
-    startPrice() {
-      const startStr = Number(this.price[1]) > 10000 ? 'от ' : ''
-      return this.price[0] ? `${startStr} ${this.price[0]} ` : ''
+    startPrice(price) {
+      const startStr = Number(price.max_cost) > 10000 ? 'от ' : ''
+      return price.min_cost ? `${startStr} ${price.min_cost} ` : ''
     },
-    endPrice() {
-      if (Number(this.price[1]) > 10000) return ''
-      const startStr = Number(!this.price[0]) ? 'до ' : ''
-      return this.price[1] ? `${startStr}${this.price[1]} ` : ''
+    endPrice(price) {
+      if (Number(price.max_cost) > 10000) return ''
+      const startStr = Number(!price.min_cost) ? 'до ' : ''
+      return price.max_cost ? `${startStr}${price.max_cost} ` : ''
     },
-    decim() {
-      return this.price[0] && this.endPrice ? '- ' : ''
+    decim(price) {
+      return price.min_cost && this.endPrice(price) ? '- ' : ''
+    },
+    sortByMin(a, b) {
+      if (a.min_cost < b.min_cost) {
+        return -1
+      }
+      if (a.min_cost > b.min_cost) {
+        return 1
+      }
+      return 0
+    },
+    mergePrice(sortedArray) {
+      let result = []
+      sortedArray.forEach((item, index, array) => {
+        let prevValue
+        if (result.length) {
+          prevValue = result[result.length - 1]
+        }
+        if (!prevValue) {
+          result.push(item)
+        } else {
+          if (prevValue.max_cost === item.min_cost) {
+            result[result.length - 1].max_cost = item.max_cost
+          } else {
+            result.push(item)
+          }
+        }
+      })
+      return result
     }
   }
 }

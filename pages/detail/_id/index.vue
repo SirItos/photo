@@ -78,7 +78,7 @@ export default {
           id: response.data.id,
           user_id: response.data.user.id,
           description: response.data.description,
-          cost_range: [response.data.min_cost, response.data.max_cost],
+          cost_range: response.data.price_range,
           type: response.data.resource_type,
           like: response.data.favorite,
           images: response.data.images

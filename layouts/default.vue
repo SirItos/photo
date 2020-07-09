@@ -139,7 +139,6 @@ export default {
       if ($nuxt.$route.name !== 'index') return
       if (this.$store.state.dialog.visibility) return
       if (this.roles === 'provider') {
-        console.log(this.resStatus)
         if (this.resStatus === 7) {
           return
         }
@@ -257,7 +256,6 @@ export default {
         okLabel: this.checkDevice ? 'Как добавить?' : 'Добавить',
         cancelLabel: 'Отмена',
         okAction: () => {
-          debugger
           this.$store.dispatch('dialog/setDialogParams', {})
           if (this.checkDevice) {
             this.installSheet = true

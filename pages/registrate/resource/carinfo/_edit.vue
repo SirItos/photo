@@ -42,24 +42,32 @@
           <div class="font-weight-bold">Оцените ваше свидание?</div>
           <div>
             <v-text-field
-              label="Cтоимость"
+              label="Ваша оценка"
               class="mt-3"
               v-model="cost"
               type="number"
               color="primary"
+              :rules="priceRange.length ? [] : [val=>!!val|| 'Оцените свидание']"
             />
           </div>
           <v-select
             :disabled="cost ? true : false"
-            return-object
+            multiple
             v-model="priceRange"
-            clearable
-            :items="options"
+            :items="optionsPriceRange"
+            chips
             item-value="id"
-            label="Выберите стоимость"
+            item-text="value"
+            label="Выберите оценку"
           >
-            <template v-slot:item="{item}">{{`${item.min}${checkMaxValue(item.max)}`}}</template>
-            <template v-slot:selection="{item}">{{`${item.min}${checkMaxValue(item.max)}`}}</template>
+            <template v-slot:selection="{item}">
+              <v-chip
+                @click:close="spliceSelected(item.id)"
+                close
+                :color="!cost ? 'primary' : 'secondary'"
+              >{{item.value}}</v-chip>
+            </template>
+            <!-- <template v-slot:selection="{item}">{{`${item.min}${checkMaxValue(item.max)}`}}</template>-->
           </v-select>
           <!-- <div>
             <v-range-slider
@@ -137,8 +145,7 @@ export default {
           'resource_type',
           'description',
           'cost',
-          'min_cost',
-          'max_cost'
+          'priceRange'
         ]
       })
       .then(response => {
@@ -151,7 +158,7 @@ export default {
           cost: response.data.cost,
           priceRange: response.data.cost
             ? null
-            : rangeHelperSelect(response.data.min_cost)
+            : rangeHelperSelect(response.data.price_range)
         }
       })
   },
@@ -162,7 +169,7 @@ export default {
     showroom: null,
     description: null,
     cost: null,
-    priceRange: [3, 5],
+    priceRange: [],
     valid: false,
     options: [
       { id: 1, min: 1000, max: 3000 },
@@ -172,6 +179,16 @@ export default {
       { id: 5, min: 20000, max: 999999999 }
     ]
   }),
+  computed: {
+    optionsPriceRange() {
+      return this.options.map(item => {
+        return {
+          id: item.id,
+          value: `${item.min}  ${this.checkMaxValue(item.max)}`
+        }
+      })
+    }
+  },
   created() {
     this.id = this.$route.query.edit
   },
@@ -212,19 +229,42 @@ export default {
           value: this.cost
         },
         {
-          field: 'min_cost',
-          value: this.cost || this.priceRange.min
-        },
-        {
-          field: 'max_cost',
-          value: this.cost || this.priceRange.max
+          field: 'priceRange',
+          value: this.cost || this.getMinMaxPrices(this.priceRange)
         }
+        // {
+        //   field: 'min_cost',
+        //   value: this.cost || getMinMaxPrice[this.priceRange]
+        // },
+        // {
+        //   field: 'max_cost',
+        //   value: this.cost || this.priceRange.max
+        // }
       ])
       if (this.id) {
         this.$root.$router.back()
         return
       }
       this.$root.$router.push('/registrate/resource/photos')
+    },
+    spliceSelected(id) {
+      const index = this.priceRange.findIndex(item => {
+        return item.id === id
+      })
+      this.priceRange.splice(index, 1)
+    },
+    getMinMaxPrices(arr) {
+      return arr.map(item => {
+        const key = typeof item === 'number' ? item : item.id
+        const option = this.options.find(option_item => {
+          return option_item.id === key
+        })
+
+        return {
+          min_cost: option.min,
+          max_cost: option.max
+        }
+      })
     },
     checkMaxValue(value) {
       return value >= 999999999 ? ' и более' : ` - ${value}`

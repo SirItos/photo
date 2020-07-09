@@ -21,13 +21,19 @@ const selectOptions = [
 ]
 
 export const rangeHelper = value => {
-  if (value > 10000) return 10
-  return cost_range.indexOf(value.toString())
+  return selectOptions.find(price_item => {
+    return price_item.id === value
+  })
 }
 
-export const rangeHelperSelect = value => {
-  const result = selectOptions.find(item => {
-    return item.min === value
+export const rangeHelperSelect = values => {
+  let result = []
+  values.forEach(value => {
+    result.push(
+      selectOptions.find(item => {
+        return item.min === value.min_cost
+      })
+    )
   })
 
   return result

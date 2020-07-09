@@ -15,7 +15,15 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico' }],
+    script: [
+      {
+        src: '/js/pixel.js'
+      },
+      {
+        src: '/js/yandex.js'
+      }
+    ]
   },
   router: {},
 
@@ -79,7 +87,13 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {},
+    babel: {
+      presets({ isServer }) {
+        const targets = isServer ? { node: 'current' } : { ie: 11 }
+        return [[require.resolve('@nuxt/babel-preset-app'), { targets }]]
+      }
+    }
   },
   pwa: {
     manifest: {
