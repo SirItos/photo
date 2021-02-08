@@ -3,7 +3,7 @@
     <div class="primary pa-6 pb-10 white--text">
       <div>
         На
-        <span v-if="phone">номер +7 {{ phone }}</span>
+        <span v-if="phone">номер {{ phone }}</span>
         <span v-else>телефонный номер</span>
       </div>
       <div>выслан код подтверждения</div>
@@ -13,15 +13,17 @@
         type="tel"
         class="code-input"
         maxlength="4"
-        @focus="vissible_button=false"
-        @blur="vissible_button=true"
+        @focus="vissible_button = false"
+        @blur="vissible_button = true"
       />
       <v-fade-transition>
         <div
           v-if="timer"
           class="caption"
           style=" font-family: 'Montserrat', sans-serif !important;"
-        >выслать повторно код можно через {{ timer }} секунд</div>
+        >
+          выслать повторно код можно через {{ timer }} секунд
+        </div>
       </v-fade-transition>
     </div>
     <v-col>
@@ -37,7 +39,8 @@
                 class="text-none font-weight-bold"
                 color="primary"
                 :disabled="codeEntered"
-              >Подтвердить</v-btn>
+                >Подтвердить</v-btn
+              >
               <v-btn
                 v-else
                 large
@@ -45,14 +48,19 @@
                 class="text-none font-weight-bold"
                 color="primary"
                 @click="sendSms"
-              >Отправить код</v-btn>
+                >Отправить код</v-btn
+              >
             </v-fade-transition>
           </div>
         </v-fade-transition>
-        <div class="caption pa-3" style=" font-family: 'Montserrat', sans-serif !important;">
-          Введя код , вы подтверждаете, что вы старше 18 лет и
-          соглашаетесь с
-          <nuxt-link to="/terms?confirm=1">Условиями использования сервиса</nuxt-link>
+        <div
+          class="caption pa-3"
+          style=" font-family: 'Montserrat', sans-serif !important;"
+        >
+          Введя код , вы подтверждаете, что вы старше 18 лет и соглашаетесь с
+          <nuxt-link to="/terms?confirm=1"
+            >Условиями использования сервиса</nuxt-link
+          >
         </div>
       </v-row>
     </v-col>

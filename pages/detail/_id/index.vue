@@ -3,13 +3,13 @@
     <g-detail-slider :images="images" />
     <div class="detail_title" ref="title">
       <v-row no-gutters class="px-3">
-        <v-col class="headline">{{ address.replace(/, Россия, \d{5,}/g, '') }}</v-col>
+        <v-col class="headline">{{
+          address.replace(/, Россия, \d{5,}/g, '')
+        }}</v-col>
         <div v-if="$store.state.user.roles === 'customer'">
           <v-btn text icon @click="setFavorite">
             <v-icon :class="{ 'primary--text': like }">
-              {{
-              like ? 'mdi-cards-heart' : 'mdi-heart-outline'
-              }}
+              {{ like ? 'mdi-cards-heart' : 'mdi-heart-outline' }}
             </v-icon>
           </v-btn>
         </div>
@@ -37,7 +37,7 @@
         </v-col>
         <v-col class="px-2">
           <v-btn
-            :href="`tel:+7${phone}`"
+            :href="`tel:${phone}`"
             @click="sendStatisticEvent('call')"
             block
             large

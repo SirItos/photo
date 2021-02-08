@@ -1,16 +1,21 @@
 <template>
   <v-row no-gutters class="flex-column fill-height px-8 py-10">
-    <div class="title font-weight-bold text-center mb-10">Востановление пароля</div>
+    <div class="title font-weight-bold text-center mb-10">
+      Востановление пароля
+    </div>
     <v-col>
       <v-form @submit="reset" :value="valid" lazy-validation ref="form">
         <v-text-field
           v-model="phone"
-          v-mask="mask"
+          v-mask="computedMask"
           autocomplete="off"
-          prefix="+7"
-          max="10"
+          :max="computedMask.len"
           type="tel"
-          :rules="[v => !!v || 'Укажите свой телефон', rules.length(13)]"
+          label="Телефон"
+          :rules="[
+            v => !!v || 'Укажите свой телефон',
+            rules.length(computedMask.len)
+          ]"
         ></v-text-field>
       </v-form>
     </v-col>
@@ -23,7 +28,8 @@
         nuxt
         large
         @click="reset"
-      >Востановить</v-btn>
+        >Востановить</v-btn
+      >
     </div>
   </v-row>
 </template>
@@ -41,7 +47,12 @@ export default {
   },
   data: () => ({
     phone: null,
-    mask: '### ### ## ##',
+    tokens: {
+      F: {
+        pattern: /[\+\d]/
+      },
+      '#': { pattern: /\d/ }
+    },
     valid: false,
     rules: {
       length: len => v => {
@@ -50,6 +61,19 @@ export default {
       }
     }
   }),
+  computed: {
+    computedMask() {
+      return {
+        mask: this.phone
+          ? this.phone[0] === '+'
+            ? 'F# ### ### ## ##'
+            : '#### ### ## ##'
+          : 'F# ### ### ## ##',
+        tokens: this.tokens,
+        len: this.phone ? (this.phone[0] === '+' ? 16 : 14) : 16
+      }
+    }
+  },
   methods: {
     ...mapActions('user', ['resetPassword']),
     async reset() {
@@ -64,5 +88,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

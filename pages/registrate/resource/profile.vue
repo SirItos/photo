@@ -48,7 +48,9 @@
       <div
         class="my-6 caption"
         style=" font-family: 'Montserrat', sans-serif !important;"
-      >Вы сможете изменить эти параметры в настройках сервиса</div>
+      >
+        Вы сможете изменить эти параметры в настройках сервиса
+      </div>
     </v-col>
     <div class="pt-10 d-flex justify-center">
       <v-btn
@@ -59,7 +61,8 @@
         color="primary"
         @click="next"
         block
-      >Продолжить</v-btn>
+        >Продолжить</v-btn
+      >
     </div>
   </v-row>
 </template>
@@ -121,7 +124,7 @@ export default {
   },
   created() {
     if (!this.userPhone) {
-      this.userPhone = this.phone.length <= 10 ? `+7${this.phone}` : this.phone
+      this.userPhone = this.phone.length <= 10 ? `${this.phone}` : this.phone
     }
   },
   methods: {

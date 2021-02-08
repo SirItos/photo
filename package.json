@@ -2,7 +2,7 @@
   "name": "photo",
   "version": "1.0.0",
   "description": "photoservice",
-  "author": "KonikNA",
+  
   "private": true,
   "scripts": {
     "serve": "nuxt",

@@ -9,9 +9,8 @@
           v-model="loginPhone"
           dark
           readonly
-          v-mask="mask"
-          prefix="+7"
-          max="10"
+          v-mask="computedMask"
+          :max="computedMask.len"
           type="tel"
           name="loginPhone"
           class="loginPhone"
@@ -79,7 +78,7 @@
                 @click="
                   $router.push({
                     path: '/placement',
-                    query: { profile:1 }
+                    query: { profile: 1 }
                   })
                 "
               >
@@ -139,7 +138,8 @@
                   color="primary"
                   class="text-none font-weight-bold"
                   @click="saveChange"
-                >Сохранить</v-btn>
+                  >Сохранить</v-btn
+                >
               </div>
               <div v-if="resource_id" class="d-flex pt-2 justify-center">
                 <v-btn
@@ -161,10 +161,13 @@
       </v-form>
     </v-col>
     <v-col v-else>
-      <v-row no-gutters class="py-5 flex-column fill-height justify-center align-center">
-        <div
-          class="px-5 py-2 text-center"
-        >Ваша анкета удалена Вами. Для востановления анкеты нажмити кнопку</div>
+      <v-row
+        no-gutters
+        class="py-5 flex-column fill-height justify-center align-center"
+      >
+        <div class="px-5 py-2 text-center">
+          Ваша анкета удалена Вами. Для востановления анкеты нажмити кнопку
+        </div>
         <div class="d-flex justify-center">
           <v-btn
             block
@@ -174,7 +177,8 @@
             color="primary"
             class="text-none font-weight-bold"
             @click="restoreDialog"
-          >Востановить анкету</v-btn>
+            >Востановить анкету</v-btn
+          >
         </div>
       </v-row>
     </v-col>
@@ -216,7 +220,12 @@ export default {
       .catch(e => {})
   },
   data: () => ({
-    mask: '### ### ## ##',
+    tokens: {
+      F: {
+        pattern: /[\+\d]/
+      },
+      '#': { pattern: /\d/ }
+    },
     age: null,
     email_rules: value => {
       const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -225,7 +234,18 @@ export default {
     valid: false
   }),
   computed: {
-    ...mapState('user', ['name', 'phone', 'pin', 'roles', 'email', 'ageRange'])
+    ...mapState('user', ['name', 'phone', 'pin', 'roles', 'email', 'ageRange']),
+    computedMask() {
+      return {
+        mask: this.phone
+          ? this.phone[0] === '+'
+            ? 'F# ### ### ## ##'
+            : '#### ### ## ##'
+          : 'F# ### ### ## ##',
+        tokens: this.tokens,
+        len: this.phone ? (this.phone[0] === '+' ? 16 : 14) : 16
+      }
+    }
   },
   methods: {
     ...mapActions('settings', ['setToolbar']),

@@ -8,27 +8,31 @@
         ref="form"
         class="d-flex fill-height flex-column justify-center align-center"
       >
-        <div class="d-flex flex-column justify-space-around white--text" style="height:100%">
+        <div
+          class="d-flex flex-column justify-space-around white--text"
+          style="height:100%"
+        >
           <div class="fill-height flex-column justify-end d-flex">
             <div>
               <div class="text-uppercase display-1">
                 Место
-                <br />Твоих
-                <br />Свиданий
+                <br />Твоих <br />Свиданий
               </div>
 
               <div class="py-4" v-if="city">город : {{ city }}</div>
               <!--     -->
               <v-text-field
                 v-model="phone"
-                v-mask="mask"
+                v-mask="computedMask"
                 autocomplete="off"
-                prefix="+7"
-                max="10"
+                :max="computedMask.len"
                 type="tel"
-                :rules="[v => !!v || 'Укажите свой телефон', rules.length(13)]"
+                :rules="[
+                  v => !!v || 'Укажите свой телефон',
+                  rules.length(computedMask.len)
+                ]"
                 hide-details
-                placeholder="_ _ _  _ _ _  _ _  _ _"
+                placeholder="+7 999 999 99 99"
                 solo
                 style="border-radius:0"
               ></v-text-field>
@@ -66,7 +70,8 @@
               max-width="250"
               style="min-width:250px!important"
               type="submit"
-            >{{ registrate ? 'Регистрация' : 'Вход' }}</v-btn>
+              >{{ registrate ? 'Регистрация' : 'Вход' }}</v-btn
+            >
           </div>
         </div>
       </v-form>
@@ -90,7 +95,12 @@ export default {
     mask
   },
   data: () => ({
-    mask: '### ### ## ##',
+    tokens: {
+      F: {
+        pattern: /[\+\d]/
+      },
+      '#': { pattern: /\d/ }
+    },
     valid: false,
     phone: null,
     code: null,
@@ -102,7 +112,18 @@ export default {
     }
   }),
   computed: {
-    ...mapState('user', ['city'])
+    ...mapState('user', ['city']),
+    computedMask() {
+      return {
+        mask: this.phone
+          ? this.phone[0] === '+'
+            ? 'F# ### ### ## ##'
+            : '#### ### ## ##'
+          : 'F# ### ### ## ##',
+        tokens: this.tokens,
+        len: this.phone ? (this.phone[0] === '+' ? 16 : 14) : 16
+      }
+    }
   },
   methods: {
     ...mapActions('user', ['registrateApi', 'enter', 'resetPassword']),

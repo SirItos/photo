@@ -9,7 +9,7 @@ const MapComponent = () => import('~/components/MapComponent')
 import { mapActions } from 'vuex'
 export default {
   head: {
-    title: 'BazaBab'
+    title: 'BazaLove'
   },
   name: 'index',
   components: {

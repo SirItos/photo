@@ -2,7 +2,7 @@ export default {
   mode: 'universal',
   head: {
     titleTemplate: '%s - Место твоих свиданий',
-    title: 'BazaBab',
+    title: 'BazaLove',
     meta: [
       { charset: 'utf-8' },
       {
@@ -67,8 +67,8 @@ export default {
   axios: {
     baseURL:
       process.env.NODE_ENV === 'development'
-        ? 'http://photo/api'
-        : 'https://back.bazabab.ru/api',
+        ? 'https://bazalove.ru/back/public/api/'
+        : 'https://bazalove.ru/back/public/api/',
     progress: false
   },
   //http://photo/api
