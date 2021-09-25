@@ -27,6 +27,7 @@ export const rangeHelper = value => {
 }
 
 export const rangeHelperSelect = values => {
+  debugger
   let result = []
   values.forEach(value => {
     result.push(

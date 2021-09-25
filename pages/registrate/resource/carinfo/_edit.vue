@@ -2,10 +2,20 @@
   <v-row no-gutters class="fill-height flex-column pa-5">
     <v-col>
       <v-form ref="form" lazy-validation :value="valid">
-        <div class="text-center font-weight-bold headline">Информация о себе</div>
-        <v-geo-search @setLocate="setLocate" :init="location" :many="showroom" />
+        <div class="text-center font-weight-bold headline">
+          Информация о себе
+        </div>
+        <v-geo-search
+          @setLocate="setLocate"
+          :init="location"
+          :many="showroom"
+        />
         <div class="pt-5">
-          <v-textarea v-model="description" label="Информация о себе" rows="4" />
+          <v-textarea
+            v-model="description"
+            label="Информация о себе"
+            rows="4"
+          />
         </div>
         <div class="py-5">
           <div class="font-weight-bold">Как вы встречаетесь?</div>
@@ -47,7 +57,7 @@
               v-model="cost"
               type="number"
               color="primary"
-              :rules="priceRange.length ? [] : [val=>!!val|| 'Оцените свидание']"
+              :rules="priceRange ? [] : [val => !!val || 'Оцените свидание']"
             />
           </div>
           <v-select
@@ -60,12 +70,13 @@
             item-text="value"
             label="Выберите оценку"
           >
-            <template v-slot:selection="{item}">
+            <template v-slot:selection="{ item }">
               <v-chip
                 @click:close="spliceSelected(item.id)"
                 close
                 :color="!cost ? 'primary' : 'secondary'"
-              >{{item.value}}</v-chip>
+                >{{ item.value }}</v-chip
+              >
             </template>
             <!-- <template v-slot:selection="{item}">{{`${item.min}${checkMaxValue(item.max)}`}}</template>-->
           </v-select>
@@ -87,7 +98,9 @@
         <div
           class="my-6 caption"
           style=" font-family: 'Montserrat', sans-serif !important;"
-        >Вы сможете изменить эти параметры в личном кабинете</div>
+        >
+          Вы сможете изменить эти параметры в личном кабинете
+        </div>
       </v-form>
     </v-col>
 
@@ -99,7 +112,8 @@
           width="250px"
           @click="next"
           large
-        >{{ id ? 'Сохранить' : 'Продолжить' }}</v-btn>
+          >{{ id ? 'Сохранить' : 'Продолжить' }}</v-btn
+        >
       </div>
       <div class="d-flex justify-center">
         <v-btn
@@ -111,7 +125,8 @@
           @click="$router.back()"
           text
           color="primary"
-        >Отмена</v-btn>
+          >Отмена</v-btn
+        >
       </div>
     </div>
   </v-row>

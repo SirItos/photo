@@ -8,16 +8,23 @@
       </div>
       <v-row no-gutters>
         <v-col class="d-flex align-center justify-center">
-          <div class="primary--text text-capitalize font-weight-bold">{{ header }}</div>
+          <div class="primary--text text-capitalize font-weight-bold">
+            {{ header }}
+          </div>
         </v-col>
-        <div class="overline texg-uppercase text-right">
+        <div class="overline text-uppercase text-right">
           <div class="text-right">Место</div>
           <div>Твоих</div>
           <div>Свиданий</div>
         </div>
       </v-row>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawler" class="primary white--text fix-nav" app temporary>
+    <v-navigation-drawer
+      v-model="drawler"
+      class="primary white--text fix-nav"
+      app
+      temporary
+    >
       <AppNavContent>
         <NavList :items="getNavList(list)" @hideDrawler="drawler = false" />
       </AppNavContent>
@@ -26,7 +33,12 @@
       <nuxt />
     </v-content>
     <v-overlay :value="overlay" opacity="0.8">
-      <v-progress-circular indeterminate color="primary" width="7" size="64"></v-progress-circular>
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        width="7"
+        size="64"
+      ></v-progress-circular>
     </v-overlay>
     <v-dialog :value="visibility" @click:outside="closeDialog">
       <dialog-content />
@@ -42,7 +54,10 @@
           <v-img src="/tutorial.gif" max-height="364px" contain>
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
               </v-row>
             </template>
           </v-img>

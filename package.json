@@ -2,7 +2,6 @@
   "name": "photo",
   "version": "1.0.0",
   "description": "photoservice",
-  
   "private": true,
   "scripts": {
     "serve": "nuxt",
@@ -14,33 +13,33 @@
     "help": "nuxt --help"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.9.5",
-    "@nuxtjs/pwa": "^3.0.0-beta.20",
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/recaptcha": "^0.6.2",
     "babel-runtime": "^6.26.0",
-    "cookie-universal-nuxt": "^2.1.2",
+    "cookie-universal-nuxt": "^2.1.5",
     "leaflet-geosearch": "^2.7.0",
     "leaflet.gridlayer.googlemutant": "^0.8.0",
-    "nuxt": "^2.10.2",
-    "nuxt-i18n": "^6.6.1",
+    "nuxt": "^2.15.8",
+    "nuxt-i18n": "^6.28.1",
     "nuxt-leaflet": "0.0.19",
     "vue-awesome-swiper": "^3.1.3",
     "vue-gallery": "^2.0.1",
     "vue-phone-mask-input": "^1.1.11",
     "vue-the-mask": "^0.11.1",
-    "vue-yandex-maps": "^0.10.6",
+    "vue-yandex-maps": "^0.10.12",
     "vue2-leaflet-googlemutant": "^2.0.0",
     "vue2-leaflet-markercluster": "^3.0.0",
-    "vuetify-google-autocomplete": "^2.0.1",
+    "vuetify-google-autocomplete": "^2.0.4",
     "ymaps": "^0.2.1"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.0",
-    "@types/leaflet": "^1.5.10",
+    "@nuxtjs/vuetify": "^1.12.1",
+    "@types/leaflet": "^1.7.5",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "leaflet": "^1.6.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "leaflet": "^1.7.1",
     "node-sass": "^4.14.1",
     "prettier": "^1.16.4"
   }
