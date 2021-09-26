@@ -12,7 +12,7 @@
             {{ header }}
           </div>
         </v-col>
-        <div class="overline text-uppercase text-right">
+        <div class=" text-uppercase text-right label-style">
           <div class="text-right">Место</div>
           <div>Твоих</div>
           <div>Свиданий</div>
@@ -296,5 +296,14 @@ export default {
 <style lang="scss">
 .fix-nav {
   max-height: calc(var(--vh, 1vh) * 100) !important;
+}
+.label-style {
+  font-size: 0.55rem !important;
+  line-height: 16px;
+  opacity: 0.8;
+  font-weight: 500;
+  letter-spacing: 0.1666666667em !important;
+  text-transform: uppercase;
+  font-family: 'Roboto', sans-serif !important;
 }
 </style>

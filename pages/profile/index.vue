@@ -82,12 +82,14 @@
                   })
                 "
               >
-                <v-row>
-                  <v-col>Правила размещения анкет</v-col>
+                <div class="d-flex margin-sides">
+                  <div class="flex pa-3">
+                    Правила размещения анкет
+                  </div>
                   <div class="d-flex align-center">
                     <v-icon>mdi-chevron-right</v-icon>
                   </div>
-                </v-row>
+                </div>
               </div>
               <v-divider></v-divider>
               <v-divider></v-divider>
@@ -101,12 +103,14 @@
                   })
                 "
               >
-                <v-row>
-                  <v-col>Редактировать информацию о себе</v-col>
+                <div class="d-flex margin-sides">
+                  <div class="flex pa-3">
+                    Редактировать информацию о себе
+                  </div>
                   <div class="d-flex align-center">
                     <v-icon>mdi-chevron-right</v-icon>
                   </div>
-                </v-row>
+                </div>
               </div>
               <v-divider></v-divider>
               <div
@@ -119,12 +123,14 @@
                   })
                 "
               >
-                <v-row>
-                  <v-col>Редактирование фотографий</v-col>
+                <div class="d-flex margin-sides">
+                  <div class="flex pa-3">
+                    Редактирование фотографий
+                  </div>
                   <div class="d-flex align-center">
                     <v-icon>mdi-chevron-right</v-icon>
                   </div>
-                </v-row>
+                </div>
               </div>
               <v-divider></v-divider>
             </div>
@@ -340,5 +346,9 @@ export default {
   .v-text-field__prefix {
     color: #ffffff !important;
   }
+}
+.margin-sides {
+  margin-left: -12px;
+  margin-right: -12px;
 }
 </style>
